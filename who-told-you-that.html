@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Who Told You That?</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Ctext%20y='.9em'%20font-size='90'%3E%F0%9F%94%8D%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=DM+Sans:ital,wght@0,400;0,500;1,400&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+
+    --paper: #DAB785;
+    --paper-line: rgba(4, 57, 94, 0.3);
+    --card: #F2E4C8;
+    --ink: #031D44;
+    --ink-soft: #04395E;
+    --red: #D5896F;
+    --red-soft: #70A288;
+    --highlight: #C9DEB9;
+    --focus: #031D44;
+  }
+  :root:not([data-theme="light"]) {
+    @media (prefers-color-scheme: dark) {
+      --paper: #031D44;
+      --paper-line: rgba(112, 162, 136, 0.2);
+      --card: #04395E;
+      --ink: #DAB785;
+      --ink-soft: #D5896F;
+      --red: #70A288;
+      --red-soft: #2E4A3D;
+      --highlight: #0B5580;
+      --focus: #DAB785;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #031D44;
+    --paper-line: rgba(112, 162, 136, 0.2);
+    --card: #04395E;
+    --ink: #DAB785;
+    --ink-soft: #D5896F;
+    --red: #70A288;
+    --red-soft: #2E4A3D;
+    --highlight: #0B5580;
+    --focus: #DAB785;
+  }
+
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "DM Sans", -apple-system, "Segoe UI", sans-serif;
+    font-size: 18px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 31px,
+      var(--paper-line) 31px,
+      var(--paper-line) 32px
+    );
+    pointer-events: none;
+    z-index: -2;
+  }
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1.4 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 180px 180px;
+    opacity: 0.16;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: -1;
+  }
+  .doodles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.09;
+    background-color: var(--ink-soft);
+    -webkit-mask-repeat: repeat;
+    mask-repeat: repeat;
+    -webkit-mask-size: 300px 300px;
+    mask-size: 300px 300px;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cg fill='none' stroke='black' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 40 Q25 20 40 40 T70 40 T100 40' transform='rotate(-8 55 40)'/%3E%3Cpath d='M150 30 q0 -18 18 -18 q18 0 18 16 q0 14 -14 18 q-4 2 -4 10'/%3E%3Ccircle cx='168' cy='78' r='3' fill='black' stroke='none'/%3E%3Cpath d='M230 40 l6 14 15 1 -11 10 4 15 -14 -8 -14 8 4 -15 -11 -10 15 -1 z' transform='rotate(10 230 55)'/%3E%3Cpath d='M30 140 q40 -20 70 0'/%3E%3Cpath d='M92 132 l10 8 -12 6'/%3E%3Cg transform='translate(150,150)'%3E%3Cpath d='M-12 0 L12 0 M-8 -9 L8 9 M-8 9 L8 -9'/%3E%3C/g%3E%3Ccircle cx='240' cy='150' r='14' transform='rotate(4 240 150)'/%3E%3Cpath d='M60 210 q-2 -20 0 -30'/%3E%3Ccircle cx='60' cy='228' r='3' fill='black' stroke='none'/%3E%3Cpath d='M170 230 q10 -20 25 -10 q10 8 -2 18 q-10 8 2 16' transform='rotate(-6 190 230)'/%3E%3Cpath d='M110 260 l16 0 M118 252 l0 16' transform='rotate(20 118 260)'/%3E%3C/g%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cg fill='none' stroke='black' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 40 Q25 20 40 40 T70 40 T100 40' transform='rotate(-8 55 40)'/%3E%3Cpath d='M150 30 q0 -18 18 -18 q18 0 18 16 q0 14 -14 18 q-4 2 -4 10'/%3E%3Ccircle cx='168' cy='78' r='3' fill='black' stroke='none'/%3E%3Cpath d='M230 40 l6 14 15 1 -11 10 4 15 -14 -8 -14 8 4 -15 -11 -10 15 -1 z' transform='rotate(10 230 55)'/%3E%3Cpath d='M30 140 q40 -20 70 0'/%3E%3Cpath d='M92 132 l10 8 -12 6'/%3E%3Cg transform='translate(150,150)'%3E%3Cpath d='M-12 0 L12 0 M-8 -9 L8 9 M-8 9 L8 -9'/%3E%3C/g%3E%3Ccircle cx='240' cy='150' r='14' transform='rotate(4 240 150)'/%3E%3Cpath d='M60 210 q-2 -20 0 -30'/%3E%3Ccircle cx='60' cy='228' r='3' fill='black' stroke='none'/%3E%3Cpath d='M170 230 q10 -20 25 -10 q10 8 -2 18 q-10 8 2 16' transform='rotate(-6 190 230)'/%3E%3Cpath d='M110 260 l16 0 M118 252 l0 16' transform='rotate(20 118 260)'/%3E%3C/g%3E%3C/svg%3E");
+  }
+  .mono {
+    font-family: "Outfit", ui-monospace, Consolas, monospace;
+    letter-spacing: 0.01em;
+  }
+  a { color: var(--red); }
+  img { max-width: 100%; }
+
+  .wrap {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .rule {
+    border: none;
+    border-top: 1px solid var(--paper-line);
+    margin: 0;
+  }
+
+  /* ---------- Header ---------- */
+  header {
+    padding: 28px 0 12px;
+    border-bottom: 1px solid var(--paper-line);
+  }
+  .brand {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .brand .mark {
+    font-family: "Outfit", sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    color: var(--ink-soft);
+  }
+  .brand .mark b { color: var(--red); font-weight: 700; }
+
+  /* ---------- Hero ---------- */
+  .hero { padding: 56px 0 40px; }
+  .doc {
+    background: var(--card);
+    border: 1px solid var(--paper-line);
+    border-radius: 20px;
+    padding: 28px 26px;
+    font-size: 17px;
+    line-height: 1.85;
+    position: relative;
+    box-shadow: 0 1px 0 var(--paper-line);
+  }
+  .doc p { margin: 0 0 14px; }
+  .doc p:last-child { margin-bottom: 0; }
+  .mark-strike {
+    position: relative;
+    color: var(--ink-soft);
+  }
+  .mark-strike::after {
+    content: "";
+    position: absolute;
+    left: -2px; right: -2px; top: 50%;
+    height: 2px;
+    background: var(--red);
+    transform: rotate(-2deg);
+  }
+  .note {
+    display: inline-block;
+    font-family: "Outfit", sans-serif;
+    font-size: 12.5px;
+    color: var(--red);
+    border: 1px solid var(--red-soft);
+    padding: 2px 9px;
+    border-radius: 999px;
+    margin-left: 6px;
+    white-space: nowrap;
+    vertical-align: 2px;
+  }
+
+  h1 {
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: 800;
+    font-size: clamp(38px, 7vw, 58px);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    margin: 30px 0 14px;
+  }
+  .lede {
+    font-size: 19px;
+    color: var(--ink-soft);
+    max-width: 52ch;
+    margin: 0 0 6px;
+  }
+
+  section { padding: 56px 0; border-top: 1px solid var(--paper-line); }
+  section > .kicker {
+    font-family: "Outfit", sans-serif;
+    font-size: 13px;
+    color: var(--red);
+    margin: 0 0 10px;
+  }
+  h2 {
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-size: clamp(26px, 4vw, 34px);
+    font-weight: 700;
+    margin: 0 0 18px;
+    line-height: 1.2;
+  }
+  p.body { max-width: 62ch; }
+  .highlight {
+    background: linear-gradient(transparent 60%, var(--highlight) 60%);
+  }
+
+  /* ---------- Self-check ---------- */
+  .quiz {
+    background: var(--card);
+    border: 1px solid var(--paper-line);
+    border-radius: 20px;
+    padding: 24px 26px;
+    margin-top: 20px;
+  }
+  .q { display: none; }
+  .q.active { display: block; }
+  .q-num {
+    font-family: "Outfit", sans-serif;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+  .q-prompt { font-size: 19px; margin: 0 0 18px; }
+  .options { display: grid; gap: 10px; }
+  .opt {
+    text-align: left;
+    font-family: "DM Sans", sans-serif;
+    font-size: 16px;
+    background: var(--paper);
+    border: 1px solid var(--paper-line);
+    border-radius: 14px;
+    padding: 12px 16px;
+    cursor: pointer;
+    color: var(--ink);
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .opt:hover { border-color: var(--red-soft); }
+  .opt:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  .opt.chosen { border-color: var(--red); background: var(--red-soft); }
+  .q-result {
+    display: none;
+  }
+  .q-result.active { display: block; }
+  .q-result .verdict {
+    font-family: "Outfit", sans-serif;
+    font-size: 13px;
+    color: var(--red);
+    margin-bottom: 8px;
+  }
+  .restart {
+    margin-top: 16px;
+    font-family: "Outfit", sans-serif;
+    font-size: 13px;
+    background: none;
+    border: none;
+    color: var(--ink-soft);
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 4px 0;
+  }
+
+  /* ---------- Wall ---------- */
+  .wall-note {
+    color: var(--ink-soft);
+    font-size: 15px;
+    margin: 6px 0 24px;
+  }
+  .composer {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+  textarea, input[type=text] {
+    font-family: "DM Sans", sans-serif;
+    font-size: 16px;
+    background: var(--card);
+    border: 1px solid var(--paper-line);
+    border-radius: 14px;
+    padding: 12px 16px;
+    color: var(--ink);
+    resize: vertical;
+    width: 100%;
+  }
+  textarea:focus-visible, input:focus-visible, button:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+  .composer button {
+    justify-self: start;
+    font-family: "Outfit", sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    background: var(--red);
+    color: var(--paper);
+    border: none;
+    border-radius: 999px;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  .composer button:hover { opacity: 0.9; }
+  .cloud-block {
+    background: var(--card);
+    border: 1px solid var(--paper-line);
+    border-radius: 20px;
+    padding: 24px 22px;
+    margin-bottom: 28px;
+  }
+  .cloud-label {
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin: 0 0 14px;
+  }
+  .cloud {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 16px;
+    min-height: 40px;
+  }
+  .cloud-word {
+    font-family: "Outfit", sans-serif;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .cloud-empty {
+    font-family: "DM Sans", sans-serif;
+    font-style: italic;
+    color: var(--ink-soft);
+    font-size: 15px;
+  }
+  .cards { display: grid; gap: 14px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--paper-line);
+    border-left: 4px solid var(--red);
+    border-radius: 16px;
+    padding: 16px 18px;
+  }
+  .card .quote { margin: 0 0 8px; font-size: 17px; }
+  .card .source {
+    font-family: "Outfit", sans-serif;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- Limits ---------- */
+  .limits-list { display: grid; gap: 14px; padding: 0; margin: 20px 0 0; list-style: none; }
+  .limits-list li {
+    padding-left: 22px;
+    position: relative;
+    max-width: 62ch;
+  }
+  .limits-list li::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: var(--red);
+  }
+
+  footer {
+    padding: 40px 0 calc(40px + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid var(--paper-line);
+    color: var(--ink-soft);
+    font-size: 14px;
+  }
+  footer .mono { color: var(--ink-soft); }
+
+  @media (max-width: 560px) {
+    body { font-size: 17px; }
+    .doc { padding: 20px 18px; }
+    section { padding: 44px 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="doodles" aria-hidden="true"></div>
+
+<header>
+  <div class="wrap brand">
+    <div class="mark">who told<br>you <b>that?</b></div>
+    <div class="mark" style="text-align:right;">a project on<br>where the standard<br>came from</div>
+  </div>
+</header>
+
+<div class="hero wrap">
+  <div class="doc">
+    <p>Dear self,</p>
+    <p>I need to get this <span class="mark-strike">right</span><span class="note">right, or what?</span> because if I don't, people will <span class="mark-strike">think less of me</span><span class="note">who is "people"?</span>. Rest is something I'll earn <span class="mark-strike">once I'm caught up</span><span class="note">[citation needed]</span>. Good enough has never actually been <span class="mark-strike">good enough</span><span class="note">says who?</span>.</p>
+  </div>
+  <h1>Who told you that?</h1>
+  <p class="lede">Most of the standards you're failing to meet were never yours to begin with. This traces a few of them back to where they came from.</p>
+</div>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">01 — the claim</p>
+    <h2>Achievement isn't supposed to be your whole identity.</h2>
+    <p class="body">Somewhere along the way, a grade, a rank, or a comparison got treated as a fact about who you are, instead of one piece of feedback on one piece of work. Nobody sat you down and told you that directly — it got absorbed from a hundred smaller moments: a look, a comment, a silence after a bad result. That's exactly why it's hard to argue with. It was never stated clearly enough to be questioned.</p>
+    <p class="body">Being <span class="highlight">specific about where a standard came from</span> is usually the first crack in it. A teacher's offhand comment in 2019 is not a permanent verdict. A parent's own unresolved fear about money or status is not a fact about your worth. Once a claim has a source, it can be checked — and most of these don't hold up under a check.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">02 — the self-check</p>
+    <h2>Notice which one it feels like.</h2>
+    <p class="body">Nothing clinical, nothing scored. Just three moments — answer for how you actually tend to react, not how you think you should.</p>
+
+    <div class="quiz" id="quiz">
+      <div class="q active" data-q="0">
+        <div class="q-num">1 / 3</div>
+        <p class="q-prompt">You get back a grade or a result that's worse than you expected.</p>
+        <div class="options">
+          <button class="opt" data-lean="try">My first thought is what I'd do differently next time.</button>
+          <button class="opt" data-lean="exposed">My first thought is who saw it and what they'll think.</button>
+        </div>
+      </div>
+      <div class="q" data-q="1">
+        <div class="q-num">2 / 3</div>
+        <p class="q-prompt">Someone points out a mistake in something you made.</p>
+        <div class="options">
+          <button class="opt" data-lean="try">It stings for a second, then I fix it.</button>
+          <button class="opt" data-lean="exposed">It stays with me way longer than it probably should.</button>
+        </div>
+      </div>
+      <div class="q" data-q="2">
+        <div class="q-num">3 / 3</div>
+        <p class="q-prompt">You imagine turning in work that's genuinely just "good enough."</p>
+        <div class="options">
+          <button class="opt" data-lean="try">Fine — it did the job.</button>
+          <button class="opt" data-lean="exposed">Uncomfortable, like I got away with something.</button>
+        </div>
+      </div>
+
+      <div class="q-result" data-result="try">
+        <p class="verdict">leans: try again</p>
+        <p class="body" style="margin:0;">Setbacks mostly feel like information for you, not a verdict. That's worth keeping — it's the opposite of the pattern this project is about.</p>
+        <button class="restart" onclick="resetQuiz()">Answer again</button>
+      </div>
+      <div class="q-result" data-result="exposed">
+        <p class="verdict">leans: exposed</p>
+        <p class="body" style="margin:0;">If falling short feels less like "I can improve" and more like "I've been found out," that's usually the sign worth sitting with — not because something's wrong with you, but because a standard got fused to your worth somewhere along the way.</p>
+        <button class="restart" onclick="resetQuiz()">Answer again</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">03 — the wall</p>
+    <h2>Other people's "who told you that?" moments.</h2>
+    <p class="wall-note">Anonymous. No login, no name attached — just the moment, and where the standard actually came from if you know it. That second part feeds the word cloud below, so the more specific it is, the more the pattern says. <em>This page is a working prototype: entries you add here appear for this visit only, as a demo of how the wall will work once it's backed by real storage.</em></p>
+
+    <div class="composer">
+      <textarea id="momentInput" rows="2" placeholder="What's the moment, and what did it teach you to believe?"></textarea>
+      <input type="text" id="sourceInput" placeholder="Where did that standard come from? (optional)">
+      <button onclick="addEntry()">Add to the wall</button>
+    </div>
+
+    <div class="cloud-block">
+      <p class="cloud-label mono">where it's coming from, sized by how often it's mentioned</p>
+      <div class="cloud" id="cloud"></div>
+    </div>
+
+    <div class="cards" id="cards"></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">04 — the limits</p>
+    <h2>What this can't do.</h2>
+    <ul class="limits-list">
+      <li>It only reaches people who go looking for it — nothing here shows up uninvited, the way a feed post would.</li>
+      <li>It can't undo years of internalized pressure in one visit, and it doesn't touch grading culture, school stress, or family expectations directly — those exist outside anything a website can fix.</li>
+      <li>The people who'd benefit most are often the least likely to look, since perfectionistic tendencies tend to come with not wanting to admit the message applies to you.</li>
+      <li>Without something pulling people back — a school link, a counselor mention, a friend sharing it — a single visit is easy to forget once the tab closes.</li>
+    </ul>
+    <p class="body" style="margin-top:20px;">Research on peer acceptance suggests it can directly ease perfectionistic tendencies in teens (Blackburn et al., 2025) — which is part of why routing this through schools or counselors, rather than leaving it to be found cold, matters more than the site itself.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p class="mono">who told you that? — a work in progress. stories, standards, and design are still being collected.</p>
+  </div>
+</footer>
+
+<script>
+  // ---- Self-check quiz ----
+  let currentQ = 0;
+  const leans = [];
+  const quiz = document.getElementById('quiz');
+
+  quiz.addEventListener('click', (e) => {
+    const btn = e.target.closest('.opt');
+    if (!btn) return;
+    leans.push(btn.dataset.lean);
+    const qEl = quiz.querySelector('.q[data-q="' + currentQ + '"]');
+    qEl.classList.remove('active');
+    currentQ++;
+    if (currentQ < 3) {
+      quiz.querySelector('.q[data-q="' + currentQ + '"]').classList.add('active');
+    } else {
+      const exposedCount = leans.filter(l => l === 'exposed').length;
+      const result = exposedCount >= 2 ? 'exposed' : 'try';
+      quiz.querySelector('.q-result[data-result="' + result + '"]').classList.add('active');
+    }
+  });
+
+  function resetQuiz() {
+    leans.length = 0;
+    currentQ = 0;
+    quiz.querySelectorAll('.q-result').forEach(el => el.classList.remove('active'));
+    quiz.querySelectorAll('.q').forEach(el => el.classList.remove('active'));
+    quiz.querySelector('.q[data-q="0"]').classList.add('active');
+  }
+
+  // ---- Wall (backed by a Google Apps Script web app) ----
+  const API_URL = 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+
+  let entries = [
+    { text: "Cried after a B+ because I genuinely thought my parents would be disappointed. They weren't. I never even told them the grade.", source: "an unspoken family expectation" },
+    { text: "I still can't submit anything without checking it four times, even group chats. A teacher once read my draft out loud as an example of a mistake.", source: "one classroom moment, years ago" },
+    { text: "Somewhere I decided that resting before finishing everything meant I was lazy. I don't know who told me that. I just believe it.", source: "unknown — still tracing it" }
+  ];
+
+  async function loadEntries() {
+    if (!API_URL || API_URL.includes('PASTE_YOUR')) {
+      renderCards();
+      return;
+    }
+    try {
+      const res = await fetch(API_URL);
+      const data = await res.json();
+      if (Array.isArray(data) && data.length) entries = data;
+    } catch (err) {
+      console.error('Could not load wall entries, showing local copy instead.', err);
+    }
+    renderCards();
+  }
+
+  function renderCards() {
+    const el = document.getElementById('cards');
+    el.innerHTML = entries.map(e => `
+      <div class="card">
+        <p class="quote">"${escapeHtml(e.text)}"</p>
+        ${e.source ? `<p class="source">source: ${escapeHtml(e.source)}</p>` : ''}
+      </div>
+    `).join('');
+    renderCloud();
+  }
+
+  // ---- Word cloud, built from the "source" field of every entry ----
+  const CLOUD_STOPWORDS = new Set([
+    'a','an','the','of','to','from','it','my','me','i','my','and','or','but','so','in','on','at',
+    'is','was','were','be','been','that','this','one','still','just','not','no','yet','ago','with',
+    'for','about','still','tracing','unknown','own'
+  ]);
+
+  function buildWordFreq() {
+    const freq = {};
+    entries.forEach(e => {
+      if (!e.source) return;
+      e.source
+        .toLowerCase()
+        .replace(/[^a-z0-9\s'-]/g, ' ')
+        .split(/\s+/)
+        .filter(Boolean)
+        .forEach(word => {
+          if (CLOUD_STOPWORDS.has(word) || word.length < 3) return;
+          freq[word] = (freq[word] || 0) + 1;
+        });
+    });
+    return freq;
+  }
+
+  function renderCloud() {
+    const el = document.getElementById('cloud');
+    const freq = buildWordFreq();
+    const words = Object.keys(freq);
+    if (words.length === 0) {
+      el.innerHTML = '<p class="cloud-empty">the pattern will show up here as people share where their standards came from.</p>';
+      return;
+    }
+    const counts = words.map(w => freq[w]);
+    const min = Math.min(...counts);
+    const max = Math.max(...counts);
+    const colors = ['var(--ink)', 'var(--red)', 'var(--ink-soft)'];
+
+    words.sort((a, b) => freq[b] - freq[a]);
+
+    el.innerHTML = words.map((w, i) => {
+      const t = max === min ? 1 : (freq[w] - min) / (max - min);
+      const size = 14 + t * 30; // 14px .. 44px
+      const weight = 400 + Math.round(t * 300); // 400 .. 700
+      const color = colors[i % colors.length];
+      return `<span class="cloud-word" style="font-size:${size.toFixed(0)}px; font-weight:${weight}; color:${color};">${escapeHtml(w)}</span>`;
+    }).join('');
+  }
+
+  function escapeHtml(str) {
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  function addEntry() {
+    const momentEl = document.getElementById('momentInput');
+    const sourceEl = document.getElementById('sourceInput');
+    const text = momentEl.value.trim();
+    if (!text) { momentEl.focus(); return; }
+    const source = sourceEl.value.trim();
+
+    entries.unshift({ text, source });
+    momentEl.value = '';
+    sourceEl.value = '';
+    renderCards();
+
+    if (!API_URL || API_URL.includes('PASTE_YOUR')) return;
+
+    fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // avoids a CORS preflight Apps Script can't handle
+      body: JSON.stringify({ text, source })
+    }).catch(err => console.error('Could not save entry to the sheet.', err));
+  }
+
+  loadEntries();
+</script>
+
+</body>
+</html>
