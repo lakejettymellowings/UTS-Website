@@ -8,6 +8,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=DM+Sans:ital,wght@0,400;0,500;1,400&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  // Apply saved theme choice before first paint
+  try {
+    var savedTheme = localStorage.getItem('wtyt-theme');
+    if (savedTheme === 'dark' || savedTheme === 'light') {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+  } catch (e) {}
+</script>
 <style>
   :root {
     box-sizing: border-box;
@@ -87,6 +96,61 @@
     pointer-events: none;
     z-index: -1;
   }
+  body.splash-lock { overflow: hidden; height: 100%; }
+
+  #splash {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: var(--paper);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 24px;
+    text-align: center;
+  }
+  #splash.fade {
+    transition: opacity 0.5s ease 0.25s;
+    opacity: 0;
+  }
+  #splash-text {
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    max-width: 90vw;
+    background: linear-gradient(90deg, #031D44, #04395E, #70A288, #DAB785, #D5896F, #031D44);
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    animation: splashGradient 6s ease-in-out infinite;
+    font-size: clamp(34px, 9vw, 88px);
+    transition: transform 0.7s cubic-bezier(.65, 0, .35, 1);
+    transform-origin: center center;
+    will-change: transform;
+  }
+  @keyframes splashGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #splash-text { animation: none; background-position: 30% 50%; }
+  }
+  #splash-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 0; right: 0;
+    text-align: center;
+    font-size: 13px;
+    color: var(--ink-soft);
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+  }
+
   .doodles {
     position: fixed;
     inset: 0;
@@ -139,7 +203,7 @@
   .brand .mark b { color: var(--red); font-weight: 700; }
 
   /* ---------- Hero ---------- */
-  .hero { padding: 56px 0 40px; }
+  .hero { padding-top: 56px; padding-bottom: 40px; }
   .doc {
     background: var(--card);
     border: 1px solid var(--paper-line);
@@ -333,6 +397,18 @@
     line-height: 1;
     white-space: nowrap;
   }
+  /* Small screens (or a crowded cloud): words wrap naturally, so they can never overlap */
+  .cloud.flow {
+    height: auto;
+    min-height: 120px;
+    overflow: visible;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px 16px;
+  }
+  .cloud.flow .cloud-word { position: static; }
   .cloud-empty {
     font-family: "DM Sans", sans-serif;
     font-style: italic;
@@ -385,10 +461,39 @@
   @media (prefers-reduced-motion: reduce) {
     * { transition: none !important; }
   }
+
+  /* ---------- Theme toggle ---------- */
+  #theme-toggle {
+    position: fixed;
+    right: calc(16px + env(safe-area-inset-right, 0px));
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    z-index: 100;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    min-height: 44px;
+    font-family: "Outfit", sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    background: var(--card);
+    border: 1px solid var(--paper-line);
+    border-radius: 999px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  }
+  #theme-toggle:hover { border-color: var(--ink-soft); }
 </style>
 </head>
-<body>
+<body class="splash-lock">
 <div class="doodles" aria-hidden="true"></div>
+
+<div id="splash" role="button" tabindex="0" aria-label="Enter the site">
+  <div id="splash-text">Who told you that?</div>
+  <div id="splash-hint" class="mono">tap anywhere to begin</div>
+</div>
+<noscript><style>#splash{display:none !important;}</style></noscript>
 
 <header>
   <div class="wrap brand">
@@ -502,6 +607,42 @@
   </div>
 </footer>
 
+<button id="theme-toggle" type="button" aria-label="Switch to dark mode">
+  <span id="theme-icon" aria-hidden="true">&#9790;</span>
+  <span id="theme-label">dark</span>
+</button>
+
+<script>
+  // ---- Dark / light toggle ----
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById('theme-toggle');
+    var icon = document.getElementById('theme-icon');
+    var label = document.getElementById('theme-label');
+    var media = window.matchMedia('(prefers-color-scheme: dark)');
+
+    function currentTheme() {
+      var t = root.getAttribute('data-theme');
+      if (t === 'dark' || t === 'light') return t;
+      return media.matches ? 'dark' : 'light';
+    }
+    function render() {
+      var dark = currentTheme() === 'dark';
+      icon.innerHTML = dark ? '&#9728;' : '&#9790;';
+      label.textContent = dark ? 'light' : 'dark';
+      btn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+    }
+    btn.addEventListener('click', function () {
+      var next = currentTheme() === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('wtyt-theme', next); } catch (e) {}
+      render();
+    });
+    if (media.addEventListener) media.addEventListener('change', render);
+    render();
+  })();
+</script>
+
 <script>
   // ---- Self-check quiz ----
   let currentQ = 0;
@@ -546,14 +687,20 @@
       renderCards();
       return;
     }
-    try {
-      const res = await fetch(API_URL);
-      const data = await res.json();
+    // Loaded via a <script> tag instead of fetch — Apps Script's redirect
+    // often blocks fetch() from reading the response cross-origin, but a
+    // script tag isn't subject to that restriction.
+    const callbackName = 'wttLoad_' + Date.now();
+    window[callbackName] = function (data) {
       if (Array.isArray(data) && data.length) entries = data;
-    } catch (err) {
-      console.error('Could not load wall entries, showing local copy instead.', err);
-    }
-    renderCards();
+      renderCards();
+      delete window[callbackName];
+      tag.remove();
+    };
+    const tag = document.createElement('script');
+    tag.src = API_URL + (API_URL.includes('?') ? '&' : '?') + 'callback=' + callbackName;
+    tag.onerror = () => renderCards();
+    document.body.appendChild(tag);
   }
 
   function renderCards() {
@@ -591,10 +738,13 @@
     return freq;
   }
 
-  function renderCloud() {
+  let cloudWidth = 0;
+
+  function renderCloud(forceFlow) {
     const el = document.getElementById('cloud');
     const freq = buildWordFreq();
     const words = Object.keys(freq);
+    el.classList.remove('flow');
     if (words.length === 0) {
       el.innerHTML = '<div class="cloud-empty-wrap"><p class="cloud-empty">the pattern will show up here as people share where their standards came from.</p></div>';
       return;
@@ -610,13 +760,21 @@
 
     const boxWidth = el.clientWidth || 400;
     const boxHeight = el.clientHeight || 240;
+    cloudWidth = boxWidth;
     const cx = boxWidth / 2;
     const cy = boxHeight / 2;
+    // Scale the biggest word to the space available, so it fits on phones too
+    const maxSize = Math.min(48, Math.max(22, boxWidth * 0.1));
+    const useFlow = forceFlow === true || boxWidth < 520;
     const placed = [];
+    let allPlaced = true;
 
-    words.forEach((w, i) => {
+    if (useFlow) el.classList.add('flow');
+
+    for (let i = 0; i < words.length; i++) {
+      const w = words[i];
       const t = max === min ? 1 : (freq[w] - min) / (max - min);
-      const size = 14 + t * 34;   // 14px .. 48px
+      const size = 14 + t * (maxSize - 14);
       const weight = 400 + Math.round(t * 300); // 400 .. 700
       const color = colors[i % colors.length];
 
@@ -626,6 +784,9 @@
       span.style.fontSize = size.toFixed(0) + 'px';
       span.style.fontWeight = weight;
       span.style.color = color;
+
+      if (useFlow) { el.appendChild(span); continue; }
+
       span.style.position = 'absolute';
       span.style.visibility = 'hidden';
       el.appendChild(span);
@@ -642,22 +803,32 @@
         const x = cx + radius * Math.cos(angle) - ww / 2;
         const y = cy + radius * Math.sin(angle) * 0.62 - wh / 2;
         const box = { left: x, top: y, right: x + ww, bottom: y + wh };
+        const inside = box.left >= 0 && box.top >= 0 && box.right <= boxWidth && box.bottom <= boxHeight;
         const overlaps = placed.some(p =>
           !(box.right < p.left - 3 || box.left > p.right + 3 || box.bottom < p.top - 3 || box.top > p.bottom + 3)
         );
-        if (!overlaps) { spot = box; break; }
+        if (inside && !overlaps) { spot = box; break; }
         angle += 0.32;
         radius += 2.4;
       }
-      if (!spot) {
-        spot = { left: Math.max(0, boxWidth - ww), top: Math.max(0, boxHeight - wh), right: boxWidth, bottom: boxHeight };
-      }
+      if (!spot) { allPlaced = false; break; }
       placed.push(spot);
-      span.style.left = Math.max(0, Math.min(spot.left, boxWidth - ww)) + 'px';
-      span.style.top = Math.max(0, Math.min(spot.top, boxHeight - wh)) + 'px';
+      span.style.left = spot.left + 'px';
+      span.style.top = spot.top + 'px';
       span.style.visibility = 'visible';
-    });
+    }
+
+    // If the words didn't all fit without overlapping, use the wrapping layout instead
+    if (!useFlow && !allPlaced) renderCloud(true);
   }
+
+  // Re-draw once the web fonts have loaded (words measure differently before that),
+  // and again if the screen width changes (e.g. rotating a phone).
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => renderCloud());
+  window.addEventListener('resize', () => {
+    const el = document.getElementById('cloud');
+    if (el && el.clientWidth !== cloudWidth) renderCloud();
+  });
 
   function escapeHtml(str) {
     const d = document.createElement('div');
@@ -681,12 +852,54 @@
 
     fetch(API_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // avoids a CORS preflight Apps Script can't handle
+      mode: 'no-cors', // fire-and-forget: we don't need to read the response, just avoid the CORS block
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({ text, source })
     }).catch(err => console.error('Could not save entry to the sheet.', err));
   }
 
   loadEntries();
+
+  // ---- Splash screen: shrinks into the real title on click/tap/Enter ----
+  (function () {
+    const splash = document.getElementById('splash');
+    const splashText = document.getElementById('splash-text');
+    const splashHint = document.getElementById('splash-hint');
+    const heroTitle = document.querySelector('.hero h1');
+    let entered = false;
+
+    function enterSite() {
+      if (entered) return;
+      entered = true;
+
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduceMotion || !heroTitle) {
+        splash.style.display = 'none';
+        document.body.classList.remove('splash-lock');
+        return;
+      }
+
+      const heroRect = heroTitle.getBoundingClientRect();
+      const textRect = splashText.getBoundingClientRect();
+      const scale = heroRect.width / textRect.width;
+      const dx = (heroRect.left + heroRect.width / 2) - (textRect.left + textRect.width / 2);
+      const dy = (heroRect.top + heroRect.height / 2) - (textRect.top + textRect.height / 2);
+
+      splashHint.style.opacity = '0';
+      splashText.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`;
+      splash.classList.add('fade');
+
+      setTimeout(() => {
+        splash.style.display = 'none';
+        document.body.classList.remove('splash-lock');
+      }, 750);
+    }
+
+    splash.addEventListener('click', enterSite);
+    splash.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); enterSite(); }
+    });
+  })();
 
   // Keep the source field to a single word as the person types
   document.getElementById('sourceInput').addEventListener('input', (e) => {
