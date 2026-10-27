@@ -1852,6 +1852,78 @@
     .scrap.env { scale: 0.75; }
   }
 </style>
+<style>
+  /* ---------- Wall on phones: the notes are a pile of layered notes. Flick the top one sideways to see the next ---------- */
+  .swipe-hint { display: none; }
+  @media (max-width: 700px) {
+    .cards { display: block; position: relative; height: calc(var(--stack-h, 260px) + 16px); padding: 0; margin: 0 0 6px; touch-action: pan-y; }
+    .cards .card, .cards .card:hover, .cards .card.lit {
+      position: absolute; top: 16px; left: 0; right: 0; margin: 0; box-sizing: border-box; height: var(--card-h, auto);
+      z-index: calc(10 - var(--p, 0)); touch-action: pan-y; user-select: none; -webkit-user-select: none;
+      transform-origin: 50% 100%;
+      transform: translateY(calc(var(--p, 0) * 12px)) scale(calc(1 - var(--p, 0) * 0.045)) rotate(var(--rot, var(--tilt, 0deg)));
+      transition: transform .3s cubic-bezier(.3, 1.2, .5, 1), opacity .25s;
+    }
+    .cards .card[data-p="1"] { --rot: 2deg; }
+    .cards .card[data-p="2"], .cards .card[data-p="3"] { --rot: -2deg; }
+    .cards .card[data-p="3"] { opacity: 0; }
+    .cards .card:not([data-p="0"]) { pointer-events: none; }
+    .cards .card > * { transition: opacity .2s; }
+    .cards .card:not([data-p="0"]) > * { opacity: 0; }
+    .cards .card.dim { opacity: 1; }
+    .cards .card.drop { animation: none; }
+    .cards .card[data-drag], .cards .card[data-snap] { transition: none; }
+    .cards .card[data-fly] > * { opacity: 1; }
+    .cards .card[data-fly="hi"] { z-index: 12; }
+    .cards .card[data-fly="lo"] { z-index: 0; }
+    .swipe-hint { display: block; font-family: "Caveat", cursive; font-size: 20px; color: var(--red); text-align: center; margin: 4px 0 6px; transform: rotate(-1deg); }
+  }
+</style>
+<style>
+  /* ---------- Section 5 closing box: same folded-note style as the dear self letter, on sage graph paper with washi tape ---------- */
+  .doc.yourturn { margin-top: 34px; rotate: 0.6deg; }
+  .doc.yourturn .lp::before, .doc.yourturn .lp::after {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 36px 100%, 0 calc(100% - 36px));
+  }
+  .doc.yourturn .lp::before {
+    background-color: #DCE8CF;
+    background-image:
+      linear-gradient(rgba(47, 94, 71, 0.3) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(47, 94, 71, 0.3) 1px, transparent 1px),
+      linear-gradient(rgba(47, 94, 71, 0.14) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(47, 94, 71, 0.14) 1px, transparent 1px),
+      linear-gradient(160deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0) 45%, rgba(30, 80, 50, 0.1)),
+      radial-gradient(130% 110% at 50% 50%, transparent 52%, rgba(80, 120, 70, 0.3) 100%);
+    background-size: 90px 90px, 90px 90px, 18px 18px, 18px 18px, auto, auto;
+    background-repeat: repeat, repeat, repeat, repeat, no-repeat, no-repeat;
+    background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+  }
+  /* dog-eared bottom left corner this time */
+  .doc.yourturn::after {
+    left: 0; right: auto;
+    background: linear-gradient(225deg, #F4FAEC 0%, #BDD3AE 49%, transparent 50%);
+    filter: drop-shadow(2px -2px 2px rgba(3, 29, 68, 0.3));
+  }
+  /* striped washi tape across the top edge instead of a paper clip */
+  .doc.yourturn::before {
+    content: ""; position: absolute; top: -13px; right: 14%; width: 104px; height: 26px; z-index: 1; pointer-events: none;
+    rotate: -4deg;
+    background: repeating-linear-gradient(45deg, rgba(47, 94, 71, 0.5) 0 7px, rgba(235, 210, 122, 0.65) 7px 14px);
+    border: 1px solid var(--paper-line); box-shadow: 0 1px 2px rgba(3, 29, 68, 0.2);
+  }
+  /* green ink instead of blue */
+  .doc.yourturn .dear { color: #20472F; }
+  .doc.yourturn .dear::after {
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 8' preserveAspectRatio='none'%3E%3Cpath d='M2 5 C 20 1, 40 7, 62 4 S 100 2, 118 5' fill='none' stroke='%2320472F' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+  }
+  .doc.yourturn b {
+    font-family: "Caveat", cursive; font-weight: 700; font-size: 1.32em; line-height: 1; color: #20472F;
+    background: linear-gradient(transparent 58%, rgba(235, 210, 122, 0.65) 58%);
+    filter: url(#ink-bleed);
+  }
+  @media (max-width: 700px) { .doc.yourturn b { filter: none; } }
+  @media (max-width: 560px) { .doc.yourturn { rotate: 0deg; } .doc.yourturn::before { right: 8%; width: 84px; } }
+</style>
 </head>
 <body class="splash-lock">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -2114,6 +2186,7 @@
 
     <div class="filters" id="filters"></div>
     <div class="cards" id="cards"></div>
+    <p class="swipe-hint" id="swipeHint" aria-hidden="true"></p>
     <div class="scrap yarn" id="yarn" aria-hidden="true"></div>
   </div>
 </section>
@@ -2190,7 +2263,11 @@
     <div class="rewrite-row"><span class="old">I'll earn rest once I'm caught up.</span><span class="new">Rest is part of the work.</span></div>
     <div class="rewrite-row"><span class="old">One mistake and people will think less of me.</span><span class="new">One mistake is just one mistake.</span></div>
     <div class="rewrite-row"><span class="old">Good enough isn't good enough.</span><span class="new">Good enough is allowed to be enough.</span></div>
-    <div class="prompt-box">Think of one standard you hold yourself to. <b>Who told you that?</b> Then ask what you'd say to a friend who held the same one.</div>
+    <div class="doc yourturn">
+      <span class="lp" aria-hidden="true"></span>
+      <p class="dear">Your turn,</p>
+      <p>Think of one standard you hold yourself to. <b>Who told you that?</b> Then ask what you'd say to a friend who held the same one.</p>
+    </div>
   </div>
 </section>
 
@@ -2352,6 +2429,7 @@
         <div class="reacts">${RX.map(([k, l]) => `<button class="metoo${e.mine && e.mine[k] ? ' mine' : ''}" data-i="${i}" data-k="${k}" type="button">${l}${e.rx && e.rx[k] ? ' · ' + e.rx[k] : ''}</button>`).join('')}</div>
       </div>
     `).join('');
+    if (justAdded) el.dataset.reset = '1';
     justAdded = false;
     renderStats();
     applyFilters();
@@ -2781,6 +2859,108 @@
     sched();
     setTimeout(sched, 1200);
   } catch (e) { /* decoration only */ }
+})();
+</script>
+<script>
+/* Phones: the wall notes are a layered pile. Flick right for the next note, left for the previous one. */
+(function () {
+  try {
+    var row = document.getElementById('cards'), hint = document.getElementById('swipeHint');
+    if (!row || !hint) return;
+    var mq = window.matchMedia('(max-width: 700px)');
+    var topKey = null, raf = 0, busy = false, moved = false;
+    function key(c) { var q = c.querySelector('.quote'); return q ? q.textContent : ''; }
+    function vis() { return Array.prototype.slice.call(row.querySelectorAll('.card')).filter(function (c) { return !c.hidden; }); }
+    function clean() {
+      Array.prototype.forEach.call(row.querySelectorAll('.card'), function (c) { c.removeAttribute('data-p'); c.style.removeProperty('--p'); });
+      row.style.removeProperty('--card-h'); row.style.removeProperty('--stack-h'); hint.textContent = '';
+    }
+    function layout() {
+      raf = 0;
+      if (!mq.matches) { clean(); return; }
+      var list = vis(), n = list.length;
+      Array.prototype.forEach.call(row.querySelectorAll('.card[hidden]'), function (c) { c.removeAttribute('data-p'); });
+      if (!n) { hint.textContent = ''; return; }
+      if (row.dataset.reset) { topKey = null; delete row.dataset.reset; }
+      var idx = 0;
+      for (var i = 0; i < n; i++) if (key(list[i]) === topKey) { idx = i; break; }
+      var lit = list.filter(function (c) { return c.classList.contains('lit'); });
+      if (lit.length && lit.indexOf(list[idx]) < 0) idx = list.indexOf(lit[0]);
+      topKey = key(list[idx]);
+      row.style.removeProperty('--card-h');
+      var h = 0;
+      list.forEach(function (c) { h = Math.max(h, c.offsetHeight); });
+      row.style.setProperty('--card-h', h + 'px');
+      row.style.setProperty('--stack-h', (h + 24) + 'px');
+      list.forEach(function (c, j) {
+        var pos = Math.min((j - idx + n) % n, 3);
+        c.setAttribute('data-p', pos); c.style.setProperty('--p', pos);
+      });
+      hint.textContent = n > 1 ? 'flick right for next, left for back \u00b7 ' + (idx + 1) + ' of ' + n : '';
+    }
+    function sched() { if (!raf) raf = requestAnimationFrame(layout); }
+
+    // Flick right: the top note slides out to the side, then tucks in behind the pile (goes to the bottom).
+    // Flick left: the bottom note slides out from under the pile, then lays itself on top. Either way the old top and the new top move at the same time.
+    function fling(card, dir) {
+      busy = true;
+      var list = vis(), n = list.length, i = list.indexOf(card), next = dir > 0;
+      var mover = next ? card : list[(i + n - 1) % n];
+      topKey = key(list[(i + (next ? 1 : n - 1)) % n]);
+      mover.setAttribute('data-fly', next ? 'hi' : 'lo');
+      mover.style.transition = 'transform .2s ease-out, opacity .2s';
+      layout();
+      if (!next) card.style.transform = '';
+      mover.style.transform = 'translateX(' + (dir * mover.offsetWidth * 0.62) + 'px) rotate(' + (dir * 9) + 'deg)';
+      mover.style.opacity = '1';
+      setTimeout(function () {
+        mover.setAttribute('data-fly', next ? 'lo' : 'hi');
+        mover.style.transition = ''; mover.style.transform = ''; mover.style.opacity = '';
+        setTimeout(function () { mover.removeAttribute('data-fly'); busy = false; }, 330);
+      }, 210);
+    }
+
+    var card = null, x0 = 0, y0 = 0, t0 = 0, dx = 0, drag = false, pid = null;
+    row.addEventListener('pointerdown', function (e) {
+      if (!mq.matches || busy || (e.pointerType === 'mouse' && e.button !== 0)) return;
+      var c = e.target.closest ? e.target.closest('.card') : null;
+      if (!c || c.getAttribute('data-p') !== '0' || vis().length < 2) return;
+      card = c; x0 = e.clientX; y0 = e.clientY; t0 = Date.now(); dx = 0; drag = false; pid = e.pointerId; moved = false;
+    });
+    row.addEventListener('pointermove', function (e) {
+      if (!card || e.pointerId !== pid) return;
+      var mx = e.clientX - x0, my = e.clientY - y0;
+      if (!drag) {
+        if (Math.abs(mx) < 8 || Math.abs(mx) < Math.abs(my)) return;
+        drag = true; moved = true;
+        card.setAttribute('data-drag', '1');
+        try { card.setPointerCapture(pid); } catch (err) {}
+      }
+      dx = mx;
+      var tilt = parseFloat(getComputedStyle(card).getPropertyValue('--tilt')) || 0;
+      card.style.transform = 'translateX(' + dx + 'px) rotate(' + (tilt + dx / 18) + 'deg)';
+    });
+    function end(e, cancelled) {
+      if (!card || (e && e.pointerId !== pid)) return;
+      var c = card; card = null;
+      if (!drag) return;
+      c.removeAttribute('data-drag');
+      var fast = Math.abs(dx) / Math.max(1, Date.now() - t0) > 0.5;
+      if (!cancelled && (Math.abs(dx) > 80 || (fast && Math.abs(dx) > 30))) fling(c, dx > 0 ? 1 : -1);
+      else c.style.transform = '';
+    }
+    row.addEventListener('pointerup', function (e) { end(e, false); });
+    row.addEventListener('pointercancel', function (e) { end(e, true); });
+    // a flick that started on a button must not count as a tap on it
+    row.addEventListener('click', function (e) { if (moved) { e.stopPropagation(); e.preventDefault(); moved = false; } }, true);
+
+    new MutationObserver(sched).observe(row, { childList: true, subtree: true, attributes: true, attributeFilter: ['hidden', 'class'] });
+    window.addEventListener('resize', sched);
+    window.addEventListener('load', sched);
+    if (mq.addEventListener) mq.addEventListener('change', sched);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(sched);
+    sched();
+  } catch (e) { /* the pile is a layout nicety, the cards still show */ }
 })();
 </script>
 </body>
