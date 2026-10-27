@@ -1853,7 +1853,7 @@
   }
 </style>
 <style>
-  /* ---------- Wall on phones: the notes are a pile of layered notes. Flick the top one sideways to see the next ---------- */
+  /* ---------- Wall on phones: the notes are a pile of layered notes. Flick right for the next, left for the previous ---------- */
   .swipe-hint { display: none; }
   @media (max-width: 700px) {
     .cards { display: block; position: relative; height: calc(var(--stack-h, 260px) + 16px); padding: 0; margin: 0 0 6px; touch-action: pan-y; }
@@ -1861,21 +1861,27 @@
       position: absolute; top: 16px; left: 0; right: 0; margin: 0; box-sizing: border-box; height: var(--card-h, auto);
       z-index: calc(10 - var(--p, 0)); touch-action: pan-y; user-select: none; -webkit-user-select: none;
       transform-origin: 50% 100%;
-      transform: translateY(calc(var(--p, 0) * 12px)) scale(calc(1 - var(--p, 0) * 0.045)) rotate(var(--rot, var(--tilt, 0deg)));
+      transform: translate3d(0, calc(var(--p, 0) * 12px), 0) scale(calc(1 - var(--p, 0) * 0.045)) rotate(var(--rot, var(--tilt, 0deg)));
       transition: transform .3s cubic-bezier(.3, 1.2, .5, 1), opacity .25s;
+      /* two plain shadows instead of five layers plus the pooled shadow, so each note is cheap to draw */
+      box-shadow: 0 2px 3px rgba(3, 29, 68, 0.22), 0 8px 12px rgba(3, 29, 68, 0.16);
+      backface-visibility: hidden; -webkit-backface-visibility: hidden;
     }
+    .cards .card:not(.t5)::after { display: none; }
+    /* only the notes you can see get their own layer. The rest are not drawn at all */
+    .cards .card[data-p="0"], .cards .card[data-p="1"], .cards .card[data-p="2"], .cards .card[data-fly] { will-change: transform; }
     .cards .card[data-p="1"] { --rot: 2deg; }
     .cards .card[data-p="2"], .cards .card[data-p="3"] { --rot: -2deg; }
-    .cards .card[data-p="3"] { opacity: 0; }
+    .cards .card[data-p="3"] { opacity: 0; visibility: hidden; }
+    .cards .card[data-fly] { visibility: visible; }
     .cards .card:not([data-p="0"]) { pointer-events: none; }
-    .cards .card > * { transition: opacity .2s; }
     .cards .card:not([data-p="0"]) > * { opacity: 0; }
-    .cards .card.dim { opacity: 1; }
-    .cards .card.drop { animation: none; }
-    .cards .card[data-drag], .cards .card[data-snap] { transition: none; }
     .cards .card[data-fly] > * { opacity: 1; }
     .cards .card[data-fly="hi"] { z-index: 12; }
     .cards .card[data-fly="lo"] { z-index: 0; }
+    .cards .card.dim { opacity: 1; }
+    .cards .card.drop { animation: none; }
+    .cards .card[data-drag] { transition: none; }
     .swipe-hint { display: block; font-family: "Caveat", cursive; font-size: 20px; color: var(--red); text-align: center; margin: 4px 0 6px; transform: rotate(-1deg); }
   }
 </style>
@@ -2811,6 +2817,7 @@
     }
     function draw() {
       raf = 0;
+      if (window.matchMedia('(max-width: 940px)').matches) return;
       try {
         var list = Array.prototype.slice.call(cards.querySelectorAll('.card')).filter(function (c) { return c.offsetWidth > 0 && c.offsetHeight > 0; });
         var pts = [];
@@ -2868,40 +2875,46 @@
     var row = document.getElementById('cards'), hint = document.getElementById('swipeHint');
     if (!row || !hint) return;
     var mq = window.matchMedia('(max-width: 700px)');
-    var topKey = null, raf = 0, busy = false, moved = false;
+    var topKey = null, raf = 0, needMeasure = true, busy = false, moved = false, lastHint = '';
     function key(c) { var q = c.querySelector('.quote'); return q ? q.textContent : ''; }
     function vis() { return Array.prototype.slice.call(row.querySelectorAll('.card')).filter(function (c) { return !c.hidden; }); }
     function clean() {
       Array.prototype.forEach.call(row.querySelectorAll('.card'), function (c) { c.removeAttribute('data-p'); c.style.removeProperty('--p'); });
-      row.style.removeProperty('--card-h'); row.style.removeProperty('--stack-h'); hint.textContent = '';
+      row.style.removeProperty('--card-h'); row.style.removeProperty('--stack-h'); hint.textContent = ''; lastHint = '';
     }
-    function layout() {
+    // measure = true when notes were added, filtered, or the screen or fonts changed. A flick only moves notes, so it skips the measuring.
+    function layout(measure) {
       raf = 0;
       if (!mq.matches) { clean(); return; }
+      if (measure === true || needMeasure) { measure = true; needMeasure = false; }
       var list = vis(), n = list.length;
-      Array.prototype.forEach.call(row.querySelectorAll('.card[hidden]'), function (c) { c.removeAttribute('data-p'); });
-      if (!n) { hint.textContent = ''; return; }
+      if (!n) { hint.textContent = ''; lastHint = ''; return; }
       if (row.dataset.reset) { topKey = null; delete row.dataset.reset; }
-      var idx = 0;
-      for (var i = 0; i < n; i++) if (key(list[i]) === topKey) { idx = i; break; }
-      var lit = list.filter(function (c) { return c.classList.contains('lit'); });
-      if (lit.length && lit.indexOf(list[idx]) < 0) idx = list.indexOf(lit[0]);
+      var idx = 0, i;
+      for (i = 0; i < n; i++) if (key(list[i]) === topKey) { idx = i; break; }
+      if (measure) {
+        var lit = list.filter(function (c) { return c.classList.contains('lit'); });
+        if (lit.length && lit.indexOf(list[idx]) < 0) idx = list.indexOf(lit[0]);
+      }
       topKey = key(list[idx]);
-      row.style.removeProperty('--card-h');
-      var h = 0;
-      list.forEach(function (c) { h = Math.max(h, c.offsetHeight); });
-      row.style.setProperty('--card-h', h + 'px');
-      row.style.setProperty('--stack-h', (h + 24) + 'px');
-      list.forEach(function (c, j) {
-        var pos = Math.min((j - idx + n) % n, 3);
-        c.setAttribute('data-p', pos); c.style.setProperty('--p', pos);
-      });
-      hint.textContent = n > 1 ? 'flick right for next, left for back \u00b7 ' + (idx + 1) + ' of ' + n : '';
+      if (measure) {
+        row.style.removeProperty('--card-h');
+        var h = 0;
+        for (i = 0; i < n; i++) h = Math.max(h, list[i].offsetHeight);
+        row.style.setProperty('--card-h', h + 'px');
+        row.style.setProperty('--stack-h', (h + 24) + 'px');
+      }
+      for (i = 0; i < n; i++) {
+        var pos = String(Math.min((i - idx + n) % n, 3)), c = list[i];
+        if (c.getAttribute('data-p') !== pos) { c.setAttribute('data-p', pos); c.style.setProperty('--p', pos); }
+      }
+      var t = n > 1 ? 'flick right for next, left for back \u00b7 ' + (idx + 1) + ' of ' + n : '';
+      if (t !== lastHint) { hint.textContent = t; lastHint = t; }
     }
-    function sched() { if (!raf) raf = requestAnimationFrame(layout); }
+    function sched() { needMeasure = true; if (!raf) raf = requestAnimationFrame(layout); }
 
     // Flick right: the top note slides out to the side, then tucks in behind the pile (goes to the bottom).
-    // Flick left: the bottom note slides out from under the pile, then lays itself on top. Either way the old top and the new top move at the same time.
+    // Flick left: the bottom note slides out from under the pile, then lays itself on top.
     function fling(card, dir) {
       busy = true;
       var list = vis(), n = list.length, i = list.indexOf(card), next = dir > 0;
@@ -2909,9 +2922,9 @@
       topKey = key(list[(i + (next ? 1 : n - 1)) % n]);
       mover.setAttribute('data-fly', next ? 'hi' : 'lo');
       mover.style.transition = 'transform .2s ease-out, opacity .2s';
-      layout();
+      layout(false);
       if (!next) card.style.transform = '';
-      mover.style.transform = 'translateX(' + (dir * mover.offsetWidth * 0.62) + 'px) rotate(' + (dir * 9) + 'deg)';
+      mover.style.transform = 'translate3d(' + (dir * mover.offsetWidth * 0.62) + 'px, 0, 0) rotate(' + (dir * 9) + 'deg)';
       mover.style.opacity = '1';
       setTimeout(function () {
         mover.setAttribute('data-fly', next ? 'lo' : 'hi');
@@ -2920,12 +2933,17 @@
       }, 210);
     }
 
-    var card = null, x0 = 0, y0 = 0, t0 = 0, dx = 0, drag = false, pid = null;
+    var card = null, x0 = 0, y0 = 0, t0 = 0, dx = 0, drag = false, pid = null, tilt0 = 0, dragRaf = 0;
+    function paintDrag() {
+      dragRaf = 0;
+      if (card) card.style.transform = 'translate3d(' + dx + 'px, 0, 0) rotate(' + (tilt0 + dx / 18) + 'deg)';
+    }
     row.addEventListener('pointerdown', function (e) {
       if (!mq.matches || busy || (e.pointerType === 'mouse' && e.button !== 0)) return;
       var c = e.target.closest ? e.target.closest('.card') : null;
       if (!c || c.getAttribute('data-p') !== '0' || vis().length < 2) return;
       card = c; x0 = e.clientX; y0 = e.clientY; t0 = Date.now(); dx = 0; drag = false; pid = e.pointerId; moved = false;
+      tilt0 = parseFloat(getComputedStyle(c).getPropertyValue('--tilt')) || 0;   // read once, not on every move
     });
     row.addEventListener('pointermove', function (e) {
       if (!card || e.pointerId !== pid) return;
@@ -2937,12 +2955,12 @@
         try { card.setPointerCapture(pid); } catch (err) {}
       }
       dx = mx;
-      var tilt = parseFloat(getComputedStyle(card).getPropertyValue('--tilt')) || 0;
-      card.style.transform = 'translateX(' + dx + 'px) rotate(' + (tilt + dx / 18) + 'deg)';
+      if (!dragRaf) dragRaf = requestAnimationFrame(paintDrag);   // at most one style write per frame
     });
     function end(e, cancelled) {
       if (!card || (e && e.pointerId !== pid)) return;
       var c = card; card = null;
+      if (dragRaf) { cancelAnimationFrame(dragRaf); dragRaf = 0; }
       if (!drag) return;
       c.removeAttribute('data-drag');
       var fast = Math.abs(dx) / Math.max(1, Date.now() - t0) > 0.5;
