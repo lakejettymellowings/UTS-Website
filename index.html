@@ -1754,6 +1754,20 @@
     .scrap.d1 { top: 78px; }
   }
 </style>
+<style>
+  /* ---------- Phone performance pass. Desktop is untouched ---------- */
+  /* Fewer live effects to repaint while scrolling: no endless doodle drift, no full-screen blend layer,
+     one light shadow per sheet instead of three, and no SVG displacement filters on text. */
+  @media (pointer: coarse), (max-width: 700px) {
+    .doodles { animation: none; will-change: auto; }
+    body::after, .paper::after, .doc .lp::after { mix-blend-mode: normal; }
+    .paper, .doc .lp { filter: drop-shadow(0 3px 4px rgba(3, 29, 68, 0.28)); }
+    .margin-note, .scribble, .thanks, .stat-insight, .sticky h3, .reframe, .rewrite-row .new,
+    .card .source, .scrap.index, .note,
+    .scrap.hnote, .scrap.sticker, .scrap.rstamp,
+    .prompts button:nth-of-type(4), .doc .dear, .doc .mark-strike { filter: none; }
+  }
+</style>
 </head>
 <body class="splash-lock">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
