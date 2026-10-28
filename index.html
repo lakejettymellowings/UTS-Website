@@ -2030,10 +2030,8 @@
   @media (pointer: coarse), (max-width: 700px) {
     .rw-out img { box-shadow: none; border: 1px solid rgba(3, 29, 68, 0.25); rotate: 0deg; } .rw-out img.fresh { animation: none; }
     .rw-slot { rotate: 0deg; }
-    /* the envelope is a filtered, rotated, scaled layer, so nothing inside it animates on phones */
+    /* the envelope loses its drop-shadow filter on phones (a filtered layer re-draws on every animation frame). The card still flies into it. */
     .scrap.env { filter: none; }
-    .env .flap, .env .bd::before, .env .bd::after, .env .env-tag { transition: none; }
-    .env.sealed .bd::after { animation: none; }
   }
   /* the flap opens up behind the letter, then closes and the seal pops back on */
   .env .flap { position: absolute; left: 0; right: 0; bottom: 24px; height: 40px; background: linear-gradient(to bottom, #EADDBC, #D9C99C); clip-path: polygon(0 0, 100% 0, 50% 100%); transform-origin: 50% 0; transform: scaleY(0); opacity: 0; transition: transform 0.5s cubic-bezier(0.3, 1.35, 0.5, 1), opacity 0.25s 0.25s; }
@@ -3702,9 +3700,7 @@ function qrMatrix(text){
     function land() {
       tucked = true; busy = false;
       if (env) {
-        var l = env.querySelector('.ltr');
-        l.style.backgroundImage = 'url("' + url + '")'; l.style.backgroundSize = 'cover'; l.style.backgroundPosition = 'center top';
-        env.classList.remove('open'); env.classList.add('sealed', 'tagged');
+        env.classList.remove('open'); env.classList.add('sealed', 'tagged'); // the letter peeking out keeps its own plain lined paper
         if (env.animate && !reduced()) env.animate([{ translate: '0 0' }, { translate: '0 -7px' }, { translate: '0 0' }], { duration: 380, delay: 300, easing: 'ease-out' });
       }
       pic.classList.add('tucked'); backBtn.hidden = false;
@@ -3721,7 +3717,7 @@ function qrMatrix(text){
     // lift the picture off the page, carry it down to the envelope, slide it into the pocket
     function tuck() {
       if (!env || busy || tucked || !blob) return;
-      if (reduced() || lite() || !Element.prototype.animate) { land(); return; }
+      if (reduced() || !Element.prototype.animate) { land(); return; }
       busy = true;
       var id = ++runId;
       var r0 = img.getBoundingClientRect();
@@ -3813,7 +3809,64 @@ function qrMatrix(text){
       outMsg.textContent = tucked ? 'Saved again.' : 'Saved. If nothing downloaded, press and hold the picture.';
       tuck();
     });
+    // reverse of tuck(): the flap opens, the card slides up out of the pocket, then flies back to where it was
+    function untuck() {
+      if (busy || !tucked || !env) return;
+      busy = true; backBtn.hidden = true;
+      var id = ++runId, easy = lite();
+      var FW = 110, FH = Math.round(FW * H / W);
+      var clone = document.createElement('img');
+      clone.id = 'rwFly'; clone.src = url; clone.alt = ''; clone.setAttribute('aria-hidden', 'true');
+      clone.style.cssText = 'position:fixed;left:0;top:0;margin:0;z-index:9999;pointer-events:none;border-radius:3px;' + (easy ? '' : 'box-shadow:0 8px 20px rgba(3,29,68,0.35);') + 'transform-origin:50% 50%;opacity:0;width:' + FW + 'px;height:' + FH + 'px;';
+      document.body.appendChild(clone);
+      env.scrollIntoView({ behavior: easy ? 'auto' : 'smooth', block: 'center' });
+      waitScroll(function () { if (id === runId) open(); });
+      function open() {
+        env.classList.remove('sealed', 'tagged'); env.classList.add('open');
+        setTimeout(function () { if (id === runId) out(); }, 450);
+      }
+      function out() {
+        var bd = env.querySelector('.bd').getBoundingClientRect();
+        var s1 = bd.width * 0.8 / FW, hx = bd.left + bd.width / 2;
+        var pocket = bd.top + bd.width * 0.045, hy = pocket - 14 - FH * s1 / 2;
+        var D = Math.max(FH * s1, FH * s1 + 14);
+        var gap = Math.max(0, pocket - (hy + FH * s1 / 2));
+        D = Math.max(pocket - (hy - FH * s1 / 2), FH * s1);
+        var o1 = Math.min(0.9, gap / D);
+        function tf(t) { return 'translate(' + (hx - FW / 2) + 'px,' + (hy - FH / 2 + t) + 'px) rotate(-5deg) scale(' + s1 + ')'; }
+        var none = 'inset(0px 0px 0px 0px)';
+        clone.style.opacity = '1';
+        var a = clone.animate([
+          { transform: tf(D), clipPath: 'inset(0px 0px ' + FH + 'px 0px)', offset: 0 },
+          { transform: tf(gap), clipPath: none, offset: 1 - o1 },
+          { transform: tf(0), clipPath: none, offset: 1 }
+        ], { duration: 700, easing: 'ease-out', fill: 'forwards' });
+        a.onfinish = function () {
+          if (id !== runId) { clone.remove(); return; }
+          env.classList.remove('open');
+          pic.scrollIntoView({ behavior: easy ? 'auto' : 'smooth', block: 'center' });
+          waitScroll(function () { setTimeout(function () { back(hx, hy, s1); }, 150); });
+        };
+      }
+      function back(hx, hy, s1) {
+        if (id !== runId) { clone.remove(); return; }
+        var r = pic.getBoundingClientRect();
+        var s2 = r.width / FW, cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+        function frame(x, y, sc, rot) { return 'translate(' + (x - FW / 2) + 'px,' + (y - FH / 2) + 'px) rotate(' + rot + 'deg) scale(' + sc + ')'; }
+        var a = clone.animate([
+          { transform: frame(hx, hy, s1, -5), offset: 0 },
+          { transform: frame((hx + cx) / 2, (hy + cy) / 2 - 50, (s1 + s2) / 2, 6), offset: 0.5 },
+          { transform: frame(cx, cy, s2, easy ? 0 : -1), offset: 1 }
+        ], { duration: 800, easing: 'cubic-bezier(0.45, 0.05, 0.2, 1)', fill: 'forwards' });
+        a.onfinish = function () {
+          if (id !== runId) { clone.remove(); return; }
+          resetTuck();
+          outMsg.textContent = 'The card is back out.';
+        };
+      }
+    }
     backBtn.addEventListener('click', function () {
+      if (!reduced() && Element.prototype.animate && env && tucked) { untuck(); return; }
       resetTuck();
       img.classList.remove('fresh'); void img.offsetWidth; img.classList.add('fresh');
       if (env && !lite()) env.classList.add('open');
