@@ -3,6 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Most of the standards you're failing to meet were never yours to begin with. A short look at self-imposed pressure and maladaptive perfectionism, and where they come from.">
+<meta name="theme-color" content="#DAB785">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Who Told You That?">
+<meta property="og:title" content="Who told you that?">
+<meta property="og:description" content="Most of the standards you're failing to meet were never yours to begin with. A short look at self-imposed pressure and maladaptive perfectionism, and where they come from.">
+<!-- SET BEFORE HOSTING: replace the address below with the real address of og-image.png (it must be a full https:// link, or the preview image will not show). Use the same address in twitter:image. -->
+<meta property="og:image" content="https://YOUR-USERNAME.github.io/YOUR-REPO/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Who told you that? written on a sheet of notebook paper, with that? circled in red pen.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Who told you that?">
+<meta name="twitter:description" content="Most of the standards you're failing to meet were never yours to begin with.">
+<meta name="twitter:image" content="https://YOUR-USERNAME.github.io/YOUR-REPO/og-image.png">
 <title>Who Told You That?</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Ctext%20y='.9em'%20font-size='90'%3E%F0%9F%94%8D%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1930,6 +1945,79 @@
   @media (max-width: 700px) { .doc.yourturn b { filter: none; } }
   @media (max-width: 560px) { .doc.yourturn { rotate: 0deg; } .doc.yourturn::before { right: 8%; width: 84px; } }
 </style>
+<style>
+  /* ---------- Share button, link preview and the schools and counselors section ---------- */
+  body > section.schools > .wrap { --sheet: var(--s1); --r: 0.3deg; }
+  body > section.schools > .wrap > .paper::before { background-image: var(--crumple); background-size: 640px 640px; background-position: 300px 200px; background-blend-mode: var(--crumple-blend); }
+  body > section.schools > .wrap::after { left: 30%; transform: rotate(3deg); }
+  body > section.schools > .wrap { --tear: 0.0% 2.2px, 4.1% 3.1px, 8.3% 1.9px, 12.9% 3.6px, 17.2% 2.4px, 21.8% 4.8px, 26.5% 2.1px, 31.1% 1.4px, 35.9% 3.3px, 40.2% 2.6px, 45.6% 5.1px, 50.4% 2.2px, 55.3% 1.8px, 60.1% 3.9px, 64.8% 2.5px, 69.6% 4.4px, 74.2% 2.0px, 79.5% 3.2px, 84.1% 1.7px, 88.9% 3.6px, 93.7% 2.3px, calc(100% - 2.4px) 0%, calc(100% - 1.6px) 9%, calc(100% - 3.1px) 19%, calc(100% - 1.2px) 31%, calc(100% - 2.8px) 44%, calc(100% - 1.5px) 57%, calc(100% - 3.4px) 69%, calc(100% - 1.3px) 82%, calc(100% - 2.2px) 93%, 100% calc(100% - 2.6px), 94% calc(100% - 4.1px), 88% calc(100% - 2.3px), 81% calc(100% - 5.2px), 74% calc(100% - 3.0px), 66% calc(100% - 1.8px), 58% calc(100% - 4.4px), 50% calc(100% - 2.6px), 42% calc(100% - 3.9px), 34% calc(100% - 1.7px), 26% calc(100% - 4.8px), 18% calc(100% - 2.5px), 10% calc(100% - 3.7px), 3% calc(100% - 2.0px), 1.8px 100%, 2.6px 92%, 1.2px 80%, 3.0px 68%, 1.6px 55%, 2.9px 42%, 1.3px 30%, 2.7px 18%, 1.5px 7%; }
+  .sharebar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; margin-top: 32px; }
+  .share-btn, .sc-btn { font: 700 17px/1 "Outfit", sans-serif; display: inline-flex; align-items: center; gap: 10px; cursor: pointer; transition: rotate .2s, translate .2s; }
+  .share-btn { padding: 15px 24px; border: 0; border-radius: 14px 18px 15px 19px; background: var(--good); color: #F7F1E3; rotate: -1.2deg; box-shadow: 0 0 0 4px #fff, 0 0 0 5px rgba(3,29,68,.55), 0 6px 12px rgba(3,29,68,.28); }
+  .share-btn svg { width: 20px; height: 20px; flex: none; }
+  .sc-btn { padding: 11px 18px; border: 2px solid var(--ink); border-radius: 12px 15px 12px 16px; background: transparent; color: var(--ink); font-size: 15px; }
+  @media (hover: hover) { .share-btn:hover { rotate: 0deg; translate: 0 -2px; } .sc-btn:hover { background: color-mix(in srgb, var(--ink) 8%, transparent); translate: 0 -1px; } }
+  .share-btn:active, .sc-btn:active { translate: 0 1px; }
+  .share-btn:focus-visible, .sc-btn:focus-visible { outline: 3px solid var(--focus); outline-offset: 6px; }
+  .share-msg { font-family: "Caveat", cursive; font-size: 22px; line-height: 1.1; color: var(--good); }
+  .sc-steps { margin: 22px 0 0; padding-left: 22px; max-width: 62ch; }
+  .sc-steps li { margin-bottom: 10px; }
+  .sc-grid { display: grid; grid-template-columns: minmax(0, 250px) minmax(0, 1fr); gap: 22px; margin-top: 28px; align-items: start; }
+  .sc-card { position: relative; padding: 20px; background: #FBF7EC; border: 1px solid rgba(3,29,68,.2); border-radius: 3px; box-shadow: 0 6px 14px rgba(3,29,68,.16), 0 1px 2px rgba(3,29,68,.2); }
+  .sc-qrcard { text-align: center; rotate: -0.8deg; }
+  .sc-card .dear { font-family: "Caveat", cursive; font-weight: 700; font-size: 30px; line-height: 1.1; margin: 0 0 6px; color: #20472F; }
+  .sc-qr { width: 100%; max-width: 210px; margin: 0 auto 10px; aspect-ratio: 1; background: #fff; display: grid; place-items: center; font: 400 14px/1.4 "Special Elite", "Courier New", monospace; color: #444; text-align: center; }
+  .sc-qr svg { display: block; width: 100%; height: auto; }
+  .sc-qr:empty::after, .sc-qr.sc-none { content: "The QR code appears once this page is online."; padding: 14px; border: 2px dashed rgba(3,29,68,.35); }
+  .sc-url { margin: 0 0 12px; font: 400 12px/1.3 "Special Elite", "Courier New", monospace; overflow-wrap: anywhere; color: var(--ink-soft); }
+  .sc-msg { margin: 0 0 14px; font-size: 16px; line-height: 1.55; }
+  .sc-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; }
+  @media (max-width: 700px) { .sc-grid { grid-template-columns: 1fr; } .sc-qrcard { rotate: 0deg; } .share-btn { font-size: 16px; padding: 14px 20px; } }
+  @media (prefers-reduced-motion: reduce) { .share-btn, .sc-btn { transition: none; } }
+  /* tape and a pin holding the two cards to the sheet */
+  .sc-card::before { content: ""; position: absolute; top: -12px; left: 50%; width: 84px; height: 22px; margin-left: -42px; rotate: -3deg; background: color-mix(in srgb, var(--tape) 78%, transparent); border: 1px solid rgba(3,29,68,.18); box-shadow: 0 1px 2px rgba(3,29,68,.2); }
+  .sc-card:not(.sc-qrcard)::before { rotate: 2deg; margin-left: -10px; background: repeating-linear-gradient(135deg, #CFE0C8 0 8px, #F4F0E4 8px 16px); }
+  .sc-card:not(.sc-qrcard) { rotate: 0.5deg; background-image: repeating-linear-gradient(to bottom, transparent 0 27px, rgba(3,29,68,.1) 27px 28px); }
+  .sc-qrcard::after { content: ""; position: absolute; right: -9px; bottom: -9px; width: 34px; height: 34px; background: linear-gradient(225deg, transparent 50%, #E4D9BC 50%); filter: drop-shadow(-2px -2px 2px rgba(3,29,68,.2)); }
+  .sc-steps li::marker { font-family: "Caveat", cursive; font-weight: 700; font-size: 1.3em; color: var(--red); }
+  .sc-steps b { background: linear-gradient(transparent 62%, rgba(243,216,102,.7) 62%); }
+  /* section 06 buttons use the same red sticker look as Add to the wall */
+  .sc-btn { --stk: var(--red); font: 600 13px/1.2 "Outfit", sans-serif; letter-spacing: 0.02em; padding: 8px 18px; color: #FFFDF6; text-shadow: 0 1px 1px rgba(60,10,0,.45); background: linear-gradient(160deg, rgba(255,255,255,.12), rgba(255,255,255,0) 48%), var(--red); border: 3px solid var(--sticker-edge); outline: 1px solid rgba(3,29,68,.3); border-radius: 8px 18px 8px 18px; box-shadow: 0 1px 1px rgba(3,29,68,.25), 0 3px 5px rgba(3,29,68,.16); rotate: -1deg; transition: translate .18s, rotate .18s, box-shadow .18s; }
+  .sc-actions .sc-btn:nth-of-type(2) { rotate: 1deg; }
+  @media (hover: hover) { .sc-btn:hover { background: linear-gradient(160deg, rgba(255,255,255,.12), rgba(255,255,255,0) 48%), var(--red); translate: 0 -2px; rotate: 0deg; box-shadow: 0 2px 2px rgba(3,29,68,.22), 0 8px 12px rgba(3,29,68,.2); } }
+  .sc-btn:active { translate: 0 0; box-shadow: 0 1px 1px rgba(3,29,68,.25); }
+  #poster-print { display: none; }
+  @media print {
+    html.printing, html.printing body { height: auto !important; overflow: visible !important; background: #fff !important; }
+    html.printing body::before, html.printing body::after { display: none !important; }
+    html.printing body > *:not(#poster-print) { display: none !important; }
+    html.printing #poster-print { display: block !important; text-align: center; padding: 28px 24px; color: #000; background: #fff; font-family: "Outfit", Arial, sans-serif; }
+    #poster-print h1 { font-size: 64px; line-height: 1.05; margin: 0 0 12px; }
+    #poster-print p { font-size: 22px; margin: 0 auto 20px; max-width: 560px; }
+    #poster-print .pp-qr { width: 420px; max-width: 80%; margin: 24px auto 12px; }
+    #poster-print .pp-qr svg { width: 100%; height: auto; display: block; }
+    #poster-print .pp-url { font: 400 16px "Courier New", monospace; overflow-wrap: anywhere; }
+  }
+</style>
+<style>
+  /* ---------- Rewrite card: the form in the Your turn box, and the preview under it ---------- */
+  .rw-form { display: grid; gap: 6px; margin-top: 18px; position: relative; z-index: 1; }
+  .rw-l { font-family: "Caveat", cursive; font-weight: 700; font-size: 22px; line-height: 1.1; color: #8F2D18; margin-top: 6px; }
+  .rw-l.g { color: #20472F; }
+  .rw-form input[type=text] { background: rgba(255, 255, 255, 0.62); border: 1px solid rgba(47, 94, 71, 0.45); border-radius: 10px; color: #031D44; }
+  .rw-form input[type=text]::placeholder { color: #04395E; opacity: 0.55; }
+  .rw-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-top: 10px; }
+  .rw-ex { background: none; border: 0; padding: 4px 2px; font: 600 14px "Outfit", sans-serif; color: #20472F; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+  .rw-note { font-family: "Caveat", cursive; font-size: 19px; line-height: 1.1; color: #20472F; margin: 4px 0 0; }
+  .rw-status:empty { display: none; }
+  .rw-out { margin-top: 30px; }
+  .rw-out img { display: block; width: min(100%, 380px); height: auto; border-radius: 4px; background: #fff; box-shadow: 0 10px 24px rgba(3, 29, 68, 0.3); rotate: -1deg; }
+  .rw-out .rw-row { margin-top: 20px; }
+  .rw-sec { font: 700 16px/1 "Outfit", sans-serif; padding: 13px 20px; border: 2px solid #20472F; border-radius: 14px 18px 15px 19px; background: transparent; color: #20472F; cursor: pointer; }
+  .rw-sec:focus-visible, .rw-ex:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
+  @media (hover: hover) { .rw-sec:hover { background: rgba(47, 94, 71, 0.1); } .rw-ex:hover { color: #031D44; } }
+  @media (max-width: 700px) { .rw-sec { font-size: 15px; padding: 12px 16px; } .rw-l { font-size: 20px; } }
+</style>
 </head>
 <body class="splash-lock">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -2017,7 +2105,7 @@
     <p>I need to get this <span class="mark-strike">right</span><span class="note">right, or what?</span> because if I don't, people will <span class="mark-strike">think less of me</span><span class="note">who is "people"?</span>. Rest is something I'll earn <span class="mark-strike">once I'm caught up</span><span class="note">[citation needed]</span>. Good enough has never actually been <span class="mark-strike">good enough</span><span class="note">says who?</span>.</p>
   </div>
   <h1>Who told you that?</h1>
-  <p class="lede">Most of the standards you're failing to meet were never yours to begin with. This traces a few of them back to where they came from.</p>
+  <p class="lede">Most of the standards you're failing to meet were never yours to begin with. This traces a few of them back to where they came from, and looks at the self-imposed pressure and maladaptive perfectionism that grow out of them.</p>
 </div>
 
 <section>
@@ -2052,6 +2140,7 @@
     <h2 class="big-claim">Achievement isn't supposed to be your <span class="circled">whole identity.</span></h2>
     <p class="margin-note">nobody ever said this out loud <svg viewBox="0 0 36 34" aria-hidden="true"><path d="M18 32 C 18 20, 22 12, 20 3 M20 3 l-6 8 M20 3 l7 7"/></svg></p>
     <p class="body">A grade, a rank, a comparison. Somewhere along the way it stopped being feedback on one piece of work and started feeling like a fact about you. It got absorbed from a hundred small moments, which is why it's so hard to argue with.</p>
+    <p class="body">Two things tend to get tangled together here. <b>Self-imposed pressure</b> is the push you put on yourself, often long after anyone else stopped asking. <b>Maladaptive perfectionism</b> is when that push hardens into needing everything flawless and treating anything less as failure. They often travel together and feed each other. Neither is a diagnosis, and this page does not screen for either one.</p>
     <p class="body pull">Once a standard has a <span class="highlight">source</span>, it can be checked. <span class="scribble-under">Most don't hold up.</span></p>
   </div>
 </section>
@@ -2118,12 +2207,12 @@
 
       <div class="q-result" data-result="try">
         <p class="verdict">leans: try again</p>
-        <p class="body" style="margin:0;">Setbacks mostly feel like information for you, not a verdict. That's worth keeping. It's the opposite of the pattern this project is about.</p>
+        <p class="body" style="margin:0;">Setbacks mostly feel like information for you, not a verdict. That's worth keeping. It's the opposite of the pattern this project is about: self-imposed pressure and maladaptive perfectionism.</p>
         <button class="restart" onclick="resetQuiz()">Answer again</button>
       </div>
       <div class="q-result" data-result="exposed">
         <p class="verdict">leans: exposed</p>
-        <p class="body" style="margin:0;">If falling short feels less like "I can improve" and more like "I've been found out," that's usually the sign worth sitting with. Not because something's wrong with you, but because a standard got fused to your worth somewhere along the way.</p>
+        <p class="body" style="margin:0;">If falling short feels less like "I can improve" and more like "I've been found out," that's usually the sign worth sitting with. Not because something's wrong with you, but because a standard got fused to your worth somewhere along the way, and the pressure to meet it may now be coming from you.</p>
         <button class="restart" onclick="resetQuiz()">Answer again</button>
       </div>
     </div>
@@ -2227,7 +2316,7 @@
     <ul class="limits-notes">
       <li class="sticky"><h3>Only reaches people who look</h3><p>Nothing here shows up uninvited, the way a feed post would.</p></li>
       <li class="sticky"><h3>One visit won't undo years</h3><p>It doesn't touch grading culture, school stress or family expectations. Those sit outside anything a website can fix.</p></li>
-      <li class="sticky"><h3>Those who need it may skip it</h3><p>Perfectionism often comes with not wanting to admit the message applies to you.</p></li>
+      <li class="sticky"><h3>Those who need it may skip it</h3><p>Self-imposed pressure and perfectionism often come with not wanting to admit the message applies to you.</p></li>
       <li class="sticky"><h3>Easy to forget</h3><p>Without a school link, a counselor mention or a friend sharing it, a single visit is gone once the tab closes.</p></li>
     </ul>
     <p class="body" style="margin-top:20px;">Research on peer acceptance suggests it can directly ease perfectionistic tendencies in teens (Blackburn et al., 2025). That is part of why routing this through schools or counselors, rather than leaving it to be found cold, matters more than the site itself.</p>
@@ -2273,6 +2362,80 @@
       <span class="lp" aria-hidden="true"></span>
       <p class="dear">Your turn,</p>
       <p>Think of one standard you hold yourself to. <b>Who told you that?</b> Then ask what you'd say to a friend who held the same one.</p>
+      <form class="rw-form" id="rwForm" novalidate>
+        <label class="rw-l" for="rwOld">red pen out. the rule you were handed</label>
+        <input type="text" id="rwOld" maxlength="120" autocomplete="off" placeholder="If it isn’t perfect, it doesn’t count.">
+        <label class="rw-l g" for="rwNew">green pen in. what you’d say to a friend</label>
+        <input type="text" id="rwNew" maxlength="120" autocomplete="off" placeholder="Doing it at all is already worth something.">
+        <div class="rw-row">
+          <button type="submit" class="share-btn rw-go">Make my card</button>
+          <button type="button" class="rw-ex" id="rwEx">fill in an example</button>
+        </div>
+        <p class="rw-note">made on your device. nothing you type is sent anywhere.</p>
+        <span class="rw-status share-msg" id="rwStatus" role="status" aria-live="polite"></span>
+      </form>
+    </div>
+    <div class="rw-out" id="rwOut" hidden>
+      <img id="rwImg" alt="">
+      <div class="rw-row">
+        <button type="button" class="share-btn rw-go" id="rwSave">Save image</button>
+        <button type="button" class="rw-sec" id="rwShare" hidden>Share image</button>
+        <span class="share-msg" id="rwOutMsg" role="status" aria-live="polite"></span>
+      </div>
+    </div>
+    <div class="sharebar">
+      <button class="share-btn" type="button" data-share><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.6l6.8-4M8.6 13.4l6.8 4"/></svg>Send this to a friend</button>
+      <span class="share-msg" role="status" aria-live="polite"></span>
+    </div>
+  </div>
+</section>
+
+<section class="schools" id="schools">
+  <div class="wrap">
+    <span class="paper" aria-hidden="true"></span>
+    <span class="scrap cl-side cl-pol pv2" style="left:-152px;top:8%;--sr:-8deg" aria-hidden="true"><i></i><em>after hours</em></span>
+    <span class="scrap cl-side cl-badge" style="left:-112px;top:30%;--sr:6deg;--bc:#3F6FB5" aria-hidden="true"><b>psst</b></span>
+    <span class="scrap cl-side cl-note" style="left:-172px;top:48%;--sr:-5deg" aria-hidden="true"><b>for the people<br>who listen</b></span>
+    <span class="scrap cl-side cl-stamps" style="left:-140px;top:68%;--sr:8deg" aria-hidden="true"><u style="--sc:#B5442B"><svg viewBox="0 0 48 48"><use href="#d-heart"/></svg></u><u style="--sc:#2F5E47"><svg viewBox="0 0 48 48"><use href="#d-star"/></svg></u></span>
+    <span class="scrap cl-side cl-stamps" style="right:-140px;top:10%;--sr:-7deg" aria-hidden="true"><u style="--sc:#2F5E47"><svg viewBox="0 0 48 48"><use href="#d-sun"/></svg></u><u style="--sc:#B5442B"><svg viewBox="0 0 48 48"><use href="#d-smile"/></svg></u></span>
+    <span class="scrap cl-side cl-pol pv0" style="right:-152px;top:30%;--sr:7deg" aria-hidden="true"><i></i><em>pin it up</em></span>
+    <span class="scrap cl-side cl-badge" style="right:-112px;top:52%;--sr:-6deg;--bc:#2F5E47" aria-hidden="true"><b>yes</b></span>
+    <span class="scrap cl-side cl-wt cl-wtp b" style="right:-140px;top:70%;--sr:5deg" aria-hidden="true"></span>
+    <span class="scrap cl-wt cl-c bl b" aria-hidden="true"></span>
+    <span class="scrap cl-wt cl-c br d" aria-hidden="true"></span>
+    <span class="scrap cl-dot g" style="left:-10px;top:46%" aria-hidden="true"></span>
+    <span class="scrap cl-dot r" style="right:-10px;top:60%" aria-hidden="true"></span>
+    <span class="scrap pclip c3" aria-hidden="true"><svg viewBox="0 0 24 56" aria-hidden="true"><path class="pc-shade" d="M14 40 V10 a5 5 0 0 0 -10 0 V42 a8 8 0 0 0 16 0 V14"/><path class="pc-wire" d="M14 40 V10 a5 5 0 0 0 -10 0 V42 a8 8 0 0 0 16 0 V14"/></svg></span>
+    <span class="scrap flag f4" aria-hidden="true"></span>
+    <span class="scrap dborder b2" aria-hidden="true"></span>
+    <span class="scrap sticker s-round" style="--sr:10deg;left:auto;right:14px;top:-26px;background:#BFD9B2;color:#20472F;font-size:24px" aria-hidden="true"><b>free</b></span>
+    <span class="scrap dd gd r" style="left:-124px;top:150px;--sr:-10deg;width:42px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-bolt"/></svg></span>
+    <span class="scrap dd gd" style="right:-116px;top:330px;--sr:12deg;width:44px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-crown"/></svg></span>
+    <span class="scrap dd gd" style="left:-100px;top:650px;--sr:-6deg;width:40px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-spiral"/></svg></span>
+    <p class="kicker"><span class="cn">06</span> — for schools and counselors</p>
+    <h2>Hand it to the <span class="circled">people</span> who can use it.</h2>
+    <p class="margin-note">print it. pin it. pass it on. <svg viewBox="0 0 36 34" aria-hidden="true"><path d="M4 6 C 14 3, 27 10, 28 28 M28 28 l-6 -7 M28 28 l7 -8"/></svg></p>
+    <p class="body">Who Told You That? is a short, anonymous page where students look at self-imposed pressure and maladaptive perfectionism, trace a rule they hold themselves to back to where it came from, then rewrite it in a kinder way. It asks for no name or account and works on a phone. It is a starting point for a conversation, not a screening tool and not a replacement for counseling.</p>
+    <ol class="sc-steps">
+      <li><b>Put it where students already look.</b> A QR code on a classroom wall, a counselor's door or a group chat link.</li>
+      <li><b>Let them read it alone.</b> Nothing is graded, and posting to the wall is optional and anonymous.</li>
+      <li><b>Ask the question out loud.</b> "Who told you that?" works well as a check-in prompt afterward.</li>
+    </ol>
+    <div class="sc-grid">
+      <div class="sc-card sc-qrcard">
+        <div class="sc-qr" id="sc-qr" role="img" aria-label="QR code that opens this page"></div>
+        <p class="sc-url" id="sc-url"></p>
+        <button class="sc-btn" type="button" id="sc-print">Print a poster</button>
+      </div>
+      <div class="sc-card">
+        <p class="dear">A message you can send,</p>
+        <p class="sc-msg" id="sc-msg">Hello! This is a short page called Who Told You That? about self-imposed pressure and maladaptive perfectionism. It helps students notice where their own "rules" came from and try a kinder version. It is anonymous, needs no account and works on a phone. It is a starting point, not a replacement for counseling.</p>
+        <div class="sc-actions">
+          <button class="sc-btn" type="button" id="sc-copy">Copy message and link</button>
+          <button class="sc-btn" type="button" data-share>Share the link</button>
+          <span class="share-msg" role="status" aria-live="polite"></span>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -2409,6 +2572,48 @@
   function filterCards(word) { hoverWord = word; applyFilters(); }
   const RX = [['me', 'me too'], ['need', 'I needed this'], ['felt', 'felt this']];
   const rxLabel = k => RX.find(r => r[0] === k)[1];
+
+  // ---- Saved reactions ----
+  // Each note has a stable id made from its text. Counts are shared (kept in the Apps Script sheet).
+  // Which buttons this visitor pressed is remembered in this browser, so a reload keeps them lit.
+  function rid(t) { let h = 5381; for (const c of String(t)) h = ((h * 33) ^ c.charCodeAt(0)) >>> 0; return 'r' + h.toString(36); }
+  const RXKEY = 'wtyt-rx';
+  let RXS = {};   // id -> { me, need, felt } counts
+  let MINE = {};  // id -> { me: true, ... } this browser only
+  try { MINE = JSON.parse(localStorage.getItem(RXKEY)) || {}; } catch (e) { MINE = {}; }
+  function saveMine() { try { localStorage.setItem(RXKEY, JSON.stringify(MINE)); } catch (e) {} }
+  const rxMine = (e, k) => !!(MINE[rid(e.text)] && MINE[rid(e.text)][k]);
+  const rxN = (e, k) => Math.max((RXS[rid(e.text)] && RXS[rid(e.text)][k]) || 0, rxMine(e, k) ? 1 : 0);
+  const rxText = (e, k) => rxLabel(k) + (rxN(e, k) ? ' \u00b7 ' + rxN(e, k) : '');
+  function paintRx() {
+    document.querySelectorAll('#cards .metoo').forEach(b => {
+      const e = entries[+b.dataset.i]; if (!e) return;
+      b.textContent = rxText(e, b.dataset.k);
+      b.classList.toggle('mine', rxMine(e, b.dataset.k));
+    });
+  }
+  function loadRx() {
+    if (!API_URL || API_URL.includes('PASTE_YOUR')) return;
+    // Same script tag trick as the entries. An old Apps Script that does not know "reactions" returns the
+    // entry list instead, which is ignored here, so the page still works until the script is updated.
+    const cb = 'wttRx_' + Date.now();
+    const tag = document.createElement('script');
+    window[cb] = function (data) {
+      if (data && typeof data === 'object' && !Array.isArray(data)) { RXS = data; paintRx(); renderStats(); }
+      delete window[cb]; tag.remove();
+    };
+    tag.onerror = () => { delete window[cb]; tag.remove(); };
+    tag.src = API_URL + (API_URL.includes('?') ? '&' : '?') + 'action=reactions&callback=' + cb;
+    document.body.appendChild(tag);
+  }
+  function sendRx(id, k, delta) {
+    if (!API_URL || API_URL.includes('PASTE_YOUR')) return;
+    fetch(API_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'react', id, key: k, delta })
+    }).catch(err => console.error('Could not save reaction.', err));
+  }
   function renderStats() {
     const el = document.getElementById('stats');
     if (!el) return;
@@ -2420,7 +2625,10 @@
     const insight = order.length >= 2 ? `Most standards here trace back to ${L(order[0])} and ${L(order[1])}.`
       : order.length === 1 ? `So far, most standards trace back to ${L(order[0])}.`
       : 'The pattern shows up once people name where their standards came from.';
-    el.innerHTML = `<p class="stat-count">${entries.length} moments shared. ${traced} sources traced.</p><p class="stat-insight">${insight}</p>` +
+    let top = null, topN = 0;
+    entries.forEach(e => { const n = RX.reduce((a, r) => a + rxN(e, r[0]), 0); if (n > topN) { topN = n; top = e; } });
+    const landed = top && topN >= 2 ? `<p class="stat-count">The note that landed most: \u201c${escapeHtml(top.text.split(/\s+/).slice(0, 8).join(' '))}\u2026\u201d (${topN} reactions)</p>` : '';
+    el.innerHTML = `<p class="stat-count">${entries.length} moments shared. ${traced} sources traced.</p><p class="stat-insight">${insight}</p>${landed}` +
       order.map(c => `<div class="bar-row"><span>${L(c)}</span><span class="bar-track"><span class="bar-fill" style="width:${counts[c] / max * 100}%;background:var(--c-${c})"></span></span><span class="bar-n">${counts[c]}</span></div>`).join('');
   }
   function renderCards() {
@@ -2432,7 +2640,7 @@
           ${e.source ? `<p class="source">source: ${escapeHtml(showSource(e.source))}</p>` : '<span></span>'}
         </div>
         ${e.reframe ? `<p class="reframe">to a friend. ${escapeHtml(e.reframe)}</p>` : ''}
-        <div class="reacts">${RX.map(([k, l]) => `<button class="metoo${e.mine && e.mine[k] ? ' mine' : ''}" data-i="${i}" data-k="${k}" type="button">${l}${e.rx && e.rx[k] ? ' · ' + e.rx[k] : ''}</button>`).join('')}</div>
+        <div class="reacts">${RX.map(([k, l]) => `<button class="metoo${rxMine(e, k) ? ' mine' : ''}" data-i="${i}" data-k="${k}" type="button">${rxText(e, k)}</button>`).join('')}</div>
       </div>
     `).join('');
     if (justAdded) el.dataset.reset = '1';
@@ -2642,17 +2850,22 @@
   }
 
   loadEntries();
+  loadRx();
 
   // reactions
   document.getElementById('cards').addEventListener('click', ev => {
     const b = ev.target.closest('.metoo');
     if (!b) return;
-    const e = entries[+b.dataset.i], k = b.dataset.k;
-    e.mine = e.mine || {}; e.rx = e.rx || {};
-    e.mine[k] = !e.mine[k];
-    e.rx[k] = Math.max(0, (e.rx[k] || 0) + (e.mine[k] ? 1 : -1));
-    b.classList.toggle('mine', e.mine[k]);
-    b.textContent = rxLabel(k) + (e.rx[k] ? ' · ' + e.rx[k] : '');
+    const e = entries[+b.dataset.i], k = b.dataset.k, id = rid(e.text);
+    MINE[id] = MINE[id] || {}; RXS[id] = RXS[id] || {};
+    const on = !MINE[id][k];
+    MINE[id][k] = on;
+    RXS[id][k] = Math.max(0, (RXS[id][k] || 0) + (on ? 1 : -1));
+    saveMine();
+    b.classList.toggle('mine', on);
+    b.textContent = rxText(e, k);
+    renderStats();
+    sendRx(id, k, on ? 1 : -1);
   });
 
   // starter prompts, source chips, filters
@@ -2980,6 +3193,327 @@
     sched();
   } catch (e) { /* the pile is a layout nicety, the cards still show */ }
 })();
+</script>
+<script>
+  // ---- Share, QR code and the schools section ----
+  (function () {
+    var QR = (function () {
+function qrMatrix(text){
+  const T=[0,[10,1,16,0,0],[16,1,28,0,0],[26,1,44,0,0],[18,2,32,0,0],[24,2,43,0,0],[16,4,27,0,0],[18,4,31,0,0],[22,2,38,2,39],[22,3,36,2,37],[26,4,43,1,44]];
+  const AL=[0,[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50]];
+  const cap=k=>T[k][1]*T[k][2]+T[k][3]*T[k][4];
+  const bytes=Array.from(new TextEncoder().encode(text));
+  let v=1;
+  for(;v<=10;v++){if(4+(v<10?8:16)+bytes.length*8<=cap(v)*8)break;}
+  if(v>10)return null;
+  const bits=[],put=(n,l)=>{for(let i=l-1;i>=0;i--)bits.push((n>>i)&1);};
+  put(4,4);put(bytes.length,v<10?8:16);bytes.forEach(b=>put(b,8));
+  put(0,Math.min(4,cap(v)*8-bits.length));while(bits.length%8)bits.push(0);
+  const data=[];for(let i=0;i<bits.length;i+=8){let b=0;for(let j=0;j<8;j++)b=b<<1|bits[i+j];data.push(b);}
+  for(let p=0;data.length<cap(v);p^=1)data.push(p?0x11:0xEC);
+  const ex=[],lg=[];for(let i=0,x=1;i<255;i++){ex[i]=x;lg[x]=i;x<<=1;if(x&256)x^=0x11D;}for(let i=255;i<512;i++)ex[i]=ex[i-255];
+  const mul=(a,b)=>a&&b?ex[lg[a]+lg[b]]:0;
+  const rs=(d,n)=>{let g=[1];for(let i=0;i<n;i++){const h=new Array(g.length+1).fill(0);for(let j=0;j<g.length;j++){h[j]^=g[j];h[j+1]^=mul(g[j],ex[i]);}g=h;}
+    const r=new Array(n).fill(0);for(const b of d){const f=b^r[0];r.shift();r.push(0);for(let i=0;i<n;i++)r[i]^=mul(g[i+1],f);}return r;};
+  const [ec,b1,d1,b2,d2]=T[v],blocks=[];let pos=0;
+  for(let i=0;i<b1+b2;i++){const n=i<b1?d1:d2,d=data.slice(pos,pos+n);pos+=n;blocks.push({d:d,e:rs(d,ec)});}
+  const out=[];for(let i=0;i<Math.max(d1,d2);i++)blocks.forEach(b=>{if(i<b.d.length)out.push(b.d[i]);});
+  for(let i=0;i<ec;i++)blocks.forEach(b=>out.push(b.e[i]));
+  const N=17+4*v,M=[],R=[];
+  for(let i=0;i<N;i++){M.push(new Array(N).fill(0));R.push(new Array(N).fill(false));}
+  const set=(r,c,x)=>{M[r][c]=x;R[r][c]=true;};
+  const finder=(r,c)=>{for(let i=-1;i<=7;i++)for(let j=-1;j<=7;j++){const y=r+i,x=c+j;if(y<0||x<0||y>=N||x>=N)continue;
+    set(y,x,((i>=0&&i<=6&&(j==0||j==6))||(j>=0&&j<=6&&(i==0||i==6))||(i>=2&&i<=4&&j>=2&&j<=4))?1:0);}};
+  finder(0,0);finder(0,N-7);finder(N-7,0);
+  for(let i=8;i<N-8;i++){set(6,i,i%2?0:1);set(i,6,i%2?0:1);}
+  for(const r of AL[v])for(const c of AL[v]){if((r<9&&c<9)||(r<9&&c>N-9)||(r>N-9&&c<9))continue;
+    for(let i=-2;i<=2;i++)for(let j=-2;j<=2;j++)set(r+i,c+j,Math.max(Math.abs(i),Math.abs(j))!=1?1:0);}
+  for(let i=0;i<9;i++){if(!R[8][i])set(8,i,0);if(!R[i][8])set(i,8,0);}
+  for(let i=0;i<8;i++){set(8,N-1-i,0);set(N-1-i,8,0);}
+  if(v>=7)for(let i=0;i<6;i++)for(let j=0;j<3;j++){set(i,N-11+j,0);set(N-11+j,i,0);}
+  let bi=0;const tot=out.length*8;
+  for(let c=N-1,up=true;c>0;c-=2){if(c==6)c--;
+    for(let k=0;k<N;k++){const r=up?N-1-k:k;for(let j=0;j<2;j++){const x=c-j;if(!R[r][x]){
+      const bit=bi<tot?(out[bi>>3]>>(7-(bi&7)))&1:0;bi++;M[r][x]=bit^((r+x)%2==0?1:0);}}}
+    up=!up;}
+  let f=0;for(let i=14;i>=10;i--)if((f>>i)&1)f^=0x537<<(i-10);
+  f=((0<<10)|f)^0x5412;
+  const fb=i=>(f>>i)&1;
+  for(let i=0;i<=5;i++)set(i,8,fb(i));set(7,8,fb(6));set(8,8,fb(7));set(8,7,fb(8));for(let i=9;i<15;i++)set(8,14-i,fb(i));
+  for(let i=0;i<8;i++)set(8,N-1-i,fb(i));for(let i=8;i<15;i++)set(N-15+i,8,fb(i));
+  set(N-8,8,1);
+  if(v>=7){let r=v;for(let i=0;i<12;i++)r=(r<<1)^((r>>11)*0x1F25);const vb=v<<12|r;
+    for(let i=0;i<18;i++){const b=(vb>>i)&1,a=N-11+i%3,c=Math.floor(i/3);set(c,a,b);set(a,c,b);}}
+  return M;
+}
+
+      return qrMatrix;
+    })();
+    function pageUrl() { return /^https?:$/.test(location.protocol) ? location.href.split('#')[0] : ''; }
+    function qrSvg(url) {
+      var m = QR(url); if (!m) return '';
+      var n = m.length, q = 4, d = '';
+      for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) if (m[r][c]) d += 'M' + (c + q) + ' ' + (r + q) + 'h1v1h-1z';
+      var w = n + q * 2;
+      return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + ' ' + w + '" shape-rendering="crispEdges" aria-hidden="true"><rect width="' + w + '" height="' + w + '" fill="#fff"/><path d="' + d + '" fill="#000"/></svg>';
+    }
+    function copyText(t) {
+      if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(t).then(function () { return true; }, function () { return false; });
+      return new Promise(function (res) {
+        try { var a = document.createElement('textarea'); a.value = t; a.style.position = 'fixed'; a.style.opacity = '0'; document.body.appendChild(a); a.select(); var ok = document.execCommand('copy'); a.remove(); res(ok); } catch (e) { res(false); }
+      });
+    }
+    function say(btn, text) {
+      var box = btn.closest('.sharebar, .sc-actions'), out = box && box.querySelector('.share-msg');
+      if (!out) return; out.textContent = text;
+      clearTimeout(out._t); out._t = setTimeout(function () { out.textContent = ''; }, 4000);
+    }
+    var url = pageUrl();
+    var qrBox = document.getElementById('sc-qr'), urlEl = document.getElementById('sc-url');
+    if (qrBox) {
+      var svg = url ? qrSvg(url) : '';
+      if (svg) { qrBox.innerHTML = svg; if (urlEl) urlEl.textContent = url; }
+      else { qrBox.classList.add('sc-none'); }
+    }
+    document.querySelectorAll('[data-share]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var u = pageUrl();
+        if (!u) { say(btn, 'Sharing works once this page is online.'); return; }
+        var data = { title: 'Who told you that?', text: "Most of the standards you're failing to meet were never yours to begin with.", url: u };
+        if (navigator.share) {
+          navigator.share(data).catch(function (e) {
+            if (e && e.name === 'AbortError') return;
+            copyText(u).then(function (ok) { say(btn, ok ? 'Link copied. Paste it into a chat.' : u); });
+          });
+        } else {
+          copyText(u).then(function (ok) { say(btn, ok ? 'Link copied. Paste it into a chat.' : u); });
+        }
+      });
+    });
+    var copyBtn = document.getElementById('sc-copy');
+    if (copyBtn) copyBtn.addEventListener('click', function () {
+      var u = pageUrl(), msg = document.getElementById('sc-msg').textContent.trim();
+      copyText(u ? msg + ' ' + u : msg).then(function (ok) { say(copyBtn, ok ? (u ? 'Copied.' : 'Message copied. The link is added once the page is online.') : 'Could not copy. Select the text and copy it by hand.'); });
+    });
+    var printBtn = document.getElementById('sc-print');
+    if (printBtn) printBtn.addEventListener('click', function () {
+      var u = pageUrl(), svg2 = u ? qrSvg(u) : '';
+      var p = document.createElement('div'); p.id = 'poster-print';
+      p.innerHTML = '<h1>Who told you that?</h1><p>A short, anonymous page about the standards we never chose. No name. No account.</p>' +
+        (svg2 ? '<div class="pp-qr">' + svg2 + '</div><div class="pp-url">' + u + '</div>' : '<p>The QR code appears once this page is online.</p>');
+      document.body.appendChild(p); document.documentElement.classList.add('printing');
+      var done = function () { document.documentElement.classList.remove('printing'); p.remove(); window.removeEventListener('afterprint', done); };
+      window.addEventListener('afterprint', done);
+      window.print();
+    });
+  })();
+</script>
+<script>
+  // ---- Rewrite card: draws "red pen out, green pen in" onto a canvas in the browser. Nothing is uploaded. ----
+  (function () {
+    var form = document.getElementById('rwForm');
+    if (!form) return;
+    var oldEl = document.getElementById('rwOld'), newEl = document.getElementById('rwNew');
+    var status = document.getElementById('rwStatus'), out = document.getElementById('rwOut'), img = document.getElementById('rwImg');
+    var saveBtn = document.getElementById('rwSave'), shareBtn = document.getElementById('rwShare'), outMsg = document.getElementById('rwOutMsg');
+    var exBtn = document.getElementById('rwEx');
+    var blob = null, url = null, exN = 0;
+    var W = 1080, H = 1350, LEFT = 190, MAXW = 800;
+    var HAND = '"Caveat", "Bradley Hand", "Segoe Script", cursive';
+    var SANS = '"Outfit", system-ui, sans-serif';
+    var TYPE = '"Special Elite", "Courier New", monospace';
+    var NAME = 'who-told-you-that-my-rewrite.png';
+
+    function loadFonts() {
+      if (!document.fonts || !document.fonts.load) return Promise.resolve();
+      return Promise.all(['700 80px Caveat', '500 40px Caveat', '600 36px Outfit', '400 30px "Special Elite"'].map(function (f) { return document.fonts.load(f); })).catch(function () {});
+    }
+    function seeded(str) {
+      var h = 1779033703 ^ str.length;
+      for (var i = 0; i < str.length; i++) { h = Math.imul(h ^ str.charCodeAt(i), 3432918353); h = (h << 13) | (h >>> 19); }
+      var a = h >>> 0;
+      return function () { a = (a + 0x6D2B79F5) >>> 0; var t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+    }
+    function wrap(ctx, text, maxW) {
+      var words = text.split(/\s+/), lines = [], cur = '';
+      words.forEach(function (w) {
+        var t = cur ? cur + ' ' + w : w;
+        if (ctx.measureText(t).width > maxW && cur) { lines.push(cur); cur = w; } else cur = t;
+      });
+      if (cur) lines.push(cur);
+      return lines;
+    }
+    function fit(ctx, text, family, weight, maxW, maxLines, start, min) {
+      var size = start, lines = [];
+      for (; size >= min; size -= 4) {
+        ctx.font = weight + ' ' + size + 'px ' + family;
+        lines = wrap(ctx, text, maxW);
+        if (lines.length <= maxLines && lines.every(function (l) { return ctx.measureText(l).width <= maxW; })) return { size: size, lines: lines, lh: Math.round(size * 1.18) };
+      }
+      size = min; ctx.font = weight + ' ' + size + 'px ' + family; lines = wrap(ctx, text, maxW);
+      return { size: size, lines: lines, lh: Math.round(size * 1.18) };
+    }
+    // a hand-drawn line: slightly wavy, drawn with a quadratic curve through jittered points
+    function wob(ctx, x1, x2, y, amp, lw, col, rnd, rise) {
+      ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      var steps = Math.max(3, Math.round((x2 - x1) / 60)), px = x1, py = y + (rnd() - 0.5) * amp;
+      ctx.beginPath(); ctx.moveTo(px, py);
+      for (var i = 1; i <= steps; i++) {
+        var nx = x1 + (x2 - x1) * i / steps, ny = y - (rise || 0) * i / steps + (rnd() - 0.5) * amp * 2;
+        ctx.quadraticCurveTo((px + nx) / 2, (py + ny) / 2 + (rnd() - 0.5) * amp, nx, ny);
+        px = nx; py = ny;
+      }
+      ctx.stroke();
+    }
+    function loop(ctx, cx, cy, rx, ry, col, lw, rnd) {
+      ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.lineCap = 'round'; ctx.beginPath();
+      var n = 64, a0 = -2.4, sweep = Math.PI * 2 + 0.7, ph = rnd() * 6;
+      for (var i = 0; i <= n; i++) {
+        var t = a0 + sweep * i / n, k = 1 + 0.05 * Math.sin(t * 3 + ph) + (i / n) * 0.08;
+        var px = cx + Math.cos(t) * rx * k, py = cy + Math.sin(t) * ry * k;
+        if (i) ctx.lineTo(px, py); else ctx.moveTo(px, py);
+      }
+      ctx.stroke();
+    }
+    function arrow(ctx, x, y, col) {
+      ctx.strokeStyle = col; ctx.lineWidth = 7; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      var ex = x + 40, ey = y + 96;
+      ctx.beginPath(); ctx.moveTo(x, y); ctx.bezierCurveTo(x + 110, y + 6, x + 130, y + 56, ex, ey); ctx.stroke();
+      var ang = Math.atan2(ey - (y + 56), ex - (x + 130));
+      [-0.55, 0.55].forEach(function (s) {
+        ctx.beginPath(); ctx.moveTo(ex, ey); ctx.lineTo(ex - 40 * Math.cos(ang + s), ey - 40 * Math.sin(ang + s)); ctx.stroke();
+      });
+    }
+
+    function draw(oldT, newT) {
+      var c = document.createElement('canvas'); c.width = W; c.height = H;
+      var x = c.getContext('2d'), rnd = seeded(oldT + '|' + newT), i;
+      // paper, soft edge shading, ruled lines, red margin, punched holes
+      x.fillStyle = '#F6EEDA'; x.fillRect(0, 0, W, H);
+      var g = x.createRadialGradient(W / 2, H / 2, H * 0.35, W / 2, H / 2, H * 0.85);
+      g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(1, 'rgba(150,110,60,0.22)');
+      x.fillStyle = g; x.fillRect(0, 0, W, H);
+      x.strokeStyle = 'rgba(4,57,94,0.22)'; x.lineWidth = 2;
+      for (var y = 200; y < H - 40; y += 62) { x.beginPath(); x.moveTo(0, y); x.lineTo(W, y); x.stroke(); }
+      x.strokeStyle = 'rgba(143,45,24,0.55)'; x.lineWidth = 3; x.beginPath(); x.moveTo(140, 0); x.lineTo(140, H); x.stroke();
+      [250, 675, 1100].forEach(function (hy) {
+        x.beginPath(); x.arc(62, hy, 20, 0, Math.PI * 2); x.fillStyle = '#CDBA93'; x.fill();
+        x.lineWidth = 3; x.strokeStyle = 'rgba(60,40,20,0.35)'; x.stroke();
+      });
+      // yellow tape across the top
+      x.save(); x.translate(W / 2 + 20, 18); x.rotate(-0.04);
+      x.fillStyle = 'rgba(235,210,122,0.85)'; x.fillRect(-140, -6, 280, 70);
+      x.strokeStyle = 'rgba(3,29,68,0.15)'; x.lineWidth = 2; x.strokeRect(-140, -6, 280, 70); x.restore();
+
+      // title with "that?" circled in red pen
+      x.textBaseline = 'alphabetic'; x.textAlign = 'left';
+      x.font = '700 92px ' + HAND; x.fillStyle = '#031D44';
+      var pre = 'who told you ', preW = x.measureText(pre).width, thatW = x.measureText('that?').width;
+      x.fillText(pre, LEFT, 175); x.fillText('that?', LEFT + preW, 175);
+      loop(x, LEFT + preW + thatW / 2, 150, thatW / 2 + 26, 62, '#8F2D18', 6, rnd);
+
+      // measure the two blocks first so the space between them can be shared out evenly
+      var oldB = fit(x, oldT, HAND, 700, MAXW, 3, 84, 44);
+      var newB = fit(x, newT, HAND, 700, MAXW, 3, 96, 48);
+      var LABEL = 50, ARROW = 110;
+      var hOld = oldB.lines.length * oldB.lh, hNew = newB.lines.length * newB.lh;
+      var top = 250, bottom = 1190, free = (bottom - top) - (LABEL * 2 + hOld + hNew + ARROW);
+      var gap = Math.max(18, Math.min(80, free / 4));
+      var cy = top + Math.max(0, (free - gap * 4) / 2);
+
+      // red pen out
+      x.font = '600 38px ' + HAND; x.fillStyle = '#8F2D18'; x.fillText('red pen out.', LEFT, cy + 34);
+      cy += LABEL + gap * 0.6;
+      x.font = '700 ' + oldB.size + 'px ' + HAND; x.fillStyle = '#031D44';
+      oldB.lines.forEach(function (ln, k) {
+        var by = cy + oldB.lh * (k + 1) - oldB.lh * 0.22, w = x.measureText(ln).width;
+        x.fillText(ln, LEFT, by);
+        var sy = by - oldB.size * 0.28;
+        wob(x, LEFT - 12, LEFT + w + 12, sy, 3, 8, 'rgba(143,45,24,0.92)', rnd, 8);
+        wob(x, LEFT - 6, LEFT + w + 6, sy + 7, 3, 4, 'rgba(143,45,24,0.7)', rnd, 6);
+      });
+      cy += hOld + gap;
+
+      // curly arrow down to the green line
+      arrow(x, LEFT + 70, cy - gap * 0.2, '#2F5E47');
+      cy += ARROW + gap * 0.2;
+
+      // green pen in
+      x.font = '600 38px ' + HAND; x.fillStyle = '#2F5E47'; x.fillText('green pen in.', LEFT, cy + 34);
+      cy += LABEL + gap * 0.4;
+      x.font = '700 ' + newB.size + 'px ' + HAND;
+      newB.lines.forEach(function (ln, k) {
+        var by = cy + newB.lh * (k + 1) - newB.lh * 0.22, w = x.measureText(ln).width;
+        x.fillStyle = 'rgba(235,210,122,0.6)';
+        x.fillRect(LEFT - 8, by - newB.size * 0.34, w + 16, newB.size * 0.42);
+        x.fillStyle = '#20472F'; x.fillText(ln, LEFT, by);
+        if (k === newB.lines.length - 1) wob(x, LEFT, LEFT + w, by + 14, 2.5, 5, '#2F5E47', rnd, 0);
+      });
+
+      // footer
+      x.fillStyle = '#04395E'; x.font = '400 27px ' + TYPE;
+      x.fillText('WHO TOLD YOU THAT? \u00b7 UNDERSTANDING THE SELF', LEFT, H - 78);
+      if (/^https?:$/.test(location.protocol)) {
+        var addr = (location.host + location.pathname).replace(/index\.html$/, '').replace(/\/$/, '');
+        if (addr.length > 52) addr = addr.slice(0, 51) + '\u2026';
+        x.font = '400 23px ' + TYPE; x.fillStyle = 'rgba(4,57,94,0.75)'; x.fillText(addr, LEFT, H - 44);
+      }
+      return c;
+    }
+
+    function canShareFile() {
+      try { return !!(blob && navigator.share && navigator.canShare && navigator.canShare({ files: [new File([blob], NAME, { type: 'image/png' })] })); } catch (e) { return false; }
+    }
+    function clean(v) { return v.replace(/\s+/g, ' ').trim(); }
+
+    exBtn.addEventListener('click', function () {
+      var rows = document.querySelectorAll('.rewrite-row');
+      if (!rows.length) return;
+      var r = rows[exN++ % rows.length];
+      oldEl.value = r.querySelector('.old').textContent.trim();
+      newEl.value = r.querySelector('.new').textContent.trim();
+      status.textContent = '';
+    });
+
+    form.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      var o = clean(oldEl.value), n = clean(newEl.value);
+      if (!o || !n) { status.textContent = 'Fill in both lines first.'; (o ? newEl : oldEl).focus(); return; }
+      status.textContent = 'Making your card...';
+      loadFonts().then(function () {
+        var canvas;
+        try { canvas = draw(o, n); } catch (e) { status.textContent = 'Could not draw the card on this browser.'; return; }
+        canvas.toBlob(function (b) {
+          if (!b) { status.textContent = 'Could not make the image on this browser.'; return; }
+          blob = b;
+          if (url) URL.revokeObjectURL(url);
+          url = URL.createObjectURL(b);
+          img.src = url;
+          img.alt = 'Your rewrite card. Crossed out in red: ' + o + '. Written in green: ' + n;
+          out.hidden = false;
+          shareBtn.hidden = !canShareFile();
+          outMsg.textContent = '';
+          status.textContent = 'Your card is ready below.';
+          var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          out.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'nearest' });
+        }, 'image/png');
+      });
+    });
+
+    saveBtn.addEventListener('click', function () {
+      if (!blob) return;
+      var a = document.createElement('a'); a.href = url; a.download = NAME;
+      document.body.appendChild(a); a.click(); a.remove();
+      outMsg.textContent = 'Saved. If nothing downloaded, press and hold the picture.';
+    });
+    shareBtn.addEventListener('click', function () {
+      if (!blob) return;
+      var f = new File([blob], NAME, { type: 'image/png' });
+      navigator.share({ files: [f], title: 'Who told you that?', text: 'I rewrote a rule I was handed.' }).catch(function (e) {
+        if (e && e.name !== 'AbortError') outMsg.textContent = 'Could not open the share sheet. Try Save image instead.';
+      });
+    });
+  })();
 </script>
 </body>
 </html>
