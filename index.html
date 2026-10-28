@@ -1988,15 +1988,50 @@
   .sc-btn:active { translate: 0 0; box-shadow: 0 1px 1px rgba(3,29,68,.25); }
   #poster-print { display: none; }
   @media print {
-    html.printing, html.printing body { height: auto !important; overflow: visible !important; background: #fff !important; }
+    html.printing, html.printing body { height: auto !important; overflow: visible !important; margin: 0 !important; padding: 0 !important; background: #DAB785 !important; }
     html.printing body::before, html.printing body::after { display: none !important; }
     html.printing body > *:not(#poster-print) { display: none !important; }
-    html.printing #poster-print { display: block !important; text-align: center; padding: 28px 24px; color: #000; background: #fff; font-family: "Outfit", Arial, sans-serif; }
-    #poster-print h1 { font-size: 64px; line-height: 1.05; margin: 0 0 12px; }
-    #poster-print p { font-size: 22px; margin: 0 auto 20px; max-width: 560px; }
-    #poster-print .pp-qr { width: 420px; max-width: 80%; margin: 24px auto 12px; }
-    #poster-print .pp-qr svg { width: 100%; height: auto; display: block; }
-    #poster-print .pp-url { font: 400 16px "Courier New", monospace; overflow-wrap: anywhere; }
+    html.printing #poster-print, html.printing #poster-print * { -webkit-print-color-adjust: exact; print-color-adjust: exact; box-sizing: border-box; }
+    html.printing #poster-print {
+      display: block !important; position: relative; width: 210mm; height: 296mm; overflow: hidden; margin: 0; padding: 22mm 16mm 14mm 40mm;
+      page-break-inside: avoid; break-inside: avoid; page-break-after: avoid; break-after: avoid;
+      color: #031D44; font-family: "DM Sans", Arial, sans-serif; text-align: left;
+      background:
+        repeating-linear-gradient(to bottom, transparent 0, transparent 7.7mm, rgba(4, 57, 94, 0.3) 7.7mm, rgba(4, 57, 94, 0.3) 8mm),
+        #DAB785;
+      background-position: 0 6mm, 0 0;
+    }
+    /* notebook furniture: punched holes and the red margin rule */
+    #poster-print .pp-holes { position: absolute; left: 7mm; top: 0; bottom: 0; width: 7mm; background: radial-gradient(circle at 50% 50%, rgba(3, 29, 68, 0.78) 0 2.4mm, rgba(3, 29, 68, 0.18) 2.4mm 2.9mm, transparent 3mm); background-size: 7mm 32mm; background-position: 0 14mm; }
+    #poster-print .pp-margin { position: absolute; left: 28mm; top: 0; bottom: 0; width: 1.1mm; border-left: 0.35mm solid rgba(143, 45, 24, 0.6); border-right: 0.35mm solid rgba(143, 45, 24, 0.6); }
+    #poster-print .pp-ring { position: absolute; right: -14mm; bottom: 26mm; width: 52mm; height: 52mm; border-radius: 50%; border: 1.6mm solid rgba(110, 62, 24, 0.2); box-shadow: inset 0 0 0 0.8mm rgba(110, 62, 24, 0.1), 0 0 0 0.6mm rgba(110, 62, 24, 0.07); transform: rotate(18deg); }
+    #poster-print .pp-ring::after { content: ""; position: absolute; inset: 3mm; border-radius: 50%; border: 0.5mm solid rgba(110, 62, 24, 0.12); border-left-color: transparent; }
+    #poster-print .pp-kicker { font: 700 22pt/1 "Caveat", cursive; color: #8F2D18; transform: rotate(-2deg); transform-origin: left; margin: 0 0 3mm; }
+    #poster-print h1 { font: 800 76pt/0.98 "Plus Jakarta Sans", Arial, sans-serif; letter-spacing: -0.025em; color: #031D44; margin: 0 0 9mm; }
+    #poster-print .pp-that { position: relative; display: inline-block; white-space: nowrap; }
+    #poster-print .pp-that svg { position: absolute; left: -7mm; right: -9mm; top: -5mm; bottom: -5mm; width: calc(100% + 16mm); height: calc(100% + 10mm); overflow: visible; }
+    #poster-print .pp-that path { fill: none; stroke: #8F2D18; stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; stroke-width: 1.5mm; }
+    #poster-print .pp-sub { font: 400 15pt/1.45 "DM Sans", Arial, sans-serif; color: #04395E; max-width: 128mm; margin: 0 0 8mm; }
+    #poster-print .pp-sub mark { background: linear-gradient(transparent 52%, #C9DEB9 52%, #C9DEB9 92%, transparent 92%); color: inherit; padding: 0 1mm; }
+    #poster-print .pp-rw { margin: 0 0 9mm; display: grid; gap: 3mm; }
+    #poster-print .pp-row { display: flex; align-items: baseline; gap: 6mm; flex-wrap: wrap; }
+    #poster-print .pp-old { position: relative; font: 400 13pt/1.3 "DM Sans", Arial, sans-serif; color: #04395E; }
+    #poster-print .pp-old::after { content: ""; position: absolute; left: -1mm; right: -1mm; top: 52%; height: 0.6mm; background: #8F2D18; transform: rotate(-1.5deg); transform-origin: left; }
+    #poster-print .pp-new { font: 700 20pt/1.1 "Caveat", cursive; color: #2F5E47; transform: rotate(-1deg); }
+    #poster-print .pp-scan { display: flex; align-items: flex-end; gap: 3mm; margin: 0 0 1mm 8mm; }
+    #poster-print .pp-scan span { font: 700 25pt/1 "Caveat", cursive; color: #8F2D18; transform: rotate(-3deg); }
+    #poster-print .pp-scan svg { width: 15mm; height: 14mm; fill: none; stroke: #8F2D18; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; margin-bottom: -4mm; }
+    #poster-print .pp-card { position: relative; width: 98mm; margin: 4mm 0 0 14mm; padding: 8mm 8mm 6mm; background: #F2E4C8; background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 6.6mm, rgba(3, 29, 68, 0.1) 6.6mm, rgba(3, 29, 68, 0.1) 7mm); box-shadow: 0 0.6mm 0.8mm rgba(3, 29, 68, 0.28), 0 3mm 5mm rgba(3, 29, 68, 0.22); transform: rotate(-1.4deg); text-align: center; }
+    #poster-print .pp-card::before, #poster-print .pp-card::after { content: ""; position: absolute; top: -4.5mm; width: 26mm; height: 9mm; background: repeating-linear-gradient(135deg, rgba(235, 210, 122, 0.92) 0 2mm, rgba(240, 220, 142, 0.92) 2mm 4mm); box-shadow: 0 0.3mm 0.6mm rgba(3, 29, 68, 0.2); }
+    #poster-print .pp-card::before { left: -7mm; transform: rotate(-38deg); }
+    #poster-print .pp-card::after { right: -7mm; transform: rotate(36deg); }
+    #poster-print .pp-qr { width: 78mm; height: 78mm; margin: 0 auto 4mm; background: #fff; border: 0.5mm solid rgba(3, 29, 68, 0.35); display: grid; place-items: center; }
+    #poster-print .pp-qr svg { width: 100%; height: 100%; display: block; }
+    #poster-print .pp-qr.pp-none { font: 400 12pt/1.4 "Special Elite", "Courier New", monospace; padding: 8mm; border: 0.6mm dashed rgba(3, 29, 68, 0.4); color: #444; }
+    #poster-print .pp-url { font: 400 10.5pt/1.3 "Special Elite", "Courier New", monospace; color: #031D44; overflow-wrap: anywhere; }
+    #poster-print .pp-foot { position: absolute; left: 40mm; right: 16mm; bottom: 14mm; display: flex; justify-content: flex-end; }
+    #poster-print .pp-foot span { font: 700 21pt/1.1 "Caveat", cursive; color: #031D44; transform: rotate(-2deg); text-align: right; }
+    #poster-print .pp-foot b { color: #8F2D18; font-weight: 700; }
   }
 </style>
 <style>
@@ -3332,12 +3367,30 @@ function qrMatrix(text){
     if (printBtn) printBtn.addEventListener('click', function () {
       var u = pageUrl(), svg2 = u ? qrSvg(u) : '';
       var p = document.createElement('div'); p.id = 'poster-print';
-      p.innerHTML = '<h1>Who told you that?</h1><p>A short, anonymous page about the standards we never chose. No name. No account.</p>' +
-        (svg2 ? '<div class="pp-qr">' + svg2 + '</div><div class="pp-url">' + u + '</div>' : '<p>The QR code appears once this page is online.</p>');
+      var ring = 'M24 54 C 14 20, 92 2, 152 9 C 200 15, 204 72, 154 90 C 102 106, 20 94, 9 60 C 6 42, 28 26, 62 20';
+      p.innerHTML =
+        '<div class="pp-holes"></div><div class="pp-margin"></div><div class="pp-ring"></div>' +
+        '<div class="pp-kicker">a short, anonymous page</div>' +
+        '<h1>Who told<br>you <span class="pp-that">that?<svg viewBox="0 0 210 110" preserveAspectRatio="none" aria-hidden="true"><path d="' + ring + '"/></svg></span></h1>' +
+        '<p class="pp-sub">Most of the standards you\u2019re failing to meet were <mark>never yours</mark> to begin with.</p>' +
+        '<div class="pp-rw">' +
+          '<div class="pp-row"><span class="pp-old">I\u2019ll earn rest once I\u2019m caught up.</span><span class="pp-new">Rest is part of the work.</span></div>' +
+          '<div class="pp-row"><span class="pp-old">Good enough isn\u2019t good enough.</span><span class="pp-new">Good enough is allowed to be enough.</span></div>' +
+        '</div>' +
+        '<div class="pp-scan"><span>scan it. it\u2019s anonymous.</span><svg viewBox="0 0 36 34" aria-hidden="true"><path d="M4 6 C 14 3, 27 10, 28 28 M28 28 l-6 -7 M28 28 l7 -8"/></svg></div>' +
+        '<div class="pp-card">' +
+          (svg2 ? '<div class="pp-qr">' + svg2 + '</div><div class="pp-url"></div>' : '<div class="pp-qr pp-none">The QR code appears once this page is online.</div>') +
+        '</div>' +
+        '<div class="pp-foot"><span>No name. No account.<br><b>Just a page.</b></span></div>';
+      var urlBox = p.querySelector('.pp-url'); if (urlBox) urlBox.textContent = u;
+      // A4 with no browser margins, only while the poster is printing
+      var pg = document.createElement('style'); pg.id = 'poster-page'; pg.textContent = '@page { size: A4 portrait; margin: 0; }';
+      document.head.appendChild(pg);
       document.body.appendChild(p); document.documentElement.classList.add('printing');
-      var done = function () { document.documentElement.classList.remove('printing'); p.remove(); window.removeEventListener('afterprint', done); };
+      var done = function () { document.documentElement.classList.remove('printing'); p.remove(); pg.remove(); window.removeEventListener('afterprint', done); };
       window.addEventListener('afterprint', done);
-      window.print();
+      var go = function () { window.print(); };
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(go, go); else go();
     });
   })();
 </script>
