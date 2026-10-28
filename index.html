@@ -3384,80 +3384,257 @@ function qrMatrix(text){
         ctx.beginPath(); ctx.moveTo(ex, ey); ctx.lineTo(ex - 40 * Math.cos(ang + s), ey - 40 * Math.sin(ang + s)); ctx.stroke();
       });
     }
+    // paper texture: speckles and short fibres
+    function grain(ctx, rnd, x0, y0, x1, y1, n, a) {
+      for (var i = 0; i < n; i++) {
+        ctx.fillStyle = 'rgba(60,40,20,' + (rnd() * a).toFixed(3) + ')';
+        ctx.fillRect(x0 + rnd() * (x1 - x0), y0 + rnd() * (y1 - y0), 1 + rnd() * 1.6, 1 + rnd() * 1.6);
+      }
+    }
+    function fibers(ctx, rnd, x0, y0, x1, y1, n) {
+      ctx.lineWidth = 1; ctx.lineCap = 'round';
+      for (var i = 0; i < n; i++) {
+        var px = x0 + rnd() * (x1 - x0), py = y0 + rnd() * (y1 - y0);
+        ctx.strokeStyle = 'rgba(120,90,50,' + (0.04 + rnd() * 0.06).toFixed(3) + ')';
+        ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px + (rnd() - 0.5) * 26, py + (rnd() - 0.5) * 26); ctx.stroke();
+      }
+    }
+    // a hand-torn rectangle: points along all four edges with a little jitter
+    function tornPts(x0, y0, x1, y1, rnd, amp) {
+      var pts = [], step = 16, i;
+      for (i = x0; i < x1; i += step) pts.push([i, y0 + (rnd() - 0.5) * amp * 2]);
+      for (i = y0; i < y1; i += step) pts.push([x1 + (rnd() - 0.5) * amp * 2, i]);
+      for (i = x1; i > x0; i -= step) pts.push([i, y1 + (rnd() - 0.5) * amp * 2]);
+      for (i = y1; i > y0; i -= step) pts.push([x0 + (rnd() - 0.5) * amp * 2, i]);
+      return pts;
+    }
+    function trace(ctx, pts) {
+      ctx.beginPath();
+      pts.forEach(function (p, k) { if (k) ctx.lineTo(p[0], p[1]); else ctx.moveTo(p[0], p[1]); });
+      ctx.closePath();
+    }
+    // washi tape with torn ends: butter, stripe, dots
+    function tape(ctx, cx, cy, w, h, rot, kind) {
+      var i, zs = 6;
+      ctx.save(); ctx.translate(cx, cy); ctx.rotate(rot);
+      ctx.beginPath(); ctx.moveTo(-w / 2, -h / 2); ctx.lineTo(w / 2, -h / 2);
+      for (i = 0; i <= zs; i++) ctx.lineTo(w / 2 + (i % 2 ? -5 : 3), -h / 2 + h * i / zs);
+      ctx.lineTo(-w / 2, h / 2);
+      for (i = zs; i >= 0; i--) ctx.lineTo(-w / 2 + (i % 2 ? 5 : -3), -h / 2 + h * i / zs);
+      ctx.closePath();
+      ctx.shadowColor = 'rgba(3,29,68,0.25)'; ctx.shadowBlur = 4; ctx.shadowOffsetY = 2;
+      ctx.fillStyle = kind === 'stripe' ? 'rgba(246,236,200,0.88)' : kind === 'dots' ? 'rgba(188,211,176,0.88)' : 'rgba(235,210,122,0.85)';
+      ctx.fill(); ctx.shadowColor = 'transparent';
+      ctx.save(); ctx.clip();
+      if (kind === 'stripe') {
+        ctx.strokeStyle = 'rgba(143,45,24,0.55)'; ctx.lineWidth = 9;
+        for (i = -w; i < w; i += 22) { ctx.beginPath(); ctx.moveTo(i, h); ctx.lineTo(i + h, -h); ctx.stroke(); }
+      } else if (kind === 'dots') {
+        ctx.fillStyle = 'rgba(255,250,235,0.9)';
+        for (i = -w / 2 + 10; i < w / 2; i += 22) { ctx.beginPath(); ctx.arc(i, -6, 4, 0, Math.PI * 2); ctx.arc(i + 11, 8, 4, 0, Math.PI * 2); ctx.fill(); }
+      } else {
+        ctx.fillStyle = 'rgba(255,255,255,0.22)'; ctx.fillRect(-w / 2, -h / 2, w, h * 0.35);
+      }
+      ctx.restore();
+      ctx.strokeStyle = 'rgba(3,29,68,0.16)'; ctx.lineWidth = 1.5; ctx.stroke();
+      ctx.restore();
+    }
+    function star(ctx, cx, cy, r, col, rot) {
+      ctx.save(); ctx.translate(cx, cy); ctx.rotate(rot);
+      ctx.strokeStyle = col; ctx.lineWidth = 5; ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.beginPath();
+      for (var i = 0; i < 10; i++) {
+        var a = -Math.PI / 2 + i * Math.PI / 5, rr = i % 2 ? r * 0.45 : r, px = Math.cos(a) * rr, py = Math.sin(a) * rr;
+        if (i) ctx.lineTo(px, py); else ctx.moveTo(px, py);
+      }
+      ctx.closePath(); ctx.stroke(); ctx.restore();
+    }
+    function heart(ctx, cx, cy, s, col, rot) {
+      ctx.save(); ctx.translate(cx, cy); ctx.rotate(rot);
+      ctx.strokeStyle = col; ctx.lineWidth = 5; ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.beginPath();
+      ctx.moveTo(0, s * 0.35); ctx.bezierCurveTo(-s * 1.1, -s * 0.3, -s * 0.5, -s * 1.0, 0, -s * 0.4);
+      ctx.bezierCurveTo(s * 0.5, -s * 1.0, s * 1.1, -s * 0.3, 0, s * 0.35); ctx.stroke(); ctx.restore();
+    }
+    function sparkle(ctx, cx, cy, r, col) {
+      ctx.strokeStyle = col; ctx.lineWidth = 4.5; ctx.lineCap = 'round'; ctx.beginPath();
+      ctx.moveTo(cx, cy - r); ctx.lineTo(cx, cy + r); ctx.moveTo(cx - r, cy); ctx.lineTo(cx + r, cy);
+      ctx.moveTo(cx - r * 0.5, cy - r * 0.5); ctx.lineTo(cx + r * 0.5, cy + r * 0.5);
+      ctx.moveTo(cx + r * 0.5, cy - r * 0.5); ctx.lineTo(cx - r * 0.5, cy + r * 0.5); ctx.stroke();
+    }
+    function spiral(ctx, cx, cy, r, col) {
+      ctx.strokeStyle = col; ctx.lineWidth = 4.5; ctx.lineCap = 'round'; ctx.beginPath();
+      for (var i = 0; i <= 60; i++) {
+        var t = i / 60 * Math.PI * 4, rr = r * i / 60, px = cx + Math.cos(t) * rr, py = cy + Math.sin(t) * rr;
+        if (i) ctx.lineTo(px, py); else ctx.moveTo(px, py);
+      }
+      ctx.stroke();
+    }
+    // rubber stamp: double border, uneven ink (drawn on its own small canvas so the speckle gaps do not erase the card)
+    function stamp(ctx, cx, cy, w, h, text, col, rot, rnd) {
+      var s = document.createElement('canvas'); s.width = w + 24; s.height = h + 24;
+      var c = s.getContext('2d'), i;
+      c.strokeStyle = col; c.fillStyle = col; c.lineWidth = 5; c.strokeRect(12, 12, w, h);
+      c.lineWidth = 2; c.strokeRect(20, 20, w - 16, h - 16);
+      c.font = '400 ' + Math.round(h * 0.46) + 'px ' + TYPE; c.textAlign = 'center'; c.textBaseline = 'middle';
+      c.fillText(text, 12 + w / 2, 12 + h / 2 + 2);
+      c.globalCompositeOperation = 'destination-out';
+      for (i = 0; i < 140; i++) { c.globalAlpha = 0.3 + rnd() * 0.7; c.beginPath(); c.arc(rnd() * s.width, rnd() * s.height, 0.6 + rnd() * 2.4, 0, Math.PI * 2); c.fill(); }
+      ctx.save(); ctx.translate(cx, cy); ctx.rotate(rot); ctx.globalAlpha = 0.82; ctx.globalCompositeOperation = 'multiply';
+      ctx.drawImage(s, -s.width / 2, -s.height / 2); ctx.restore();
+    }
+    // round peel-off sticker with a white die-cut edge
+    function sticker(ctx, cx, cy, r, rot) {
+      ctx.save(); ctx.translate(cx, cy); ctx.rotate(rot);
+      ctx.shadowColor = 'rgba(3,29,68,0.3)'; ctx.shadowBlur = 8; ctx.shadowOffsetY = 4;
+      ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(0, 0, r + 8, 0, Math.PI * 2); ctx.fill();
+      ctx.shadowColor = 'transparent';
+      ctx.fillStyle = '#BCD3B0'; ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
+      var g = ctx.createLinearGradient(-r, -r, r, r); g.addColorStop(0, 'rgba(255,255,255,0.5)'); g.addColorStop(0.5, 'rgba(255,255,255,0)');
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = 'rgba(3,29,68,0.55)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(0, 0, r + 8, 0, Math.PI * 2); ctx.stroke();
+      ctx.fillStyle = '#20472F'; ctx.font = '700 42px ' + HAND; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('noted', 0, 14);
+      ctx.strokeStyle = '#20472F'; ctx.lineWidth = 6; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      ctx.beginPath(); ctx.moveTo(-16, -22); ctx.lineTo(-6, -12); ctx.lineTo(16, -34); ctx.stroke();
+      ctx.restore();
+    }
+    // a small paper card with a soft shadow and sheen (origin is the card's top left corner)
+    function cardBase(ctx, w, h, fill) {
+      ctx.save(); ctx.shadowColor = 'rgba(3,29,68,0.32)'; ctx.shadowBlur = 22; ctx.shadowOffsetY = 10;
+      ctx.fillStyle = fill; ctx.fillRect(0, 0, w, h); ctx.restore();
+      var g = ctx.createLinearGradient(0, 0, w, h); g.addColorStop(0, 'rgba(255,255,255,0.35)'); g.addColorStop(1, 'rgba(120,90,40,0.10)');
+      ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+      ctx.strokeStyle = 'rgba(3,29,68,0.14)'; ctx.lineWidth = 2; ctx.strokeRect(1, 1, w - 2, h - 2);
+    }
 
     function draw(oldT, newT) {
       var c = document.createElement('canvas'); c.width = W; c.height = H;
-      var x = c.getContext('2d'), rnd = seeded(oldT + '|' + newT), i;
-      // paper, soft edge shading, ruled lines, red margin, punched holes
-      x.fillStyle = '#F6EEDA'; x.fillRect(0, 0, W, H);
-      var g = x.createRadialGradient(W / 2, H / 2, H * 0.35, W / 2, H / 2, H * 0.85);
-      g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(1, 'rgba(150,110,60,0.22)');
-      x.fillStyle = g; x.fillRect(0, 0, W, H);
-      x.strokeStyle = 'rgba(4,57,94,0.22)'; x.lineWidth = 2;
-      for (var y = 200; y < H - 40; y += 62) { x.beginPath(); x.moveTo(0, y); x.lineTo(W, y); x.stroke(); }
-      x.strokeStyle = 'rgba(143,45,24,0.55)'; x.lineWidth = 3; x.beginPath(); x.moveTo(140, 0); x.lineTo(140, H); x.stroke();
-      [250, 675, 1100].forEach(function (hy) {
-        x.beginPath(); x.arc(62, hy, 20, 0, Math.PI * 2); x.fillStyle = '#CDBA93'; x.fill();
-        x.lineWidth = 3; x.strokeStyle = 'rgba(60,40,20,0.35)'; x.stroke();
+      var x = c.getContext('2d'), rnd = seeded(oldT + '|' + newT), i, k;
+      try { x.letterSpacing = '0px'; } catch (e) {}
+
+      // the desk
+      x.fillStyle = '#DAB785'; x.fillRect(0, 0, W, H);
+      var dg = x.createRadialGradient(W / 2, H / 2, 200, W / 2, H / 2, 900);
+      dg.addColorStop(0, 'rgba(255,240,205,0.35)'); dg.addColorStop(1, 'rgba(120,80,30,0.35)');
+      x.fillStyle = dg; x.fillRect(0, 0, W, H);
+      grain(x, rnd, 0, 0, W, H, 9000, 0.12); fibers(x, rnd, 0, 0, W, H, 220);
+
+      // the torn notebook sheet, tilted a little
+      x.save(); x.translate(W / 2, H / 2); x.rotate(-0.012); x.translate(-W / 2, -H / 2);
+      var SX0 = 70, SY0 = 70, SX1 = 1010, SY1 = 1280;
+      var pts = tornPts(SX0, SY0, SX1, SY1, rnd, 5);
+      x.save(); x.shadowColor = 'rgba(3,29,68,0.4)'; x.shadowBlur = 40; x.shadowOffsetY = 18;
+      trace(x, pts); x.fillStyle = '#F8F0DC'; x.fill(); x.restore();
+      x.save(); trace(x, pts); x.clip();
+      var pg = x.createRadialGradient(W / 2, H / 2, 300, W / 2, H / 2, 900);
+      pg.addColorStop(0, 'rgba(255,255,255,0)'); pg.addColorStop(1, 'rgba(150,110,60,0.2)');
+      x.fillStyle = pg; x.fillRect(SX0, SY0, SX1 - SX0, SY1 - SY0);
+      x.strokeStyle = 'rgba(4,57,94,0.2)'; x.lineWidth = 2;
+      for (var ly = 140; ly < SY1; ly += 58) { x.beginPath(); x.moveTo(SX0, ly); x.lineTo(SX1, ly); x.stroke(); }
+      x.strokeStyle = 'rgba(143,45,24,0.5)'; x.lineWidth = 3; x.beginPath(); x.moveTo(170, SY0); x.lineTo(170, SY1); x.stroke();
+      x.strokeStyle = 'rgba(143,45,24,0.25)'; x.lineWidth = 1.5; x.beginPath(); x.moveTo(177, SY0); x.lineTo(177, SY1); x.stroke();
+      // fold crease
+      x.strokeStyle = 'rgba(90,60,30,0.2)'; x.lineWidth = 2; x.beginPath(); x.moveTo(SX0, 715); x.lineTo(SX1, 715); x.stroke();
+      x.strokeStyle = 'rgba(255,255,255,0.4)'; x.beginPath(); x.moveTo(SX0, 718); x.lineTo(SX1, 718); x.stroke();
+      // punched holes
+      [240, 675, 1110].forEach(function (hy) {
+        x.beginPath(); x.arc(112, hy, 20, 0, Math.PI * 2); x.fillStyle = '#D3B07A'; x.fill();
+        x.lineWidth = 3; x.strokeStyle = 'rgba(60,40,20,0.4)'; x.stroke();
+        x.beginPath(); x.arc(112, hy, 20, 0.3, Math.PI - 0.3); x.strokeStyle = 'rgba(60,40,20,0.35)'; x.lineWidth = 5; x.stroke();
       });
-      // yellow tape across the top
-      x.save(); x.translate(W / 2 + 20, 18); x.rotate(-0.04);
-      x.fillStyle = 'rgba(235,210,122,0.85)'; x.fillRect(-140, -6, 280, 70);
-      x.strokeStyle = 'rgba(3,29,68,0.15)'; x.lineWidth = 2; x.strokeRect(-140, -6, 280, 70); x.restore();
+      // coffee ring
+      x.beginPath(); x.arc(930, 1170, 58, 0, Math.PI * 2); x.fillStyle = 'rgba(150,100,50,0.06)'; x.fill();
+      x.lineCap = 'round'; x.strokeStyle = 'rgba(110,70,30,0.24)'; x.lineWidth = 6;
+      x.beginPath(); x.arc(930, 1170, 58, 0.3, Math.PI * 2 - 0.4); x.stroke();
+      x.strokeStyle = 'rgba(110,70,30,0.13)'; x.lineWidth = 2.5; x.beginPath(); x.arc(931, 1171, 52, 0.9, Math.PI * 2 - 0.2); x.stroke();
+      grain(x, rnd, SX0, SY0, SX1, SY1, 5500, 0.1); fibers(x, rnd, SX0, SY0, SX1, SY1, 260);
+      x.restore();
+      trace(x, pts); x.strokeStyle = 'rgba(150,110,60,0.35)'; x.lineWidth = 2; x.stroke();
 
       // title with "that?" circled in red pen
       x.textBaseline = 'alphabetic'; x.textAlign = 'left';
-      x.font = '700 92px ' + HAND; x.fillStyle = '#031D44';
+      var tF = fit(x, 'who told you that?', HAND, 700, 700, 1, 100, 64), ty = 205;
+      x.font = '700 ' + tF.size + 'px ' + HAND; x.fillStyle = '#031D44';
       var pre = 'who told you ', preW = x.measureText(pre).width, thatW = x.measureText('that?').width;
-      x.fillText(pre, LEFT, 175); x.fillText('that?', LEFT + preW, 175);
-      loop(x, LEFT + preW + thatW / 2, 150, thatW / 2 + 26, 62, '#8F2D18', 6, rnd);
+      x.fillText(pre, LEFT, ty); x.fillText('that?', LEFT + preW, ty);
+      loop(x, LEFT + preW + thatW / 2, ty - tF.size * 0.3, thatW / 2 + 24, tF.size * 0.6, '#8F2D18', 6, rnd);
+      x.font = '400 26px ' + TYPE; x.fillStyle = 'rgba(4,57,94,0.85)';
+      x.fillText('A RULE I WAS HANDED. A LINE I WROTE BACK.', LEFT, 258);
 
-      // measure the two blocks first so the space between them can be shared out evenly
-      var oldB = fit(x, oldT, HAND, 700, MAXW, 3, 84, 44);
-      var newB = fit(x, newT, HAND, 700, MAXW, 3, 96, 48);
-      var LABEL = 50, ARROW = 110;
-      var hOld = oldB.lines.length * oldB.lh, hNew = newB.lines.length * newB.lh;
-      var top = 250, bottom = 1190, free = (bottom - top) - (LABEL * 2 + hOld + hNew + ARROW);
-      var gap = Math.max(18, Math.min(80, free / 4));
-      var cy = top + Math.max(0, (free - gap * 4) / 2);
+      // fit the two cards into the space under the title
+      var OLD_W = 680, NEW_W = 620, CW = 760, NCW = 740, OX = 196, NX = 226;
+      var HEAD = 78, PADO = 38, PADN = 56, ARROW = 100, top = 305, avail = 1135 - top;
+      var sc = 1, oldB, newB, total;
+      for (; sc >= 0.5; sc -= 0.06) {
+        oldB = fit(x, oldT, HAND, 700, OLD_W, 3, Math.round(84 * sc), 36);
+        newB = fit(x, newT, HAND, 700, NEW_W, 3, Math.round(96 * sc), 40);
+        total = HEAD + oldB.lines.length * oldB.lh + PADO + ARROW + HEAD + newB.lines.length * newB.lh + PADN;
+        if (total <= avail) break;
+      }
+      var oldH = HEAD + oldB.lines.length * oldB.lh + PADO, newH = HEAD + newB.lines.length * newB.lh + PADN;
+      var g = Math.max(0, Math.min(50, (avail - total) / 3));
+      var oldY = top + g, arrowY = oldY + oldH + g * 0.5, newY = oldY + oldH + ARROW + g;
 
-      // red pen out
-      x.font = '600 38px ' + HAND; x.fillStyle = '#8F2D18'; x.fillText('red pen out.', LEFT, cy + 34);
-      cy += LABEL + gap * 0.6;
+      // red pen out: an index card, the rule struck through, an UNVERIFIED stamp
+      x.save(); x.translate(OX + CW / 2, oldY + oldH / 2); x.rotate(0.016); x.translate(-CW / 2, -oldH / 2);
+      cardBase(x, CW, oldH, '#FFFDF5');
+      x.strokeStyle = 'rgba(4,57,94,0.18)'; x.lineWidth = 2;
+      for (k = 0; k < oldB.lines.length; k++) { var rl = HEAD + oldB.lh * (k + 1) - oldB.lh * 0.2 + 12; x.beginPath(); x.moveTo(24, rl); x.lineTo(CW - 24, rl); x.stroke(); }
+      x.strokeStyle = 'rgba(143,45,24,0.6)'; x.lineWidth = 3; x.beginPath(); x.moveTo(0, 64); x.lineTo(CW, 64); x.stroke();
+      x.font = '600 38px ' + HAND; x.fillStyle = '#8F2D18'; x.fillText('red pen out.', 34, 48);
+      stamp(x, CW - 200, 34, 230, 50, 'UNVERIFIED', '#B5342B', -0.07, rnd);
       x.font = '700 ' + oldB.size + 'px ' + HAND; x.fillStyle = '#031D44';
-      oldB.lines.forEach(function (ln, k) {
-        var by = cy + oldB.lh * (k + 1) - oldB.lh * 0.22, w = x.measureText(ln).width;
-        x.fillText(ln, LEFT, by);
-        var sy = by - oldB.size * 0.28;
-        wob(x, LEFT - 12, LEFT + w + 12, sy, 3, 8, 'rgba(143,45,24,0.92)', rnd, 8);
-        wob(x, LEFT - 6, LEFT + w + 6, sy + 7, 3, 4, 'rgba(143,45,24,0.7)', rnd, 6);
+      oldB.lines.forEach(function (ln, n) {
+        var by = HEAD + oldB.lh * (n + 1) - oldB.lh * 0.2, w = x.measureText(ln).width, sy = by - oldB.size * 0.28;
+        x.fillText(ln, 40, by);
+        wob(x, 28, 40 + w + 12, sy, 3, 8, 'rgba(143,45,24,0.92)', rnd, 8);
+        wob(x, 34, 40 + w + 6, sy + 7, 3, 4, 'rgba(143,45,24,0.7)', rnd, 6);
       });
-      cy += hOld + gap;
+      tape(x, CW - 34, 4, 116, 40, 0.5, 'butter');
+      x.restore();
 
-      // curly arrow down to the green line
-      arrow(x, LEFT + 70, cy - gap * 0.2, '#2F5E47');
-      cy += ARROW + gap * 0.2;
+      // curly arrow and a small note
+      arrow(x, 330, arrowY, '#2F5E47');
+      x.font = '600 34px ' + HAND; x.fillStyle = '#2F5E47'; x.fillText('say it kinder.', 500, arrowY + 62);
 
-      // green pen in
-      x.font = '600 38px ' + HAND; x.fillStyle = '#2F5E47'; x.fillText('green pen in.', LEFT, cy + 34);
-      cy += LABEL + gap * 0.4;
+      // green pen in: sage graph paper note, highlighted rewrite, a "noted" sticker
+      x.save(); x.translate(NX + NCW / 2, newY + newH / 2); x.rotate(-0.014); x.translate(-NCW / 2, -newH / 2);
+      cardBase(x, NCW, newH, '#DCE8CF');
+      x.lineWidth = 1; x.strokeStyle = 'rgba(47,94,71,0.12)';
+      for (i = 20; i < NCW; i += 20) { x.beginPath(); x.moveTo(i, 0); x.lineTo(i, newH); x.stroke(); }
+      for (i = 20; i < newH; i += 20) { x.beginPath(); x.moveTo(0, i); x.lineTo(NCW, i); x.stroke(); }
+      x.lineWidth = 1.5; x.strokeStyle = 'rgba(47,94,71,0.26)';
+      for (i = 80; i < NCW; i += 80) { x.beginPath(); x.moveTo(i, 0); x.lineTo(i, newH); x.stroke(); }
+      for (i = 80; i < newH; i += 80) { x.beginPath(); x.moveTo(0, i); x.lineTo(NCW, i); x.stroke(); }
+      x.strokeStyle = 'rgba(47,94,71,0.65)'; x.lineWidth = 3; x.beginPath(); x.moveTo(0, 64); x.lineTo(NCW, 64); x.stroke();
+      x.font = '600 38px ' + HAND; x.fillStyle = '#2F5E47'; x.fillText('green pen in.', 34, 48);
+      sparkle(x, NCW - 205, 34, 14, '#2F5E47'); star(x, NCW - 252, 32, 14, '#8F2D18', 0.3);
       x.font = '700 ' + newB.size + 'px ' + HAND;
-      newB.lines.forEach(function (ln, k) {
-        var by = cy + newB.lh * (k + 1) - newB.lh * 0.22, w = x.measureText(ln).width;
-        x.fillStyle = 'rgba(235,210,122,0.6)';
-        x.fillRect(LEFT - 8, by - newB.size * 0.34, w + 16, newB.size * 0.42);
-        x.fillStyle = '#20472F'; x.fillText(ln, LEFT, by);
-        if (k === newB.lines.length - 1) wob(x, LEFT, LEFT + w, by + 14, 2.5, 5, '#2F5E47', rnd, 0);
+      newB.lines.forEach(function (ln, n) {
+        var by = HEAD + newB.lh * (n + 1) - newB.lh * 0.2, w = x.measureText(ln).width;
+        x.fillStyle = 'rgba(235,210,122,0.62)'; x.fillRect(32, by - newB.size * 0.34, w + 16, newB.size * 0.42);
+        x.fillStyle = '#20472F'; x.fillText(ln, 40, by);
+        if (n === newB.lines.length - 1) wob(x, 40, 40 + w, by + 14, 2.5, 5, '#2F5E47', rnd, 0);
       });
+      tape(x, NCW - 64, 6, 120, 42, 0.45, 'stripe');
+      sticker(x, NCW - 6, newH + 2, 54, 0.2);
+      x.restore();
+
+      // doodles in the left margin and the corners
+      heart(x, 124, 440, 22, '#8F2D18', -0.2); spiral(x, 124, 575, 24, '#2F5E47'); star(x, 124, 880, 24, '#8F2D18', 0.2);
+      star(x, 935, 138, 26, '#8F2D18', 0.25); sparkle(x, 980, 205, 15, '#2F5E47');
+
+      // corner tape holding the sheet down
+      tape(x, 124, 96, 124, 46, -0.62, 'butter'); tape(x, 962, 96, 124, 46, 0.62, 'butter');
+      tape(x, 124, 1250, 130, 44, 0.6, 'stripe');
 
       // footer
-      x.fillStyle = '#04395E'; x.font = '400 27px ' + TYPE;
-      x.fillText('WHO TOLD YOU THAT? \u00b7 UNDERSTANDING THE SELF', LEFT, H - 78);
+      x.fillStyle = '#04395E'; x.font = '400 25px ' + TYPE;
+      x.fillText('WHO TOLD YOU THAT? \u00b7 UNDERSTANDING THE SELF', LEFT, 1218);
       if (/^https?:$/.test(location.protocol)) {
         var addr = (location.host + location.pathname).replace(/index\.html$/, '').replace(/\/$/, '');
         if (addr.length > 52) addr = addr.slice(0, 51) + '\u2026';
-        x.font = '400 23px ' + TYPE; x.fillStyle = 'rgba(4,57,94,0.75)'; x.fillText(addr, LEFT, H - 44);
+        x.font = '400 22px ' + TYPE; x.fillStyle = 'rgba(4,57,94,0.75)'; x.fillText(addr, LEFT, 1252);
       }
+      x.restore();
       return c;
     }
 
