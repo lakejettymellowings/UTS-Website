@@ -3537,8 +3537,11 @@ function qrMatrix(text){
     }
 
     function draw(oldT, newT) {
-      var c = document.createElement('canvas'); c.width = W; c.height = H;
+      // phones draw at 3/4 size (about 800 by 1000, 44% fewer pixels). Everything below still uses the 1080 by 1350 layout through scale().
+      var S = lite() ? 0.75 : 1;
+      var c = document.createElement('canvas'); c.width = Math.round(W * S); c.height = Math.round(H * S);
       var x = c.getContext('2d'), rnd = seeded(oldT + '|' + newT), i, k;
+      x.scale(S, S);
       try { x.letterSpacing = '0px'; } catch (e) {}
 
       // the desk
