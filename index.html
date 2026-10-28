@@ -2027,7 +2027,14 @@
   .rw-out img.fresh { animation: rwdev 0.8s ease-out both; }
   @keyframes rwdev { from { opacity: 0; translate: 0 24px; scale: 0.94; } to { opacity: 1; translate: 0 0; scale: 1; } }
   /* phones: no animated blur, lighter shadow, no entrance animation on the big picture (it was blacking out the page) */
-  @media (pointer: coarse), (max-width: 700px) { .rw-out img { box-shadow: none; border: 1px solid rgba(3, 29, 68, 0.25); } .rw-out img.fresh { animation: none; } }
+  @media (pointer: coarse), (max-width: 700px) {
+    .rw-out img { box-shadow: none; border: 1px solid rgba(3, 29, 68, 0.25); rotate: 0deg; } .rw-out img.fresh { animation: none; }
+    .rw-slot { rotate: 0deg; }
+    /* the envelope is a filtered, rotated, scaled layer, so nothing inside it animates on phones */
+    .scrap.env { filter: none; }
+    .env .flap, .env .bd::before, .env .bd::after, .env .env-tag { transition: none; }
+    .env.sealed .bd::after { animation: none; }
+  }
   /* the flap opens up behind the letter, then closes and the seal pops back on */
   .env .flap { position: absolute; left: 0; right: 0; bottom: 24px; height: 40px; background: linear-gradient(to bottom, #EADDBC, #D9C99C); clip-path: polygon(0 0, 100% 0, 50% 100%); transform-origin: 50% 0; transform: scaleY(0); opacity: 0; transition: transform 0.5s cubic-bezier(0.3, 1.35, 0.5, 1), opacity 0.25s 0.25s; }
   .env.open .flap { transform: scaleY(-1); opacity: 1; transition: transform 0.5s cubic-bezier(0.3, 1.35, 0.5, 1), opacity 0.15s; }
@@ -3540,7 +3547,8 @@ function qrMatrix(text){
       // phones draw at 3/4 size (about 800 by 1000, 44% fewer pixels). Everything below still uses the 1080 by 1350 layout through scale().
       var S = lite() ? 0.75 : 1;
       var c = document.createElement('canvas'); c.width = Math.round(W * S); c.height = Math.round(H * S);
-      var x = c.getContext('2d'), rnd = seeded(oldT + '|' + newT), i, k;
+      // on phones use the CPU canvas. A GPU canvas this size with blurred shadows and multiply blending can stall a phone's graphics driver.
+      var x = c.getContext('2d', S < 1 ? { willReadFrequently: true } : undefined), rnd = seeded(oldT + '|' + newT), i, k;
       x.scale(S, S);
       try { x.letterSpacing = '0px'; } catch (e) {}
 
@@ -3555,7 +3563,7 @@ function qrMatrix(text){
       x.save(); x.translate(W / 2, H / 2); x.rotate(-0.012); x.translate(-W / 2, -H / 2);
       var SX0 = 70, SY0 = 70, SX1 = 1010, SY1 = 1280;
       var pts = tornPts(SX0, SY0, SX1, SY1, rnd, 5);
-      x.save(); x.shadowColor = 'rgba(3,29,68,0.4)'; x.shadowBlur = 40; x.shadowOffsetY = 18;
+      x.save(); x.shadowColor = 'rgba(3,29,68,0.4)'; x.shadowBlur = S < 1 ? 16 : 40; x.shadowOffsetY = 18;
       trace(x, pts); x.fillStyle = '#F8F0DC'; x.fill(); x.restore();
       x.save(); trace(x, pts); x.clip();
       var pg = x.createRadialGradient(W / 2, H / 2, 300, W / 2, H / 2, 900);
@@ -3713,7 +3721,7 @@ function qrMatrix(text){
     // lift the picture off the page, carry it down to the envelope, slide it into the pocket
     function tuck() {
       if (!env || busy || tucked || !blob) return;
-      if (reduced() || !Element.prototype.animate) { land(); return; }
+      if (reduced() || lite() || !Element.prototype.animate) { land(); return; }
       busy = true;
       var id = ++runId;
       var r0 = img.getBoundingClientRect();
@@ -3788,7 +3796,7 @@ function qrMatrix(text){
           out.hidden = false;
           resetTuck();
           img.classList.remove('fresh'); void img.offsetWidth; img.classList.add('fresh');
-          if (env) env.classList.add('open');
+          if (env && !lite()) env.classList.add('open');
           shareBtn.hidden = !canShareFile();
           outMsg.textContent = '';
           status.textContent = 'Your card is ready below.';
@@ -3808,7 +3816,7 @@ function qrMatrix(text){
     backBtn.addEventListener('click', function () {
       resetTuck();
       img.classList.remove('fresh'); void img.offsetWidth; img.classList.add('fresh');
-      if (env) env.classList.add('open');
+      if (env && !lite()) env.classList.add('open');
       outMsg.textContent = 'The card is back out.';
       pic.scrollIntoView({ behavior: (reduced() || lite()) ? 'auto' : 'smooth', block: 'center' });
     });
