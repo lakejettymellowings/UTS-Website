@@ -359,7 +359,6 @@
   }
   .opt:hover { border-color: var(--red-soft); }
   .opt:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
-  .opt.chosen { border-color: var(--red); background: var(--red-soft); }
   .q-result {
     display: none;
   }
@@ -550,7 +549,6 @@
   .rewrite-row .old { position: relative; color: var(--ink-soft); }
   .rewrite-row .old::after { content: ""; position: absolute; left: -2px; right: -2px; top: 52%; height: 2px; background: var(--red); transform: rotate(-1.5deg); transform-origin: left; }
   .rewrite-row .new { font-family: "Caveat", cursive; font-size: 28px; color: var(--good); line-height: 1.1; }
-  .prompt-box { margin-top: 28px; padding: 20px; background: var(--card); border: 1px dashed var(--red); border-radius: 6px; font-size: 19px; }
   /* scroll reveal (only when JS + motion allowed) */
   .js-reveal section .wrap > * { opacity: 0; transform: translateY(18px); transition: opacity .7s, transform .7s; }
   .js-reveal section .wrap > *.in { opacity: 1; transform: none; }
@@ -2010,7 +2008,7 @@
     #poster-print h1 { font: 800 76pt/0.98 "Plus Jakarta Sans", Arial, sans-serif; letter-spacing: -0.025em; color: #031D44; margin: 0 0 9mm; }
     #poster-print .pp-that { position: relative; display: inline-block; white-space: nowrap; }
     #poster-print .pp-that svg { position: absolute; left: -7mm; right: -9mm; top: -5mm; bottom: -5mm; width: calc(100% + 16mm); height: calc(100% + 10mm); overflow: visible; }
-    #poster-print .pp-that path { fill: none; stroke: #8F2D18; stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; stroke-width: 1.5mm; }
+    #poster-print .pp-that path { fill: none; stroke: #8F2D18; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; stroke-width: 1.5mm; }
     #poster-print .pp-sub { font: 400 15pt/1.45 "DM Sans", Arial, sans-serif; color: #04395E; max-width: 128mm; margin: 0 0 8mm; }
     #poster-print .pp-sub mark { background: linear-gradient(transparent 52%, #C9DEB9 52%, #C9DEB9 92%, transparent 92%); color: inherit; padding: 0 1mm; }
     #poster-print .pp-rw { margin: 0 0 9mm; display: grid; gap: 3mm; }
@@ -2082,6 +2080,336 @@
     .env .flap, .env .bd::before, .env .bd::after, .env .env-tag { transition: none; }
   }
 </style>
+<style>
+  /* ---------- Trinkets in the gaps. Small keepsakes on the sheet edges and in the empty stretches of the margins ---------- */
+  /* wide screens only, like the other margin pieces. Static: no animation, no filter. Edge pieces overhang the sheet by about 16px, inside the 34px of padding, so they stay off the text */
+  .scrap.tk { display: none; }
+  @media (min-width: 1180px) { .scrap.tk { display: block; } }
+  .tk svg { display: block; width: 100%; height: 100%; overflow: visible; }
+  .tk-pin { width: 22px; height: 22px; border-radius: 50%;
+    background: radial-gradient(circle at 34% 30%, rgba(255, 255, 255, 0.8) 0 2.2px, transparent 3px), radial-gradient(circle at 50% 50%, var(--tc) 0 55%, color-mix(in srgb, var(--tc) 62%, #1A0A05) 100%);
+    box-shadow: 2px 3px 3px rgba(3, 29, 68, 0.32); }
+  .tk-btn { width: 30px; height: 30px; border-radius: 50%; box-shadow: 1px 2px 3px rgba(3, 29, 68, 0.32); }
+  .tk-star, .tk-heart { width: 34px; height: 34px; }
+  .tk-heart { width: 30px; height: 30px; }
+  .tk-plane { width: 60px; height: 40px; }
+  .tk-leaf { width: 46px; height: 58px; }
+  .tk-pinsafe { width: 46px; height: 22px; }
+  .tk-eraser { width: 52px; height: 22px; border-radius: 5px; background: linear-gradient(90deg, transparent 0 36%, #2F5E8F 36% 64%, transparent 64%), #F0A9A3; box-shadow: 0 2px 3px rgba(3, 29, 68, 0.3), inset 0 -3px 0 rgba(0, 0, 0, 0.08); }
+  .tk-aid { width: 62px; height: 20px; border-radius: 10px; box-shadow: 0 2px 3px rgba(3, 29, 68, 0.28);
+    background: linear-gradient(90deg, transparent 0 34%, #F6E3C9 34% 66%, transparent 66%), radial-gradient(circle, rgba(120, 70, 30, 0.35) 1px, transparent 1.4px) 0 0 / 6px 6px, #E5B98C; }
+  .tk-stub { width: 76px; height: 32px; display: flex; align-items: center; justify-content: center; background: #F2D8A2;
+    -webkit-mask: radial-gradient(circle at 0 50%, transparent 5px, #000 5.5px) left / 50% 100% no-repeat, radial-gradient(circle at 100% 50%, transparent 5px, #000 5.5px) right / 50% 100% no-repeat;
+    mask: radial-gradient(circle at 0 50%, transparent 5px, #000 5.5px) left / 50% 100% no-repeat, radial-gradient(circle at 100% 50%, transparent 5px, #000 5.5px) right / 50% 100% no-repeat; }
+  .tk-stub::before { content: ""; position: absolute; inset: 4px 7px; border: 1px dashed rgba(27, 47, 102, 0.45); }
+  .tk-stub::after { content: "ADMIT ONE"; position: relative; font: 700 9px/1 "Courier New", monospace; letter-spacing: 0.12em; color: #1B2F66; }
+</style>
+<style>
+  /* ---------- Splash ephemera. A postage stamp, its postmark and a strip of tape on the bottom right corner of the label ---------- */
+  .nb-label .nb-stamp { position: absolute; margin: 0; right: -18px; bottom: -22px; width: 50px; height: 62px; padding: 5px; rotate: 9deg; z-index: 2; pointer-events: none;
+    background: #FBF4E0; outline: 3px dotted #F6ECD3; outline-offset: -3px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.45); }
+  .nb-label .nb-stamp i { display: block; margin: 0; letter-spacing: 0; height: 100%; background: radial-gradient(circle at 70% 28%, #F6E7A8 0 7px, transparent 7.5px), radial-gradient(ellipse 80% 34% at 30% 100%, #5E8A6F 0 99%, transparent 100%), linear-gradient(#8E7CB8, #D7C9EA); }
+  .nb-label .nb-stamp b { position: absolute; letter-spacing: 0; left: 9px; bottom: 8px; font: 700 11px/1 Georgia, serif; color: #FBF7EC; }
+  .nb-label .nb-stamp::before { content: ""; position: absolute; top: -9px; right: -12px; width: 34px; height: 13px; rotate: 38deg; background: color-mix(in srgb, #EBD27A 80%, transparent); border: 1px solid rgba(120, 90, 0, 0.2); }
+  .nb-label .nb-stamp svg { position: absolute; left: -36px; bottom: -8px; width: 66px; height: 40px; fill: none; stroke: #1F4E79; stroke-width: 1.6; stroke-linecap: round; opacity: 0.62; rotate: -14deg; }
+  .nb-label .nb-stamp text { fill: #1F4E79; stroke: none; font: 700 7px/1 "Courier New", monospace; letter-spacing: 0.08em; }
+  @media (max-width: 560px) { .nb-label .nb-stamp { right: -12px; bottom: -18px; width: 40px; height: 50px; padding: 4px; } .nb-label .nb-stamp b { left: 7px; bottom: 6px; font-size: 9px; } .nb-label .nb-stamp svg { left: -30px; width: 56px; height: 34px; } }
+</style>
+<style>
+  /* ---------- Hero title: the normal navy lettering with a thin iridescent outline and a soft glow around it ---------- */
+  .hero h1 { --i1: #3B2FB8; --i2: #B62F8F; --i3: #D2452E; --i4: #B27700; --i5: #0F8A78; }
+  :root[data-theme="dark"] .hero h1 { --i1: #A9B8FF; --i2: #F2A6E8; --i3: #FFC48A; --i4: #9FF0D2; --i5: #8FD3FF; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .hero h1 { --i1: #A9B8FF; --i2: #F2A6E8; --i3: #FFC48A; --i4: #9FF0D2; --i5: #8FD3FF; } }
+  .hero h1 .iw { display: inline-block; white-space: nowrap; }
+  /* the stroke is painted behind the letter fill, so only its outer half shows. The glow is a text shadow in the same color */
+  .hero h1 .iw span {
+    -webkit-text-stroke: 0.05em var(--i1); paint-order: stroke fill;
+    text-shadow: 0 0 0.1em var(--i1), 0 0 0.32em var(--i1);
+    animation: irisGlow 9s linear infinite; animation-delay: calc(var(--i) * -0.42s);
+  }
+  /* each letter runs the same color loop, started a little later than the one before it, so the colors travel along the title. First and last stops match, so there is no seam */
+  @keyframes irisGlow {
+    0%, 100% { -webkit-text-stroke-color: var(--i1); text-shadow: 0 0 0.1em var(--i1), 0 0 0.32em var(--i1); }
+    20% { -webkit-text-stroke-color: var(--i2); text-shadow: 0 0 0.1em var(--i2), 0 0 0.32em var(--i2); }
+    40% { -webkit-text-stroke-color: var(--i3); text-shadow: 0 0 0.1em var(--i3), 0 0 0.32em var(--i3); }
+    60% { -webkit-text-stroke-color: var(--i4); text-shadow: 0 0 0.1em var(--i4), 0 0 0.32em var(--i4); }
+    80% { -webkit-text-stroke-color: var(--i5); text-shadow: 0 0 0.1em var(--i5), 0 0 0.32em var(--i5); }
+  }
+  @media (max-width: 700px) { .hero h1 .iw span { text-shadow: 0 0 0.16em var(--i1); } @keyframes irisGlow { 0%, 100% { -webkit-text-stroke-color: var(--i1); text-shadow: 0 0 0.16em var(--i1); } 20% { -webkit-text-stroke-color: var(--i2); text-shadow: 0 0 0.16em var(--i2); } 40% { -webkit-text-stroke-color: var(--i3); text-shadow: 0 0 0.16em var(--i3); } 60% { -webkit-text-stroke-color: var(--i4); text-shadow: 0 0 0.16em var(--i4); } 80% { -webkit-text-stroke-color: var(--i5); text-shadow: 0 0 0.16em var(--i5); } } }
+  @media (prefers-reduced-motion: reduce) { .hero h1 .iw span { animation: none; } }
+</style>
+<style>
+  /* ---------- Section labels in the typewriter font: the number and the title after it. Same size as before, only the font changes ---------- */
+  .kicker, .cn { font-family: var(--tw); font-weight: 400; }
+</style>
+<style>
+  /* ---------- Draggable clutter. The margin pieces can be picked up and moved around their sheet ---------- */
+  /* wide screens only, the same screens where these pieces exist. They keep their tilt, and the move is a separate "translate" so nothing else changes */
+  @media (min-width: 1180px) {
+    .scrap.cl-side, .scrap.tk, .scrap.gd { pointer-events: auto; cursor: grab; touch-action: none; -webkit-user-select: none; user-select: none; transition: scale .15s ease; }
+    .scrap.cl-side:hover, .scrap.tk:hover, .scrap.gd:hover { scale: 1.05; }
+    .scrap.dg-on { cursor: grabbing; scale: 1.09; }
+    .scrap.dg-back { transition: translate .45s cubic-bezier(.3, 1.35, .5, 1), scale .15s ease; }
+  }
+  .dg-reset { position: fixed; z-index: 100; left: calc(16px + env(safe-area-inset-left, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    display: none; padding: 6px 16px 7px; font: 700 21px/1.1 "Caveat", cursive; color: #1B2F66; background: #FBF6E3; border: 2px dashed rgba(27, 47, 102, 0.55); border-radius: 6px; rotate: -2deg; cursor: pointer; box-shadow: 0 2px 6px rgba(3, 29, 68, 0.2); }
+  .dg-reset:hover { rotate: -1deg; }
+  .dg-reset:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  @media (min-width: 1180px) { .dg-reset.show { display: block; } }
+  @media (prefers-reduced-motion: reduce) {
+    .scrap.cl-side, .scrap.tk, .scrap.gd, .scrap.dg-back { transition: none; }
+    .scrap.cl-side:hover, .scrap.tk:hover, .scrap.gd:hover, .scrap.dg-on { scale: none; }
+  }
+</style>
+<style>
+  /* ---------- Update 88. Polaroid backs and the rubber stamp tool ---------- */
+
+  /* Polaroid backs: click a margin polaroid and it flips over to a pencil note. The note text is added by the script */
+  .cl-pol .pb { display: none; position: absolute; inset: 0; padding: 10px 8px 6px; text-align: left; }
+  .cl-pol .pb b { display: block; font: 700 15px/1.02 "Caveat", cursive; color: #4A4A58; rotate: -2deg; }
+  .cl-pol .pb u { position: absolute; right: 7px; bottom: 6px; text-decoration: none; font: 400 8px/1 "Special Elite", "Courier New", monospace; letter-spacing: 0.1em; color: rgba(104, 56, 140, 0.72); rotate: -5deg; }
+  .cl-pol.pol-back { background: #F1E7CB; }
+  .cl-pol.pol-back i, .cl-pol.pol-back em { visibility: hidden; }
+  .cl-pol.pol-back .pb { display: block; }
+  @media (min-width: 1180px) {
+    .scrap.cl-pol.pol-back, .scrap.cl-pol.pol-back:hover { scale: 1.3; }
+    .scrap.cl-pol.pol-back.dg-on { scale: 1.34; }
+    .scrap.cl-pol.pol-flip { animation: polFlip .5s ease-in-out; }
+  }
+  @keyframes polFlip {
+    0%   { transform: rotate(var(--sr, 0deg)) perspective(520px) rotateY(0deg); }
+    50%  { transform: rotate(var(--sr, 0deg)) perspective(520px) rotateY(90deg); }
+    100% { transform: rotate(var(--sr, 0deg)) perspective(520px) rotateY(0deg); }
+  }
+
+  /* Rubber stamp tool. A small dock at the bottom left, a layer of stamps on the page */
+  .sd-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  .stamp-layer { position: absolute; left: 0; top: 0; width: 100%; height: 0; z-index: 90; pointer-events: none; }
+  .rst { --s: #A3301A; --sd: #F0A08C; position: absolute; display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 6px 14px 5px; width: max-content; text-transform: uppercase;
+    border: 3px solid var(--s); border-radius: 5px; color: var(--s); opacity: var(--o, 0.85); mix-blend-mode: multiply; translate: -50% -50%; rotate: var(--r, 0deg); pointer-events: none;
+    animation: rstThump .26s cubic-bezier(.2, .8, .3, 1) both; }
+  .rst.k1 { --s: #1F4E79; --sd: #8FB8E0; }
+  .rst.k2 { --s: #5B3E8A; --sd: #C9B0EA; }
+  .rst.k3 { --s: #2F6B4A; --sd: #8FD0A8; }
+  .rst.on-dark { mix-blend-mode: normal; border-color: var(--sd); color: var(--sd); }
+  .rst::before { content: ""; position: absolute; inset: 3px; border: 1.4px solid var(--s); border-radius: 3px; }
+  .rst.on-dark::before { border-color: var(--sd); }
+  .rst b { position: relative; font: 800 22px/1.1 "Plus Jakarta Sans", "DM Sans", sans-serif; letter-spacing: 0.08em; }
+  .rst i { position: relative; font: 400 10.5px/1.2 "Special Elite", "Courier New", monospace; font-style: normal; letter-spacing: 0.16em; }
+  @media (min-width: 701px) and (hover: hover) { .rst { filter: url(#stamp-ink); } }
+  @keyframes rstThump {
+    0%   { scale: 1.6; opacity: 0; }
+    55%  { scale: 0.94; opacity: var(--o, 0.85); }
+    100% { scale: 1; opacity: var(--o, 0.85); }
+  }
+
+  body.stamping { -webkit-user-select: none; user-select: none;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Crect x='9' y='23' width='14' height='6' rx='1.5' fill='%231B2F66'/%3E%3Crect x='13' y='14' width='6' height='10' fill='%23C9462E'/%3E%3Crect x='11' y='5' width='10' height='10' rx='4' fill='%231B2F66'/%3E%3C/svg%3E") 16 29, crosshair; }
+  body.stamping input, body.stamping textarea { -webkit-user-select: text; user-select: text; }
+  body.stamping .scrap:not(.polaroid) { pointer-events: none; }
+  body.splash-lock.stamping { cursor: auto; }
+
+  .stamp-dock { position: fixed; z-index: 110; left: calc(16px + env(safe-area-inset-left, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+  body.splash-lock .stamp-dock { display: none; }
+  .sd-toggle { display: inline-flex; align-items: center; gap: 7px; padding: 5px 14px 6px 10px; font: 700 21px/1.1 "Caveat", cursive; color: #1B2F66; background: #FBF6E3;
+    border: 2px dashed rgba(27, 47, 102, 0.55); border-radius: 6px; rotate: -2deg; cursor: pointer; box-shadow: 0 2px 6px rgba(3, 29, 68, 0.2); }
+  .sd-toggle[aria-pressed="true"] { background: #F3E3A8; border-style: solid; rotate: -1deg; }
+  .sd-toggle:hover { rotate: -1deg; }
+  .sd-toggle:focus-visible, .sd-pick:focus-visible, .sd-clear:focus-visible { outline: 2px solid #1B2F66; outline-offset: 2px; }
+  .sd-tray { display: none; flex-direction: column; align-items: stretch; gap: 7px; padding: 10px 10px 8px; background: #FBF6E3; border: 2px dashed rgba(27, 47, 102, 0.55); border-radius: 6px; box-shadow: 0 4px 12px rgba(3, 29, 68, 0.25); }
+  .stamp-dock.open .sd-tray { display: flex; }
+  .sd-hint { margin: 0 0 2px; max-width: 168px; font: 700 17px/1.1 "Caveat", cursive; color: #1B2F66; }
+  .sd-pick { --s: #A3301A; padding: 4px 10px; font: 800 12px/1.2 "Plus Jakarta Sans", "DM Sans", sans-serif; letter-spacing: 0.08em; text-transform: uppercase; text-align: center;
+    color: var(--s); background: transparent; border: 2px solid var(--s); border-radius: 4px; cursor: pointer; }
+  .sd-pick.k1 { --s: #1F4E79; } .sd-pick.k2 { --s: #5B3E8A; } .sd-pick.k3 { --s: #2F6B4A; }
+  .sd-pick[aria-pressed="true"] { color: #FBF6E3; background: var(--s); }
+  .sd-clear { padding: 2px 0; font: 700 17px/1 "Caveat", cursive; color: #1B2F66; text-align: left; text-decoration: underline; background: none; border: 0; cursor: pointer; }
+  /* the "put it all back" note from the draggable clutter moves to the right of the dock so the two do not overlap */
+  @media (min-width: 1180px) { .dg-reset { left: calc(150px + env(safe-area-inset-left, 0px)); } }
+  @media (max-width: 560px) {
+    .sd-toggle { font-size: 19px; padding: 4px 11px 5px 8px; }
+    .rst b { font-size: 18px; } .rst i { font-size: 9px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rst { animation: none; }
+    .scrap.cl-pol.pol-flip { animation: none; }
+    .scrap.cl-pol.pol-back, .scrap.cl-pol.pol-back:hover, .scrap.cl-pol.pol-back.dg-on { transition: none; scale: 1.3; }
+  }
+  @media print { .stamp-dock, .stamp-layer { display: none !important; } }
+</style>
+<style>
+  /* ---------- Update 89. Pens, pencils and tapes as trinkets, and the stamp button becomes a real stamp pad ---------- */
+
+  /* Fix for Update 88: the first two stamps had their colors swapped. Not a cure is blue and Unverified is red, like the stamps on the sheets */
+  .rst { --s: #1F4E79; --sd: #8FB8E0; }
+  .rst.k1 { --s: #A3301A; --sd: #F0A08C; }
+  .sd-pick { --s: #1F4E79; }
+  .sd-pick.k1 { --s: #A3301A; }
+
+  /* The stamp pad. Closed it is a black case with a label and a red latch. Pressed, the lid lifts and the pad inside takes the color of the chosen stamp */
+  .stamp-dock { --pad: #1F4E79; }
+  .sd-toggle, .sd-toggle[aria-pressed="true"] { display: block; padding: 0; line-height: 0; background: none; border: 0; border-radius: 0; box-shadow: none; transform-origin: 0 100%; }
+  .sd-toggle { rotate: -2deg; }
+  .sd-toggle[aria-pressed="true"] { rotate: -1deg; }
+  .sd-toggle svg { display: block; overflow: visible; }
+  .sd-toggle .pad-open { display: none; transform-origin: 50% 100%; }
+  .sd-toggle[aria-pressed="true"] .pad-open { display: block; animation: padOpen .2s ease-out; }
+  .sd-toggle[aria-pressed="true"] .pad-shut { display: none; }
+  .pad-ink { fill: var(--pad, #1F4E79); }
+  .sd-toggle:focus-visible { outline: 2px solid #1B2F66; outline-offset: 3px; border-radius: 6px; }
+  .sd-toggle:active { translate: 0 1px; }
+  @media (hover: hover) { .sd-toggle:hover { translate: 0 -2px; rotate: -1deg; } .sd-toggle:active { translate: 0 1px; } }
+  @keyframes padOpen { from { transform: scaleY(.82); } to { transform: scaleY(1); } }
+  .sd-tray { max-height: calc(100vh - 190px); max-height: calc(100dvh - 190px); overflow-y: auto; }
+  @media (min-width: 1180px) { .dg-reset { left: calc(160px + env(safe-area-inset-left, 0px)); } }
+  @media (max-width: 560px) { .sd-toggle svg { width: 92px; height: auto; } }
+  @media (prefers-reduced-motion: reduce) {
+    .sd-toggle[aria-pressed="true"] .pad-open { animation: none; }
+    .sd-toggle:hover, .sd-toggle:active { translate: none; }
+  }
+</style>
+<style>
+  /* ---------- Update 91. The desk pile is bigger and sits in the same corner as the stamp pad ---------- */
+  /* wide screens only (1180px and up). It is drawn in a 280 by 250 box and scaled up with the screen so it always fits in the left margin (the sheets are 760px wide) */
+  .desk-pile { display: none; }
+  @media (min-width: 1180px) {
+    .desk-pile { display: block; position: fixed; z-index: 105; width: 280px; height: 250px; pointer-events: none; transform-origin: 0 100%; scale: 0.78;
+      left: calc(6px + env(safe-area-inset-left, 0px)); bottom: calc(6px + env(safe-area-inset-bottom, 0px)); }
+    /* the "put it all back" note moves to the other side of the screen, left of the back to top button, since the corner is now taken */
+    .dg-reset { left: auto; right: calc(68px + env(safe-area-inset-right, 0px)); }
+  }
+  @media (min-width: 1300px) { .desk-pile { scale: 0.92; } }
+  @media (min-width: 1440px) { .desk-pile { scale: 1.08; } }
+  body.splash-lock .desk-pile { display: none; }
+  .desk-pile .dp { position: absolute; display: block; rotate: var(--r, 0deg); }
+  .desk-pile .dp svg { display: block; width: 100%; height: 100%; overflow: visible; }
+  .dp-pencil { width: 228px; height: 34px; }
+  .dp-mech { width: 213px; height: 30px; }
+  .dp-pen { width: 217px; height: 30px; }
+  .dp-fount { width: 217px; height: 34px; }
+  .dp-corr { width: 176px; height: 88px; }
+  .dp-scotch { width: 136px; height: 110px; }
+  @media print { .desk-pile { display: none !important; } }
+</style>
+<style>
+  /* Update 92: ransom note letters on the rewrite card */
+  .rl-lay { position: absolute; container-type: inline-size; rotate: -1deg; z-index: 3; pointer-events: none; }
+  .rls { position: absolute; translate: -50% -50%; white-space: nowrap; cursor: grab; touch-action: none; -webkit-user-select: none; user-select: none; pointer-events: auto; font-size: calc(var(--sz, 0.07) * 100cqw); line-height: 1; outline: none; animation: rlpeel 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) both; }
+  .rls .cut { display: block; box-sizing: border-box; min-width: 0.9em; padding: 0.12em 0.2em 0.1em; text-align: center; line-height: 1; font-size: 1em; pointer-events: none; }
+  .rls.sel { outline: 2px dashed #8F2D18; outline-offset: 4px; }
+  .rls:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
+  .rls.drag { cursor: grabbing; scale: 1.06; }
+  @keyframes rlpeel { 0% { scale: 1.7; opacity: 0; translate: -50% -64%; } 55% { scale: 1.14; opacity: 1; translate: -50% -53%; } 100% { scale: 1; opacity: 1; translate: -50% -50%; } }
+  .rw-pic.tucked .rl-lay, .rw-pic.tucked ~ .rl-tools { display: none; }
+  @media (pointer: coarse), (max-width: 700px) { .rl-lay { rotate: 0deg; } }
+  .rl-tools { margin-top: 22px; width: min(100%, 440px); }
+  .rl-h { font: 700 26px/1.1 "Caveat", cursive; color: #20472F; margin: 0 0 4px; }
+  .rl-sub, .rl-note { font: 400 14px/1.45 "Outfit", sans-serif; color: #04395E; margin: 0 0 8px; }
+  .rl-note { margin: 10px 0 0; opacity: 0.85; }
+  .rl-sheet { display: flex; flex-wrap: wrap; gap: 8px 6px; margin: 10px 0 14px; }
+  .rls-key { background: none; border: 0; padding: 0; cursor: pointer; font: inherit; }
+  .rls-key .cut { display: block; box-sizing: border-box; min-width: 40px; height: 46px; padding: 0 8px; line-height: 46px; font-size: 24px; text-align: center; transition: opacity 0.2s; }
+  .rls-key:nth-child(3n) { rotate: 3deg; } .rls-key:nth-child(3n+1) { rotate: -2deg; } .rls-key:nth-child(4n) { translate: 0 2px; }
+  .rls-key:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+  .rls-key.gone .cut { opacity: 0.2; }
+  @media (hover: hover) { .rls-key:hover { translate: 0 -3px; rotate: -4deg; } }
+  .rl-wordrow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .rl-wordrow label { font: 600 14px "Outfit", sans-serif; color: #20472F; }
+  .rl-wordrow input { font: 400 16px "Outfit", sans-serif; padding: 10px 12px; width: min(100%, 190px); background: rgba(255, 255, 255, 0.62); border: 1px solid rgba(47, 94, 71, 0.45); border-radius: 10px; color: #031D44; }
+  .rl-wordrow input:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .rl-ctl { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; }
+  .rl-ctl[hidden] { display: none; }
+  .rl-ctl button { font: 600 14px "Outfit", sans-serif; min-height: 40px; padding: 8px 12px; border: 2px solid #20472F; border-radius: 10px 14px 11px 15px; background: rgba(255, 255, 255, 0.6); color: #20472F; cursor: pointer; }
+  .rl-ctl button:disabled { opacity: 0.4; cursor: default; }
+  .rl-ctl button:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+  .rl-status { display: block; min-height: 1.4em; margin-top: 6px; font: 600 14px "Outfit", sans-serif; color: #20472F; }
+  @media (prefers-reduced-motion: reduce) { .rls { animation: none; } .rls.drag { scale: 1; } .rls-key:hover { translate: none; rotate: none; } }
+  @media print { .rl-tools, .rl-lay { display: none !important; } }
+</style>
+<style>
+  /* Update 93: pop-up card editor, sticker paper, size slider */
+  .rwm-close { display: none; }
+  .rw-out.rwm-open { position: fixed; inset: 0; z-index: 9000; margin: 0; overflow: auto; overscroll-behavior: contain; display: flex; align-items: flex-start; justify-content: center; padding: 14px 10px 24px; background: rgba(3, 29, 68, 0.8); }
+  .rw-out.rwm-open .rwm { position: relative; width: min(100%, 960px); margin: auto; padding: 44px 20px 22px; background: #F6EEDC; border-radius: 6px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45); display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px 28px; }
+  .rw-out.rwm-open .rwm-close { display: block; position: absolute; top: 10px; right: 12px; font: 700 15px "Outfit", sans-serif; min-height: 40px; padding: 6px 18px; border: 2px solid #20472F; border-radius: 10px 14px 11px 15px; background: #fff; color: #20472F; cursor: pointer; }
+  .rw-out.rwm-open .rwm-close:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+  .rw-out.rwm-open .rl-tools { margin-top: 0; width: auto; }
+  .rw-out.rwm-open .rw-row { margin-top: 0; }
+  @media (min-width: 880px) { .rw-out.rwm-open .rwm { grid-template-columns: minmax(0, 380px) minmax(0, 1fr); } .rw-out.rwm-open .rw-row { grid-column: 1 / -1; } }
+  .rl-sheet { padding: 14px 12px 10px; background-color: #FFFDF6; background-image: repeating-linear-gradient(0deg, transparent 0 23px, rgba(4, 57, 94, 0.07) 23px 24px); border-radius: 3px; box-shadow: 0 6px 14px rgba(3, 29, 68, 0.22), inset 0 0 0 1px rgba(3, 29, 68, 0.1); rotate: -0.8deg; }
+  .rls-key { touch-action: none; cursor: grab; }
+  .rl-size { display: flex; align-items: center; gap: 10px; margin-top: 12px; font: 600 14px "Outfit", sans-serif; color: #20472F; }
+  .rl-size input { flex: 1; min-width: 0; accent-color: #2F5E47; }
+  .rl-size input:disabled { opacity: 0.4; }
+  .rl-size input:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+  @media print { .rw-out.rwm-open { position: static; background: none; } }
+</style>
+<style>
+  /* Update 94: pop-up fix, corner rotate knob, ephemera drawer */
+  .rw-out.rwm-open { padding-top: max(14px, env(safe-area-inset-top)); }
+  .rw-out.rwm-open .rwm { align-items: start; }
+  .rw-out.rwm-open .rw-pic { margin: 0; }
+  .rls .rot { position: absolute; right: -11px; top: -11px; width: 20px; height: 20px; box-sizing: border-box; border-radius: 50%; background: #fff; border: 2px solid #8F2D18; display: grid; place-items: center; opacity: 0; pointer-events: none; cursor: crosshair; font: 700 13px/1 "Outfit", sans-serif; color: #8F2D18; }
+  .rls .rot::before { content: "\21BB"; }
+  .rls.sel .rot { opacity: 1; pointer-events: auto; }
+  @media (hover: hover) { .rls:hover .rot { opacity: 1; pointer-events: auto; } }
+  .rls .cut.ep { min-width: 0; padding: 0; line-height: 0; background: none; }
+  .ep-drawer { margin: 8px 0 14px; }
+  .ep-pull { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; min-height: 46px; font: 700 23px/1 "Caveat", cursive; color: #FBF7EC; background: linear-gradient(#7A4E2D, #5E3A20); border: 0; border-radius: 6px; box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.18), 0 3px 0 #3F2613; cursor: pointer; }
+  .ep-pull i { width: 34px; height: 10px; border-radius: 6px; background: linear-gradient(#E6C979, #B08A33); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.45); }
+  .ep-pull:focus-visible, .ep-key:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+  .ep-box { margin-top: 3px; padding: 10px; background: #3F2A18; border-radius: 4px 4px 8px 8px; box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.5); transform-origin: top; animation: epopen 0.25s ease-out; }
+  .ep-box[hidden] { display: none; }
+  .ep-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(56px, 1fr)); gap: 6px; max-height: 210px; overflow: auto; }
+  .ep-key { display: grid; place-items: center; height: 54px; font-size: 20px; padding: 0; border: 0; border-radius: 4px; background: #F1E6CC; box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.25); cursor: grab; touch-action: none; transition: opacity 0.2s; }
+  .ep-key.gone { opacity: 0.3; }
+  @media (hover: hover) { .ep-key:hover { background: #FBF3DC; } }
+  @keyframes epopen { from { transform: translateY(-12px) scaleY(0.88); opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .ep-box { animation: none; } }
+  /* Update 96: custom drawer scrollbar (brass thumb in a dark groove) */
+  .ep-grid { padding-right: 8px; scrollbar-gutter: stable; overscroll-behavior: contain; }
+  .ep-grid::-webkit-scrollbar { width: 12px; }
+  .ep-grid::-webkit-scrollbar-track { background: #2A1B0E; border-radius: 8px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.7); margin: 2px 0; }
+  .ep-grid::-webkit-scrollbar-thumb { background: linear-gradient(90deg, #E6C979, #B08A33); border-radius: 8px; border: 2px solid #2A1B0E; min-height: 36px; }
+  .ep-grid::-webkit-scrollbar-thumb:hover { background: linear-gradient(90deg, #F2DA95, #C79B3B); }
+  .ep-grid::-webkit-scrollbar-corner { background: transparent; }
+  @supports not selector(::-webkit-scrollbar) { .ep-grid { scrollbar-width: thin; scrollbar-color: #B08A33 #2A1B0E; } }
+</style>
+<style>
+  /* Update 95: corner resize knob */
+  .rls .siz { position: absolute; right: -11px; bottom: -11px; width: 20px; height: 20px; box-sizing: border-box; border-radius: 50%; background: #fff; border: 2px solid #20472F; display: grid; place-items: center; opacity: 0; pointer-events: none; cursor: nwse-resize; font: 700 12px/1 "Outfit", sans-serif; color: #20472F; }
+  .rls .siz::before { content: "\2198"; }
+  .rls.sel .siz { opacity: 1; pointer-events: auto; }
+  @media (hover: hover) { .rls:hover .siz { opacity: 1; pointer-events: auto; } }
+</style>
+<style>
+  /* Update 97: stamps and the pile leave the page, trinkets scatter in the margins at a bigger size */
+  .stamp-dock, .desk-pile { display: none !important; }
+  .tk-pencil { width: 300px; height: 46px; }
+  .tk-mech { width: 270px; height: 39px; }
+  .tk-pen { width: 270px; height: 38px; }
+  .tk-fount { width: 250px; height: 40px; }
+  .tk-corr { width: 130px; height: 65px; }
+  .tk-scotch { width: 110px; height: 89px; }
+</style>
+<style>
+  /* Update 98: the stamp pad inside the pop-up */
+  .rl-stamps { --pad: #1F4E79; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; margin: 6px 0 16px; }
+  .rl-stamps.open .sd-tray { display: flex; }
+  .rl-stamps .sd-tray { max-height: none; overflow: visible; }
+  .rl-stamps .sd-toggle { transform-origin: 0 100%; }
+  .rw-pic.stamping img { cursor: crosshair; }
+</style>
+<style>
+  /* Update 99: card designs */
+  .rl-designs { margin: 0 0 14px; }
+  .rl-ds-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+  .rl-ds { display: flex; align-items: center; gap: 7px; padding: 5px 11px 5px 5px; font: 600 13px "Outfit", sans-serif; color: #20472F; background: rgba(255, 255, 255, 0.6); border: 2px solid transparent; border-radius: 10px; cursor: pointer; }
+  .rl-ds i { width: 26px; height: 26px; border-radius: 6px; box-shadow: inset 0 0 0 1.5px rgba(3, 29, 68, 0.25); }
+  .rl-ds[aria-pressed="true"] { border-color: #20472F; background: #fff; }
+  .rl-ds:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+</style>
 </head>
 <body class="splash-lock">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -2117,13 +2445,27 @@
   <symbol id="d-smile" viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M16 30 q8 8 16 0"/><circle cx="18" cy="19" r="1.5"/><circle cx="30" cy="19" r="1.5"/></symbol>
   <symbol id="d-cloud" viewBox="0 0 48 48"><path d="M12 36 a8 8 0 0 1 2 -15 a10 10 0 0 1 19 -2 a8 8 0 0 1 2 17 Z"/></symbol>
 </svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="tk-star" viewBox="0 0 32 32"><path d="M16 2.5 L20 12 L30.5 12.6 L22.4 19.2 L25 29.5 L16 24 L7 29.5 L9.6 19.2 L1.5 12.6 L12 12 Z" fill="var(--tc, #E3B03B)" stroke="#FFFCF0" stroke-width="2.6" stroke-linejoin="round" paint-order="stroke"/><path d="M16 7 L18 12.5 L12.5 14 Z" fill="rgba(255,255,255,.45)"/></symbol>
+  <symbol id="tk-heart" viewBox="0 0 32 32"><path d="M16 28 C4 19.5 2.5 10.5 8.5 7 C12.5 5 16 8 16 10.5 C16 8 19.5 5 23.5 7 C29.5 10.5 28 19.5 16 28 Z" fill="var(--tc, #C9462E)" stroke="#FFFCF0" stroke-width="2.6" stroke-linejoin="round" paint-order="stroke"/><path d="M9 11 C10 9.5 12 9.3 13 10.5" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="tk-btn" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="var(--tc, #3F6FB5)" stroke="rgba(255,252,240,.7)" stroke-width="1"/><circle cx="16" cy="16" r="10" fill="none" stroke="rgba(0,0,0,.2)" stroke-width="1.5"/><path d="M12.5 12.5 L19.5 19.5 M19.5 12.5 L12.5 19.5" stroke="#F5EEDC" stroke-width="1.5" stroke-linecap="round"/><g fill="rgba(0,0,0,.5)"><circle cx="12.5" cy="12.5" r="1.7"/><circle cx="19.5" cy="12.5" r="1.7"/><circle cx="12.5" cy="19.5" r="1.7"/><circle cx="19.5" cy="19.5" r="1.7"/></g></symbol>
+  <symbol id="tk-plane" viewBox="0 0 60 40"><path d="M2 17 L58 3 L41 37 L31 25 Z" fill="var(--tc, #FBF6E8)" stroke="#1B2F66" stroke-opacity=".5" stroke-width="1.2" stroke-linejoin="round"/><path d="M31 25 L58 3 L26 21 Z" fill="rgba(27,47,102,.14)"/><path d="M31 25 L29 35 L41 37 Z" fill="rgba(27,47,102,.22)"/></symbol>
+  <symbol id="tk-leaf" viewBox="0 0 46 58"><path d="M23 3 C43 16 45 38 23 52 C1 38 3 16 23 3 Z" fill="var(--tc, #B9632E)"/><path d="M23 8 V57 M23 22 L12 15 M23 22 L34 15 M23 33 L10 26 M23 33 L36 26 M23 43 L14 38 M23 43 L32 38" fill="none" stroke="rgba(60,25,5,.55)" stroke-width="1.3" stroke-linecap="round"/></symbol>
+  <symbol id="tk-safety" viewBox="0 0 46 22"><path d="M10 5 H35 M10 17 H31 M10 5 C2 5 2 17 10 17 M10 8.5 C6.5 8.5 6.5 13.5 10 13.5" fill="none" stroke="#98A0AD" stroke-width="2" stroke-linecap="round"/><rect x="34" y="1.5" width="10" height="19" rx="3" fill="#B9C0CB" stroke="#8A93A1" stroke-width="1.2"/></symbol>
+  <symbol id="tk-pencil" viewBox="0 0 104 16"><rect x="1" y="4" width="100" height="12" rx="4" fill="rgba(3,29,68,.2)"/><rect x="0" y="2" width="10" height="12" rx="2.5" fill="#E98F9A"/><rect x="10" y="2" width="7" height="12" fill="#BCC1C9"/><path d="M12 2V14M15 2V14" stroke="#8A9099" stroke-width=".8"/><rect x="17" y="2" width="61" height="12" fill="var(--tc, #E8B33F)"/><rect x="17" y="2" width="61" height="3" fill="rgba(255,255,255,.38)"/><rect x="17" y="11" width="61" height="3" fill="rgba(0,0,0,.15)"/><text x="30" y="10.6" font-family="Courier New, monospace" font-weight="700" font-size="5.4" fill="rgba(60,30,0,.55)">HB</text><path d="M78 2L94 7V9L78 14Z" fill="#F0D2A0"/><path d="M94 7L103 8L94 9Z" fill="#3A3A42"/></symbol>
+  <symbol id="tk-mech" viewBox="0 0 98 14"><rect x="1" y="3.5" width="94" height="10" rx="4" fill="rgba(3,29,68,.2)"/><rect x="0" y="2" width="7" height="10" rx="2.5" fill="#BCC1C9"/><rect x="7" y="2" width="56" height="10" fill="var(--tc, #4E9A3C)"/><rect x="7" y="2" width="56" height="2.6" fill="rgba(255,255,255,.36)"/><rect x="7" y="9.6" width="56" height="2.4" fill="rgba(0,0,0,.16)"/><rect x="12" y=".2" width="27" height="2.4" rx="1.2" fill="#C6CBD2"/><rect x="63" y="2" width="20" height="10" fill="#26272D"/><path d="M66 2V12M69 2V12M72 2V12M75 2V12M78 2V12M81 2V12" stroke="#4A4C56" stroke-width=".9"/><path d="M83 3L92 6V8L83 11Z" fill="#BCC1C9"/><rect x="92" y="6.3" width="6" height="1.4" fill="#6A6E78"/></symbol>
+  <symbol id="tk-pen" viewBox="0 0 100 14"><rect x="1" y="3.5" width="96" height="10" rx="4" fill="rgba(3,29,68,.2)"/><rect x="0" y="2.5" width="5" height="9" rx="2.5" fill="#BCC1C9"/><rect x="4" y="2" width="61" height="10" rx="3" fill="var(--tc, #3F7FC4)"/><rect x="4" y="2" width="61" height="2.8" rx="1.4" fill="rgba(255,255,255,.4)"/><rect x="4" y="9.6" width="61" height="2.4" fill="rgba(0,0,0,.16)"/><rect x="9" y=".2" width="30" height="2.4" rx="1.2" fill="#C6CBD2"/><rect x="65" y="2" width="5" height="10" fill="#BCC1C9"/><path d="M70 3L90 6V8L70 11Z" fill="#CDD2D9"/><path d="M90 6.3L98 7L90 7.7Z" fill="#6A6E78"/></symbol>
+  <symbol id="tk-fount" viewBox="0 0 100 16"><rect x="1" y="4" width="96" height="12" rx="5" fill="rgba(3,29,68,.2)"/><rect x="0" y="1.5" width="43" height="13" rx="5.5" fill="#23252E"/><rect x="0" y="1.5" width="43" height="3.4" rx="1.7" fill="rgba(255,255,255,.14)"/><rect x="9" y="-.2" width="22" height="2.4" rx="1.2" fill="#C6CBD2"/><rect x="43" y="1" width="4" height="14" fill="#BCC1C9"/><rect x="47" y="2.5" width="27" height="11" fill="#2C2E39"/><path d="M74 3.5L84 6.4V9.6L74 12.5Z" fill="#1B1C23"/><path d="M84 6.4L99 8L84 9.6Z" fill="#CDD2D9"/><path d="M86 8H99" stroke="#6A6E78" stroke-width=".7"/><circle cx="88" cy="8" r="1" fill="#6A6E78"/></symbol>
+  <symbol id="tk-corr" viewBox="0 0 80 40"><path d="M20 16C28 9 48 7 64 9C76 11 80 19 79 27C78 36 68 40 54 40C40 40 26 36 20 31Z" fill="rgba(3,29,68,.2)"/><path d="M18 13C26 6 46 4 62 6C74 8 78 16 77 24C76 33 66 37 52 37C38 37 24 33 18 28Z" fill="rgba(247,249,253,.88)" stroke="#AEB6C2" stroke-width="1.2"/><circle cx="53" cy="21" r="14.5" fill="none" stroke="#3A5CB0" stroke-width="2.2" stroke-dasharray="1.7 1.5"/><circle cx="53" cy="21" r="12.5" fill="#C9CDD4" stroke="#9AA0AA" stroke-width=".8"/><circle cx="53" cy="21" r="7.5" fill="#2B4C9B"/><circle cx="53" cy="21" r="3" fill="#E9ECF1"/><path d="M53 21L60 14M53 21L47 15M53 21L58 28" stroke="#9AA0AA" stroke-width="1"/><circle cx="32" cy="24" r="10" fill="#2B4C9B"/><circle cx="32" cy="24" r="6.5" fill="none" stroke="#5E7FD0" stroke-width=".8"/><circle cx="32" cy="24" r="3.6" fill="#E3E8F3" stroke="#9AA0AA" stroke-width=".8"/><path d="M32 24L32 14M32 24L40 29M32 24L24 29" stroke="#6F8CD6" stroke-width=".9"/><path d="M2 10L15 6L24 14L20 28L6 25L1 15Z" fill="#2B4C9B"/><rect x="5" y="13" width="12" height="6.5" rx="3.2" fill="#E6EAF2" transform="rotate(-14 11 16)"/><path d="M3 11L14 8" stroke="rgba(255,255,255,.35)" stroke-width="1.2" stroke-linecap="round"/></symbol>
+  <symbol id="tk-scotch" viewBox="0 0 64 52"><path d="M44 36L63 41L59 51L36 44Z" fill="rgba(244,236,200,.82)" stroke="#C4B880" stroke-width="1"/><path d="M47 38L61 42" stroke="rgba(255,255,255,.7)" stroke-width="1.2"/><circle cx="28" cy="27" r="25" fill="rgba(3,29,68,.2)" transform="translate(2 2.5)"/><circle cx="26" cy="25" r="24" fill="rgba(246,240,206,.86)" stroke="#C4B880" stroke-width="1.2"/><circle cx="26" cy="25" r="19" fill="none" stroke="rgba(190,176,112,.55)" stroke-width="1"/><circle cx="26" cy="25" r="15.5" fill="#B8321F"/><circle cx="26" cy="25" r="14" fill="none" stroke="#17181F" stroke-width="1.3"/><circle cx="26" cy="25" r="11.4" fill="none" stroke="#E9C23B" stroke-width="1" stroke-dasharray="2.2 2.2"/><circle cx="26" cy="25" r="9" fill="none" stroke="#17181F" stroke-width="1.1"/><circle cx="26" cy="25" r="8" fill="rgba(255,252,240,.55)" stroke="#8A7A4A" stroke-width=".8"/><path d="M10 14A20 20 0 0 1 22 6" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="2" stroke-linecap="round"/></symbol>
+</svg>
 <div class="doodles" aria-hidden="true"></div>
 
 <div id="splash" role="button" tabindex="0" aria-label="Enter the site">
   <div class="nb-shade" aria-hidden="true"></div>
   <div class="nb-cover" aria-hidden="true">
     <span class="nb-band"></span>
-    <div class="nb-label"><i>MO-SS031</i><b>Who told you that?</b><span>Understanding the Self</span></div>
+    <div class="nb-label"><i>MO-SS031</i><b>Who told you that?</b><span>Understanding the Self</span><span class="nb-stamp" aria-hidden="true"><i></i><b>1st</b><svg viewBox="0 0 66 40"><circle cx="20" cy="20" r="16"/><circle cx="20" cy="20" r="11.5" stroke-width="1"/><text x="20" y="22.5" text-anchor="middle">UTS</text><path d="M38 12 q4 -4 7 0 t7 0 t7 0 M38 20 q4 -4 7 0 t7 0 t7 0 M38 28 q4 -4 7 0 t7 0 t7 0"/></svg></span></div>
   </div>
   <div class="nb-rings" aria-hidden="true"></div>
 </div>
@@ -2140,16 +2482,28 @@
 
 <div class="hero wrap">
   <span class="paper" aria-hidden="true"></span>
+    <span class="scrap tk tk-corr" style="left:-148px;top:13%;--sr:-24deg;--tc:#2A7F8A" aria-hidden="true"><svg viewBox="0 0 80 40"><use href="#tk-corr"/></svg></span>
+    <span class="scrap tk tk-pencil" style="right:-241px;top:27%;--sr:74deg;--tc:#C9462E" aria-hidden="true"><svg viewBox="0 0 104 16"><use href="#tk-pencil"/></svg></span>
+    <span class="scrap tk tk-corr" style="left:-163px;top:54%;--sr:-27deg;--tc:#C9462E" aria-hidden="true"><svg viewBox="0 0 80 40"><use href="#tk-corr"/></svg></span>
+    <span class="scrap tk tk-pen" style="right:-210px;top:80%;--sr:-88deg;--tc:#C9462E" aria-hidden="true"><svg viewBox="0 0 100 14"><use href="#tk-pen"/></svg></span>
     <span class="scrap cl-side cl-pol pv0" style="left:-152px;top:7.0%;--sr:-9deg" aria-hidden="true"><i></i><em>me, age 9</em></span>
-    <span class="scrap cl-side cl-badge" style="left:-112px;top:31.0%;--sr:6deg;--bc:#3F6FB5" aria-hidden="true"><b>ok</b></span>
+    <span class="scrap cl-side cl-badge" style="left:-112px;top:31.0%;--sr:6deg;--bc:#3F6FB5" aria-hidden="true"><b>fine</b></span>
     <span class="scrap cl-side cl-wt cl-wtp c" style="left:-140px;top:55.0%;--sr:-4deg" aria-hidden="true"></span>
     <span class="scrap cl-side cl-pol pv3" style="right:-152px;top:19.0%;--sr:8deg" aria-hidden="true"><i></i><em>no filter</em></span>
-    <span class="scrap cl-side cl-badge" style="right:-112px;top:43.0%;--sr:-7deg;--bc:#7B4B94" aria-hidden="true"><b>yes</b></span>
+    <span class="scrap cl-side cl-badge" style="right:-112px;top:43.0%;--sr:-7deg;--bc:#7B4B94" aria-hidden="true"><b>true</b></span>
     <span class="scrap cl-side cl-wt cl-wtp b" style="right:-140px;top:67.0%;--sr:5deg" aria-hidden="true"></span>
     <span class="scrap cl-wt cl-c bl a" aria-hidden="true"></span>
     <span class="scrap cl-wt cl-c br c" aria-hidden="true"></span>
     <span class="scrap cl-dot r" style="left:-10px;top:28%" aria-hidden="true"></span>
     <span class="scrap cl-dot y" style="right:-10px;top:62%" aria-hidden="true"></span>
+    <span class="scrap tk tk-pin" style="left:-12px;top:15%;--sr:-8deg;--tc:#C9462E" aria-hidden="true"></span>
+    <span class="scrap tk tk-btn" style="left:-15px;top:42%;--sr:6deg;--tc:#7B4B94" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-btn"/></svg></span>
+    <span class="scrap tk tk-star" style="left:-15px;top:72%;--sr:-10deg;--tc:#E3B03B" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-star"/></svg></span>
+    <span class="scrap tk tk-star" style="right:-15px;top:9%;--sr:9deg;--tc:#3F6FB5" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-star"/></svg></span>
+    <span class="scrap tk tk-btn" style="right:-15px;top:52%;--sr:-7deg;--tc:#2F5E47" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-btn"/></svg></span>
+    <span class="scrap tk tk-heart" style="right:-15px;top:76%;--sr:7deg;--tc:#C9462E" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-heart"/></svg></span>
+    <span class="scrap tk tk-plane" style="left:-140px;top:80%;--sr:-12deg;--tc:#CFE3F2" aria-hidden="true"><svg viewBox="0 0 60 40"><use href="#tk-plane"/></svg></span>
+    <span class="scrap tk tk-leaf" style="right:-130px;top:82%;--sr:10deg;--tc:#B9632E" aria-hidden="true"><svg viewBox="0 0 46 58"><use href="#tk-leaf"/></svg></span>
   <span class="tape" aria-hidden="true"></span>
   <button class="scrap polaroid" id="theme-toggle" type="button" aria-label="Switch to dark mode" title="Change the time of day"><i class="ph"><b class="ph-day"></b><b class="ph-night"></b></i><em class="cap-day">me at 3pm</em><em class="cap-night">me at 3am</em></button>
   <span class="scrap stamp" aria-hidden="true"><i></i><b>1st</b></span>
@@ -2159,36 +2513,50 @@
   <span class="scrap band" aria-hidden="true"></span>
   <span class="scrap sticker s-round s-hmm" aria-hidden="true"><b>hmm</b></span>
   <span class="scrap hnote" aria-hidden="true"><svg viewBox="0 0 64 40"><path d="M60 10 C 42 2, 22 8, 8 30 M8 30 l1 -10 M8 30 l9 -4"/></svg><em>yes, you.</em></span>
-  <span class="scrap dd gd" style="left:-124px;top:320px;--sr:-12deg;width:46px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-star"/></svg></span>
-  <span class="scrap dd gd r" style="left:-92px;top:430px;--sr:8deg;width:38px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-bolt"/></svg></span>
-  <span class="scrap dd gd" style="right:-126px;top:400px;--sr:14deg;width:46px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-spiral"/></svg></span>
+  <span class="scrap gd" style="left:-124px;top:320px;--sr:-12deg;width:46px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-star"/></svg></span>
+  <span class="scrap gd r" style="left:-92px;top:430px;--sr:8deg;width:38px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-bolt"/></svg></span>
+  <span class="scrap gd" style="right:-126px;top:400px;--sr:14deg;width:46px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-spiral"/></svg></span>
   <div class="doc">
     <span class="lp" aria-hidden="true"></span>
     <span class="scrap pclip c-doc" aria-hidden="true"><svg viewBox="0 0 24 56" aria-hidden="true"><path class="pc-shade" d="M14 40 V10 a5 5 0 0 0 -10 0 V42 a8 8 0 0 0 16 0 V14"/><path class="pc-wire" d="M14 40 V10 a5 5 0 0 0 -10 0 V42 a8 8 0 0 0 16 0 V14"/></svg></span>
     <p class="dear">Dear self,</p>
     <p>I need to get this <span class="mark-strike">right</span><span class="note">right, or what?</span> because if I don't, people will <span class="mark-strike">think less of me</span><span class="note">who is "people"?</span>. Rest is something I'll earn <span class="mark-strike">once I'm caught up</span><span class="note">[citation needed]</span>. Good enough has never actually been <span class="mark-strike">good enough</span><span class="note">says who?</span>.</p>
   </div>
-  <h1>Who told you that?</h1>
-  <p class="lede">Most of the standards you're failing to meet were never yours to begin with. This traces a few of them back to where they came from, and looks at the self-imposed pressure and maladaptive perfectionism that grow out of them.</p>
+  <h1 aria-label="Who told you that?"><span class="iw" aria-hidden="true"><span style="--i:0">W</span><span style="--i:1">h</span><span style="--i:2">o</span></span> <span class="iw" aria-hidden="true"><span style="--i:3">t</span><span style="--i:4">o</span><span style="--i:5">l</span><span style="--i:6">d</span></span> <span class="iw" aria-hidden="true"><span style="--i:7">y</span><span style="--i:8">o</span><span style="--i:9">u</span></span> <span class="iw" aria-hidden="true"><span style="--i:10">t</span><span style="--i:11">h</span><span style="--i:12">a</span><span style="--i:13">t</span><span style="--i:14">?</span></span></h1>
+  <p class="lede">Most of the standards you're failing to meet were never yours to begin with. This traces a few of them back to where they came from, and looks at the pressure and perfectionism that grow out of them.</p>
 </div>
 
 <section>
   <div class="wrap">
     <span class="paper" aria-hidden="true"></span>
+    <span class="scrap tk tk-pen" style="left:-227px;top:17%;--sr:-86deg;--tc:#C9462E" aria-hidden="true"><svg viewBox="0 0 100 14"><use href="#tk-pen"/></svg></span>
+    <span class="scrap tk tk-mech" style="right:-236px;top:30%;--sr:-83deg;--tc:#D9772B" aria-hidden="true"><svg viewBox="0 0 98 14"><use href="#tk-mech"/></svg></span>
+    <span class="scrap tk tk-pen" style="left:-238px;top:61%;--sr:83deg;--tc:#7B4B94" aria-hidden="true"><svg viewBox="0 0 100 14"><use href="#tk-pen"/></svg></span>
+    <span class="scrap tk tk-pencil" style="right:-261px;top:75%;--sr:82deg;--tc:#2F5E47" aria-hidden="true"><svg viewBox="0 0 104 16"><use href="#tk-pencil"/></svg></span>
     <span class="scrap cl-side cl-stamps" style="left:-140px;top:7.0%;--sr:-11deg" aria-hidden="true"><u style="--sc:#C9462E"><svg viewBox="0 0 48 48"><use href="#d-heart"/></svg></u><u style="--sc:#A66A00"><svg viewBox="0 0 48 48"><use href="#d-sun"/></svg></u></span>
     <span class="scrap cl-side cl-pol pv3" style="left:-152px;top:21.4%;--sr:9deg" aria-hidden="true"><i></i><em>before the rules</em></span>
     <span class="scrap cl-side cl-badge" style="left:-112px;top:35.8%;--sr:-3deg;--bc:#E3B03B" aria-hidden="true"><b>meh</b></span>
-    <span class="scrap cl-side cl-pol pv1" style="left:-152px;top:50.2%;--sr:7deg" aria-hidden="true"><i></i><em>no filter</em></span>
-    <span class="scrap cl-side cl-badge" style="left:-112px;top:64.6%;--sr:-9deg;--bc:#7B4B94" aria-hidden="true"><b>yes</b></span>
-    <span class="scrap cl-side cl-badge" style="right:-112px;top:14.2%;--sr:6deg;--bc:#C9462E" aria-hidden="true"><b>nope</b></span>
-    <span class="scrap cl-side cl-pol pv0" style="right:-152px;top:28.6%;--sr:-4deg" aria-hidden="true"><i></i><em>me, age 9</em></span>
-    <span class="scrap cl-side cl-badge" style="right:-112px;top:43.0%;--sr:8deg;--bc:#3F6FB5" aria-hidden="true"><b>ok</b></span>
+    <span class="scrap cl-side cl-pol pv1" style="left:-152px;top:50.2%;--sr:7deg" aria-hidden="true"><i></i><em>mid-cram</em></span>
+    <span class="scrap cl-side cl-badge" style="left:-112px;top:64.6%;--sr:-9deg;--bc:#7B4B94" aria-hidden="true"><b>same</b></span>
+    <span class="scrap cl-side cl-badge" style="right:-112px;top:14.2%;--sr:6deg;--bc:#C9462E" aria-hidden="true"><b>nah</b></span>
+    <span class="scrap cl-side cl-pol pv0" style="right:-152px;top:28.6%;--sr:-4deg" aria-hidden="true"><i></i><em>grade 4</em></span>
+    <span class="scrap cl-side cl-badge" style="right:-112px;top:43.0%;--sr:8deg;--bc:#3F6FB5" aria-hidden="true"><b>sure</b></span>
     <span class="scrap cl-side cl-wt cl-wtp c" style="right:-140px;top:57.4%;--sr:-7deg" aria-hidden="true"></span>
     <span class="scrap cl-side cl-note" style="right:-172px;top:71.8%;--sr:5deg" aria-hidden="true"><b>good enough<br>is enough</b></span>
     <span class="scrap cl-wt cl-c bl b" aria-hidden="true"></span>
     <span class="scrap cl-wt cl-c br d" aria-hidden="true"></span>
     <span class="scrap cl-dot b" style="left:-10px;top:34%" aria-hidden="true"></span>
     <span class="scrap cl-dot g" style="right:-10px;top:58%" aria-hidden="true"></span>
+    <span class="scrap tk tk-pin" style="left:-12px;top:12%;--sr:7deg;--tc:#3F6FB5" aria-hidden="true"></span>
+    <span class="scrap tk tk-heart" style="left:-15px;top:24%;--sr:-9deg;--tc:#C9462E" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-heart"/></svg></span>
+    <span class="scrap tk tk-btn" style="left:-15px;top:76%;--sr:8deg;--tc:#2F5E47" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-btn"/></svg></span>
+    <span class="scrap tk tk-star" style="left:-15px;top:85%;--sr:-6deg;--tc:#E3B03B" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-star"/></svg></span>
+    <span class="scrap tk tk-btn" style="right:-15px;top:20%;--sr:-8deg;--tc:#7B4B94" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-btn"/></svg></span>
+    <span class="scrap tk tk-star" style="right:-15px;top:38%;--sr:10deg;--tc:#E3B03B" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-star"/></svg></span>
+    <span class="scrap tk tk-pin" style="right:-12px;top:74%;--sr:-7deg;--tc:#C9462E" aria-hidden="true"></span>
+    <span class="scrap tk tk-heart" style="right:-15px;top:84%;--sr:9deg;--tc:#7B4B94" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-heart"/></svg></span>
+    <span class="scrap tk tk-eraser" style="left:-148px;top:80%;--sr:-8deg" aria-hidden="true"></span>
+    <span class="scrap tk tk-stub" style="right:-152px;top:86%;--sr:6deg" aria-hidden="true"></span>
     <span class="scrap news" aria-hidden="true"><b>Who set the bar?</b><u class="dl">tue. 27 oct. p. 1</u><i></i></span>
     <span class="scrap crease ch" aria-hidden="true"></span>
     <span class="scrap dborder b1" aria-hidden="true"></span>
@@ -2196,11 +2564,11 @@
     <span class="scrap ribbon" aria-hidden="true"></span>
     <span class="scrap dogear" aria-hidden="true"></span>
     <span class="scrap pclip c1" aria-hidden="true"><svg viewBox="0 0 24 56" aria-hidden="true"><path class="pc-shade" d="M14 40 V10 a5 5 0 0 0 -10 0 V42 a8 8 0 0 0 16 0 V14"/><path class="pc-wire" d="M14 40 V10 a5 5 0 0 0 -10 0 V42 a8 8 0 0 0 16 0 V14"/></svg></span>
-    <span class="scrap dd gd r" style="left:-134px;top:120px;--sr:-8deg;width:44px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-heart"/></svg></span>
-    <span class="scrap dd gd" style="right:-118px;top:210px;--sr:10deg;width:40px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-bolt"/></svg></span>
-    <span class="scrap dd gd r" style="right:-132px;top:360px;--sr:-6deg;width:52px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-squiggle"/></svg></span>
+    <span class="scrap gd r" style="left:-134px;top:120px;--sr:-8deg;width:44px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-heart"/></svg></span>
+    <span class="scrap gd" style="right:-118px;top:210px;--sr:10deg;width:40px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-bolt"/></svg></span>
+    <span class="scrap gd r" style="right:-132px;top:360px;--sr:-6deg;width:52px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-squiggle"/></svg></span>
     <span class="scrap rstamp rs-unv" aria-hidden="true"><b>Unverified</b><i>no source on file</i></span>
-    <p class="kicker"><span class="cn">01</span> — the claim</p>
+    <p class="kicker"><span class="cn">01</span>. the claim</p>
     <h2 class="big-claim">Achievement isn't supposed to be your <span class="circled">whole identity.</span></h2>
     <p class="margin-note">nobody ever said this out loud <svg viewBox="0 0 36 34" aria-hidden="true"><path d="M18 32 C 18 20, 22 12, 20 3 M20 3 l-6 8 M20 3 l7 7"/></svg></p>
     <p class="body">A grade, a rank, a comparison. Somewhere along the way it stopped being feedback on one piece of work and started feeling like a fact about you. It got absorbed from a hundred small moments, which is why it's so hard to argue with.</p>
@@ -2212,33 +2580,47 @@
 <section>
   <div class="wrap">
     <span class="paper" aria-hidden="true"></span>
+    <span class="scrap tk tk-scotch" style="left:-133px;top:17%;--sr:-1deg;--tc:#C9462E" aria-hidden="true"><svg viewBox="0 0 64 52"><use href="#tk-scotch"/></svg></span>
+    <span class="scrap tk tk-corr" style="right:-156px;top:34%;--sr:-9deg;--tc:#2F5E47" aria-hidden="true"><svg viewBox="0 0 80 40"><use href="#tk-corr"/></svg></span>
+    <span class="scrap tk tk-mech" style="left:-213px;top:59%;--sr:-80deg;--tc:#7B4B94" aria-hidden="true"><svg viewBox="0 0 98 14"><use href="#tk-mech"/></svg></span>
+    <span class="scrap tk tk-pen" style="right:-240px;top:76%;--sr:68deg;--tc:#D9772B" aria-hidden="true"><svg viewBox="0 0 100 14"><use href="#tk-pen"/></svg></span>
     <span class="scrap cl-side cl-pol pv0" style="left:-152px;top:7.0%;--sr:-11deg" aria-hidden="true"><i></i><em>day off</em></span>
     <span class="scrap cl-side cl-badge" style="left:-112px;top:19.0%;--sr:9deg;--bc:#C9462E" aria-hidden="true"><b>nope</b></span>
-    <span class="scrap cl-side cl-pol pv2" style="left:-152px;top:31.0%;--sr:-3deg" aria-hidden="true"><i></i><em>me, age 9</em></span>
-    <span class="scrap cl-side cl-badge" style="left:-112px;top:43.0%;--sr:7deg;--bc:#3F6FB5" aria-hidden="true"><b>ok</b></span>
+    <span class="scrap cl-side cl-pol pv2" style="left:-152px;top:31.0%;--sr:-3deg" aria-hidden="true"><i></i><em>report card day</em></span>
+    <span class="scrap cl-side cl-badge" style="left:-112px;top:43.0%;--sr:7deg;--bc:#3F6FB5" aria-hidden="true"><b>eh</b></span>
     <span class="scrap cl-side cl-wt cl-wtp a" style="left:-140px;top:55.0%;--sr:-9deg" aria-hidden="true"></span>
-    <span class="scrap cl-side cl-note" style="left:-172px;top:67.0%;--sr:6deg" aria-hidden="true"><b>good enough<br>is enough</b></span>
-    <span class="scrap cl-side cl-badge" style="right:-112px;top:13.0%;--sr:-4deg;--bc:#7B4B94" aria-hidden="true"><b>yes</b></span>
+    <span class="scrap cl-side cl-note" style="left:-172px;top:67.0%;--sr:6deg" aria-hidden="true"><b>done is<br>enough</b></span>
+    <span class="scrap cl-side cl-badge" style="right:-112px;top:13.0%;--sr:-4deg;--bc:#7B4B94" aria-hidden="true"><b>oof</b></span>
     <span class="scrap cl-side cl-wt cl-wtp d" style="right:-140px;top:25.0%;--sr:8deg" aria-hidden="true"></span>
     <span class="scrap cl-side cl-note" style="right:-172px;top:37.0%;--sr:-7deg" aria-hidden="true"><b>ask who<br>said it</b></span>
     <span class="scrap cl-side cl-stamps" style="right:-140px;top:49.0%;--sr:5deg" aria-hidden="true"><u style="--sc:#3F6FB5"><svg viewBox="0 0 48 48"><use href="#d-star"/></svg></u><u style="--sc:#7B4B94"><svg viewBox="0 0 48 48"><use href="#d-flower"/></svg></u></span>
-    <span class="scrap dd gd" style="right:-124px;top:61.0%;--sr:-11deg;width:40px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-cloud"/></svg></span>
-    <span class="scrap dd gd r" style="right:-124px;top:73.0%;--sr:9deg;width:47px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-star"/></svg></span>
+    <span class="scrap gd" style="right:-124px;top:61.0%;--sr:-11deg;width:40px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-cloud"/></svg></span>
+    <span class="scrap gd r" style="right:-124px;top:73.0%;--sr:9deg;width:47px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-star"/></svg></span>
     <span class="scrap cl-wt cl-c bl c" aria-hidden="true"></span>
     <span class="scrap cl-wt cl-c br a" aria-hidden="true"></span>
     <span class="scrap cl-dot y" style="left:-10px;top:40%" aria-hidden="true"></span>
     <span class="scrap cl-dot r" style="right:-10px;top:54%" aria-hidden="true"></span>
+    <span class="scrap tk tk-pin" style="left:-12px;top:10%;--sr:-9deg;--tc:#2F5E47" aria-hidden="true"></span>
+    <span class="scrap tk tk-star" style="left:-15px;top:24%;--sr:8deg;--tc:#E3B03B" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-star"/></svg></span>
+    <span class="scrap tk tk-btn" style="left:-15px;top:54%;--sr:-7deg;--tc:#3F6FB5" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-btn"/></svg></span>
+    <span class="scrap tk tk-heart" style="left:-15px;top:72%;--sr:9deg;--tc:#C9462E" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-heart"/></svg></span>
+    <span class="scrap tk tk-pin" style="right:-12px;top:24%;--sr:7deg;--tc:#E3B03B" aria-hidden="true"></span>
+    <span class="scrap tk tk-star" style="right:-15px;top:36%;--sr:-9deg;--tc:#3F6FB5" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-star"/></svg></span>
+    <span class="scrap tk tk-btn" style="right:-15px;top:70%;--sr:8deg;--tc:#C9462E" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-btn"/></svg></span>
+    <span class="scrap tk tk-heart" style="right:-15px;top:84%;--sr:-6deg;--tc:#2F5E47" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-heart"/></svg></span>
+    <span class="scrap tk tk-aid" style="left:-150px;top:84%;--sr:-10deg" aria-hidden="true"></span>
+    <span class="scrap tk tk-pinsafe" style="right:-140px;top:86%;--sr:8deg" aria-hidden="true"><svg viewBox="0 0 46 22"><use href="#tk-safety"/></svg></span>
     <span class="scrap index" aria-hidden="true">to do. be kind to myself</span>
     <span class="scrap pencil p1" aria-hidden="true"><svg viewBox="0 0 80 40" aria-hidden="true"><path d="M4 31 L19 8 L26 33 L43 6 L50 31 L69 10"/><path d="M9 36 L33 29 L58 35 L75 27" opacity="0.6"/></svg></span>
     <span class="scrap flag f1" aria-hidden="true"></span>
     <span class="scrap flag f2" aria-hidden="true"></span>
     <span class="scrap filmstrip" aria-hidden="true"><b></b><b></b><b></b></span>
     <span class="scrap bclip" aria-hidden="true"><svg viewBox="0 0 60 58" aria-hidden="true"><path class="bc-wire" d="M17 28 C 6 16, 8 3, 21 3"/><path class="bc-wire" d="M43 28 C 54 16, 52 3, 39 3"/><path class="bc-body" d="M15 24 H45 L55 54 H5 Z"/><path class="bc-shine" d="M18 28 L11 50"/><rect class="bc-jaw" x="5" y="50" width="50" height="5" rx="1.5"/></svg></span>
-    <span class="scrap dd gd" style="left:-126px;top:200px;--sr:6deg;width:46px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-spiral"/></svg></span>
-    <span class="scrap dd gd r" style="left:-98px;top:310px;--sr:-14deg;width:34px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-heart"/></svg></span>
-    <span class="scrap dd gd" style="right:-124px;top:270px;--sr:9deg;width:46px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-crown"/></svg></span>
+    <span class="scrap gd" style="left:-126px;top:200px;--sr:6deg;width:46px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-spiral"/></svg></span>
+    <span class="scrap gd r" style="left:-98px;top:310px;--sr:-14deg;width:34px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-heart"/></svg></span>
+    <span class="scrap gd" style="right:-124px;top:270px;--sr:9deg;width:46px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-crown"/></svg></span>
     <span class="scrap sticker s-star" aria-hidden="true"><svg viewBox="-6 -6 112 112" aria-hidden="true"><path class="ss-cut" d="M50.0,0.0 L59.5,8.6 L71.7,5.0 L76.5,16.8 L89.1,18.8 L88.3,31.6 L98.7,38.9 L92.5,50.0 L98.7,61.1 L88.3,68.4 L89.1,81.2 L76.5,83.2 L71.7,95.0 L59.5,91.4 L50.0,100.0 L40.5,91.4 L28.3,95.0 L23.5,83.2 L10.9,81.2 L11.7,68.4 L1.3,61.1 L7.5,50.0 L1.3,38.9 L11.7,31.6 L10.9,18.8 L23.5,16.8 L28.3,5.0 L40.5,8.6 Z"/><path class="ss-edge" d="M50.0,0.0 L59.5,8.6 L71.7,5.0 L76.5,16.8 L89.1,18.8 L88.3,31.6 L98.7,38.9 L92.5,50.0 L98.7,61.1 L88.3,68.4 L89.1,81.2 L76.5,83.2 L71.7,95.0 L59.5,91.4 L50.0,100.0 L40.5,91.4 L28.3,95.0 L23.5,83.2 L10.9,81.2 L11.7,68.4 L1.3,61.1 L7.5,50.0 L1.3,38.9 L11.7,31.6 L10.9,18.8 L23.5,16.8 L28.3,5.0 L40.5,8.6 Z"/><path class="ss-fill" d="M50.0,0.0 L59.5,8.6 L71.7,5.0 L76.5,16.8 L89.1,18.8 L88.3,31.6 L98.7,38.9 L92.5,50.0 L98.7,61.1 L88.3,68.4 L89.1,81.2 L76.5,83.2 L71.7,95.0 L59.5,91.4 L50.0,100.0 L40.5,91.4 L28.3,95.0 L23.5,83.2 L10.9,81.2 L11.7,68.4 L1.3,61.1 L7.5,50.0 L1.3,38.9 L11.7,31.6 L10.9,18.8 L23.5,16.8 L28.3,5.0 L40.5,8.6 Z"/></svg><b>think<br>about it</b></span>
-    <p class="kicker"><span class="cn">02</span> — the self-check</p>
+    <p class="kicker"><span class="cn">02</span>. the self-check</p>
     <h2>Notice <span class="circled">which one</span> it feels like.</h2>
     <p class="margin-note">no wrong answers, promise <svg viewBox="0 0 36 34" aria-hidden="true"><path d="M4 6 C 14 3, 27 10, 28 28 M28 28 l-6 -7 M28 28 l7 -8"/></svg></p>
     <p class="body">Nothing clinical, nothing scored. Just three moments. Answer for how you actually react, not how you think you should.</p>
@@ -2271,12 +2653,12 @@
 
       <div class="q-result" data-result="try">
         <p class="verdict">leans: try again</p>
-        <p class="body" style="margin:0;">Setbacks mostly feel like information for you, not a verdict. That's worth keeping. It's the opposite of the pattern this project is about: self-imposed pressure and maladaptive perfectionism.</p>
+        <p class="body" style="margin:0;">Setbacks mostly feel like information for you, not a verdict. That's worth keeping. It's the opposite of the pattern this project is about.</p>
         <button class="restart" onclick="resetQuiz()">Answer again</button>
       </div>
       <div class="q-result" data-result="exposed">
         <p class="verdict">leans: exposed</p>
-        <p class="body" style="margin:0;">If falling short feels less like "I can improve" and more like "I've been found out," that's usually the sign worth sitting with. Not because something's wrong with you, but because a standard got fused to your worth somewhere along the way, and the pressure to meet it may now be coming from you.</p>
+        <p class="body" style="margin:0;">If falling short feels less like "I can improve" and more like "I've been found out," that's usually the sign worth sitting with. Not because something's wrong with you, but because a standard got fused to your worth at some point, and the pressure to meet it may now be coming from you.</p>
         <button class="restart" onclick="resetQuiz()">Answer again</button>
       </div>
     </div>
@@ -2286,42 +2668,56 @@
 <section>
   <div class="wrap">
     <span class="paper" aria-hidden="true"></span>
-    <span class="scrap cl-side cl-badge" style="left:-112px;top:7.0%;--sr:-3deg;--bc:#7B4B94" aria-hidden="true"><b>yes</b></span>
+    <span class="scrap tk tk-pencil" style="left:-248px;top:15%;--sr:85deg;--tc:#E3B03B" aria-hidden="true"><svg viewBox="0 0 104 16"><use href="#tk-pencil"/></svg></span>
+    <span class="scrap tk tk-fount" style="right:-224px;top:28%;--sr:-75deg;--tc:#E3B03B" aria-hidden="true"><svg viewBox="0 0 100 16"><use href="#tk-fount"/></svg></span>
+    <span class="scrap tk tk-pen" style="left:-218px;top:62%;--sr:-80deg;--tc:#7B4B94" aria-hidden="true"><svg viewBox="0 0 100 14"><use href="#tk-pen"/></svg></span>
+    <span class="scrap tk tk-scotch" style="right:-152px;top:78%;--sr:13deg;--tc:#1B1B1F" aria-hidden="true"><svg viewBox="0 0 64 52"><use href="#tk-scotch"/></svg></span>
+    <span class="scrap cl-side cl-badge" style="left:-112px;top:7.0%;--sr:-3deg;--bc:#7B4B94" aria-hidden="true"><b>wait</b></span>
     <span class="scrap cl-side cl-wt cl-wtp b" style="left:-140px;top:15.0%;--sr:7deg" aria-hidden="true"></span>
-    <span class="scrap cl-side cl-note" style="left:-172px;top:23.0%;--sr:-9deg" aria-hidden="true"><b>ask who<br>said it</b></span>
+    <span class="scrap cl-side cl-note" style="left:-172px;top:23.0%;--sr:-9deg" aria-hidden="true"><b>says<br>who?</b></span>
     <span class="scrap cl-side cl-stamps" style="left:-140px;top:31.0%;--sr:6deg" aria-hidden="true"><u style="--sc:#3F6FB5"><svg viewBox="0 0 48 48"><use href="#d-star"/></svg></u><u style="--sc:#7B4B94"><svg viewBox="0 0 48 48"><use href="#d-flower"/></svg></u></span>
-    <span class="scrap dd gd" style="left:-124px;top:39.0%;--sr:-4deg;width:46px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-crown"/></svg></span>
-    <span class="scrap dd gd r" style="left:-124px;top:47.0%;--sr:8deg;width:53px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-flower"/></svg></span>
-    <span class="scrap dd gd" style="left:-124px;top:55.0%;--sr:-7deg;width:42px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-arrow"/></svg></span>
-    <span class="scrap dd gd r" style="left:-124px;top:63.0%;--sr:5deg;width:49px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-sun"/></svg></span>
+    <span class="scrap gd" style="left:-124px;top:39.0%;--sr:-4deg;width:46px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-crown"/></svg></span>
+    <span class="scrap gd r" style="left:-124px;top:47.0%;--sr:8deg;width:53px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-flower"/></svg></span>
+    <span class="scrap gd" style="left:-124px;top:55.0%;--sr:-7deg;width:42px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-arrow"/></svg></span>
+    <span class="scrap gd r" style="left:-124px;top:63.0%;--sr:5deg;width:49px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-sun"/></svg></span>
     <span class="scrap cl-side cl-wt cl-wtp a" style="left:-140px;top:71.0%;--sr:-11deg" aria-hidden="true"></span>
-    <span class="scrap dd gd r" style="right:-124px;top:11.0%;--sr:9deg;width:45px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-cloud"/></svg></span>
-    <span class="scrap dd gd" style="right:-124px;top:19.0%;--sr:-3deg;width:52px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-star"/></svg></span>
+    <span class="scrap gd r" style="right:-124px;top:11.0%;--sr:9deg;width:45px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-cloud"/></svg></span>
+    <span class="scrap gd" style="right:-124px;top:19.0%;--sr:-3deg;width:52px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-star"/></svg></span>
     <span class="scrap cl-side cl-wt cl-wtp d" style="right:-140px;top:27.0%;--sr:7deg" aria-hidden="true"></span>
     <span class="scrap cl-side cl-note" style="right:-172px;top:35.0%;--sr:-9deg" aria-hidden="true"><b>who made<br>this rule?</b></span>
     <span class="scrap cl-side cl-stamps" style="right:-140px;top:43.0%;--sr:6deg" aria-hidden="true"><u style="--sc:#B5442B"><svg viewBox="0 0 48 48"><use href="#d-cloud"/></svg></u><u style="--sc:#2F5E47"><svg viewBox="0 0 48 48"><use href="#d-star"/></svg></u></span>
-    <span class="scrap cl-side cl-pol pv2" style="right:-152px;top:51.0%;--sr:-4deg" aria-hidden="true"><i></i><em>me, age 9</em></span>
-    <span class="scrap cl-side cl-badge" style="right:-112px;top:59.0%;--sr:8deg;--bc:#3F6FB5" aria-hidden="true"><b>ok</b></span>
+    <span class="scrap cl-side cl-pol pv2" style="right:-152px;top:51.0%;--sr:-4deg" aria-hidden="true"><i></i><em>age 11</em></span>
+    <span class="scrap cl-side cl-badge" style="right:-112px;top:59.0%;--sr:8deg;--bc:#3F6FB5" aria-hidden="true"><b>huh</b></span>
     <span class="scrap cl-side cl-pol pv0" style="right:-152px;top:67.0%;--sr:-7deg" aria-hidden="true"><i></i><em>summer ’14</em></span>
-    <span class="scrap cl-side cl-badge" style="right:-112px;top:75.0%;--sr:5deg;--bc:#2F5E47" aria-hidden="true"><b>hmm?</b></span>
+    <span class="scrap cl-side cl-badge" style="right:-112px;top:75.0%;--sr:5deg;--bc:#2F5E47" aria-hidden="true"><b>yikes</b></span>
     <span class="scrap cl-wt cl-c bl d" aria-hidden="true"></span>
     <span class="scrap cl-wt cl-c br b" aria-hidden="true"></span>
     <span class="scrap cl-dot g" style="left:-10px;top:46%" aria-hidden="true"></span>
     <span class="scrap cl-dot b" style="right:-10px;top:50%" aria-hidden="true"></span>
+    <span class="scrap tk tk-pin" style="left:-12px;top:12%;--sr:8deg;--tc:#C9462E" aria-hidden="true"></span>
+    <span class="scrap tk tk-star" style="left:-15px;top:26%;--sr:-8deg;--tc:#E3B03B" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-star"/></svg></span>
+    <span class="scrap tk tk-heart" style="left:-15px;top:60%;--sr:7deg;--tc:#7B4B94" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-heart"/></svg></span>
+    <span class="scrap tk tk-btn" style="left:-15px;top:78%;--sr:-9deg;--tc:#2F5E47" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-btn"/></svg></span>
+    <span class="scrap tk tk-pin" style="right:-12px;top:22%;--sr:-7deg;--tc:#3F6FB5" aria-hidden="true"></span>
+    <span class="scrap tk tk-star" style="right:-15px;top:36%;--sr:9deg;--tc:#E3B03B" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-star"/></svg></span>
+    <span class="scrap tk tk-btn" style="right:-15px;top:64%;--sr:-8deg;--tc:#7B4B94" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-btn"/></svg></span>
+    <span class="scrap tk tk-heart" style="right:-15px;top:80%;--sr:7deg;--tc:#C9462E" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-heart"/></svg></span>
+    <span class="scrap tk tk-leaf" style="left:-148px;top:86%;--sr:-9deg;--tc:#7F9A4E" aria-hidden="true"><svg viewBox="0 0 46 58"><use href="#tk-leaf"/></svg></span>
+    <span class="scrap tk tk-plane" style="right:-136px;top:88%;--sr:10deg;--tc:#F3E0B8" aria-hidden="true"><svg viewBox="0 0 60 40"><use href="#tk-plane"/></svg></span>
     <span class="scrap ticket" aria-hidden="true"><b>Admit one</b><em>(1) mistake</em></span>
     <span class="scrap staple st1" aria-hidden="true"></span>
     <span class="scrap pencil p2" aria-hidden="true"><svg viewBox="0 0 48 44" aria-hidden="true"><path d="M24 22 c0 -3 4 -3 4 0 c0 5 -8 5 -8 -1 c0 -8 12 -8 12 0 c0 11 -16 11 -16 -1 c0 -14 20 -14 20 0 c0 17 -24 17 -24 -2 c0 -21 28 -21 28 1"/></svg></span>
     <span class="scrap libcard" aria-hidden="true"><b>DUE DATE</b><i>12 OCT</i><i>03 NOV</i><i>NEVER</i></span>
     <span class="scrap dogear" aria-hidden="true"></span>
     <span class="scrap pclip c3" aria-hidden="true"><svg viewBox="0 0 24 56" aria-hidden="true"><path class="pc-shade" d="M14 40 V10 a5 5 0 0 0 -10 0 V42 a8 8 0 0 0 16 0 V14"/><path class="pc-wire" d="M14 40 V10 a5 5 0 0 0 -10 0 V42 a8 8 0 0 0 16 0 V14"/></svg></span>
-    <span class="scrap dd gd r" style="left:-126px;top:300px;--sr:-9deg;width:46px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-crown"/></svg></span>
-    <span class="scrap dd gd" style="right:-136px;top:520px;--sr:7deg;width:54px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-squiggle"/></svg></span>
-    <span class="scrap dd gd" style="left:-104px;top:900px;--sr:12deg;width:40px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-star"/></svg></span>
-    <span class="scrap dd gd r" style="right:-112px;top:900px;--sr:-10deg;width:42px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-heart"/></svg></span>
-    <span class="scrap dd gd" style="left:-120px;top:1500px;--sr:5deg;width:46px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-spiral"/></svg></span>
-    <span class="scrap dd gd r" style="right:-120px;top:1400px;--sr:-8deg;width:40px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-bolt"/></svg></span>
+    <span class="scrap gd r" style="left:-126px;top:300px;--sr:-9deg;width:46px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-crown"/></svg></span>
+    <span class="scrap gd" style="right:-136px;top:520px;--sr:7deg;width:54px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-squiggle"/></svg></span>
+    <span class="scrap gd" style="left:-104px;top:900px;--sr:12deg;width:40px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-star"/></svg></span>
+    <span class="scrap gd r" style="right:-112px;top:900px;--sr:-10deg;width:42px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-heart"/></svg></span>
+    <span class="scrap gd" style="left:-120px;top:1500px;--sr:5deg;width:46px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-spiral"/></svg></span>
+    <span class="scrap gd r" style="right:-120px;top:1400px;--sr:-8deg;width:40px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-bolt"/></svg></span>
     <span class="scrap dymo d1" aria-hidden="true"><b>anonymous. no names.</b></span>
-    <p class="kicker"><span class="cn">03</span> — the wall</p>
+    <p class="kicker"><span class="cn">03</span>. the wall</p>
     <h2>Other people's <span class="scribble-under">"who told you that?"</span> moments.</h2>
     <p class="wall-note">Anonymous. No login, no name. Just the moment, and where the standard came from if you know it. That second part feeds the word cloud below.</p>
     <p class="scribble">psst. the “source” box is the interesting part ↓</p>
@@ -2332,7 +2728,7 @@
       <div class="chips" id="srcChips"></div>
       <input type="text" id="sourceInput" placeholder="Where did that standard come from? (one word)" maxlength="24">
       <input type="text" id="reframeInput" placeholder="What would you say to a friend in the same spot? (optional)" maxlength="160">
-      <p class="care">If something here feels heavy, it's okay to talk to a school counselor or someone you trust. This wall is for noticing, not a replacement for real support.</p>
+      <p class="care">If something here feels heavy, it's okay to talk to a school counselor or someone you trust. This wall is for noticing. It can't stand in for someone who can actually help.</p>
       <button onclick="addEntry()">Add to the wall</button>
       <p class="thanks" id="thanks" aria-live="polite"></p>
     </div>
@@ -2353,34 +2749,48 @@
 <section>
   <div class="wrap">
     <span class="paper" aria-hidden="true"></span>
-    <span class="scrap cl-side cl-note" style="left:-172px;top:7.0%;--sr:-11deg" aria-hidden="true"><b>who made<br>this rule?</b></span>
+    <span class="scrap tk tk-scotch" style="left:-148px;top:12%;--sr:12deg;--tc:#7B4B94" aria-hidden="true"><svg viewBox="0 0 64 52"><use href="#tk-scotch"/></svg></span>
+    <span class="scrap tk tk-pencil" style="right:-256px;top:27%;--sr:66deg;--tc:#2F5E8F" aria-hidden="true"><svg viewBox="0 0 104 16"><use href="#tk-pencil"/></svg></span>
+    <span class="scrap tk tk-pen" style="left:-210px;top:62%;--sr:67deg;--tc:#C9462E" aria-hidden="true"><svg viewBox="0 0 100 14"><use href="#tk-pen"/></svg></span>
+    <span class="scrap tk tk-corr" style="right:-160px;top:74%;--sr:-11deg;--tc:#E3B03B" aria-hidden="true"><svg viewBox="0 0 80 40"><use href="#tk-corr"/></svg></span>
+    <span class="scrap cl-side cl-note" style="left:-172px;top:7.0%;--sr:-11deg" aria-hidden="true"><b>whose<br>rule is it?</b></span>
     <span class="scrap cl-side cl-stamps" style="left:-140px;top:25.0%;--sr:9deg" aria-hidden="true"><u style="--sc:#B5442B"><svg viewBox="0 0 48 48"><use href="#d-cloud"/></svg></u><u style="--sc:#2F5E47"><svg viewBox="0 0 48 48"><use href="#d-star"/></svg></u></span>
-    <span class="scrap cl-side cl-pol pv0" style="left:-152px;top:43.0%;--sr:-3deg" aria-hidden="true"><i></i><em>me, age 9</em></span>
-    <span class="scrap cl-side cl-badge" style="left:-112px;top:61.0%;--sr:7deg;--bc:#3F6FB5" aria-hidden="true"><b>ok</b></span>
+    <span class="scrap cl-side cl-pol pv0" style="left:-152px;top:43.0%;--sr:-3deg" aria-hidden="true"><i></i><em>the recital</em></span>
+    <span class="scrap cl-side cl-badge" style="left:-112px;top:61.0%;--sr:7deg;--bc:#3F6FB5" aria-hidden="true"><b>sigh</b></span>
     <span class="scrap cl-side cl-stamps" style="right:-140px;top:16.0%;--sr:-9deg" aria-hidden="true"><u style="--sc:#2F5E47"><svg viewBox="0 0 48 48"><use href="#d-sun"/></svg></u><u style="--sc:#B5442B"><svg viewBox="0 0 48 48"><use href="#d-smile"/></svg></u></span>
-    <span class="scrap cl-side cl-pol pv3" style="right:-152px;top:34.0%;--sr:6deg" aria-hidden="true"><i></i><em>no filter</em></span>
-    <span class="scrap cl-side cl-badge" style="right:-112px;top:52.0%;--sr:-4deg;--bc:#7B4B94" aria-hidden="true"><b>yes</b></span>
+    <span class="scrap cl-side cl-pol pv3" style="right:-152px;top:34.0%;--sr:6deg" aria-hidden="true"><i></i><em>3 am, again</em></span>
+    <span class="scrap cl-side cl-badge" style="right:-112px;top:52.0%;--sr:-4deg;--bc:#7B4B94" aria-hidden="true"><b>yep</b></span>
     <span class="scrap cl-side cl-pol pv1" style="right:-152px;top:70.0%;--sr:8deg" aria-hidden="true"><i></i><em>just because</em></span>
     <span class="scrap cl-wt cl-c bl a" aria-hidden="true"></span>
     <span class="scrap cl-wt cl-c br c" aria-hidden="true"></span>
     <span class="scrap cl-dot r" style="left:-10px;top:52%" aria-hidden="true"></span>
     <span class="scrap cl-dot y" style="right:-10px;top:46%" aria-hidden="true"></span>
+    <span class="scrap tk tk-pin" style="left:-12px;top:14%;--sr:-8deg;--tc:#E3B03B" aria-hidden="true"></span>
+    <span class="scrap tk tk-star" style="left:-15px;top:33%;--sr:8deg;--tc:#E3B03B" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-star"/></svg></span>
+    <span class="scrap tk tk-heart" style="left:-15px;top:72%;--sr:-7deg;--tc:#C9462E" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-heart"/></svg></span>
+    <span class="scrap tk tk-btn" style="left:-15px;top:86%;--sr:9deg;--tc:#3F6FB5" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-btn"/></svg></span>
+    <span class="scrap tk tk-pin" style="right:-12px;top:24%;--sr:7deg;--tc:#7B4B94" aria-hidden="true"></span>
+    <span class="scrap tk tk-btn" style="right:-15px;top:36%;--sr:-9deg;--tc:#2F5E47" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-btn"/></svg></span>
+    <span class="scrap tk tk-star" style="right:-15px;top:62%;--sr:8deg;--tc:#3F6FB5" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-star"/></svg></span>
+    <span class="scrap tk tk-heart" style="right:-15px;top:80%;--sr:-6deg;--tc:#7B4B94" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-heart"/></svg></span>
+    <span class="scrap tk tk-stub" style="left:-152px;top:80%;--sr:-7deg" aria-hidden="true"></span>
+    <span class="scrap tk tk-leaf" style="right:-130px;top:86%;--sr:9deg;--tc:#C98A3B" aria-hidden="true"><svg viewBox="0 0 46 58"><use href="#tk-leaf"/></svg></span>
     <span class="scrap snap" aria-hidden="true"></span>
     <span class="scrap staple st2" aria-hidden="true"></span>
     <span class="scrap dborder b2" aria-hidden="true"></span>
     <span class="scrap print" aria-hidden="true"></span>
     <span class="scrap flag f3" aria-hidden="true"></span>
-    <span class="scrap dd gd r" style="left:-124px;top:80px;--sr:-10deg;width:42px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-star"/></svg></span>
-    <span class="scrap dd gd" style="right:-112px;top:270px;--sr:11deg;width:40px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-heart"/></svg></span>
-    <span class="scrap dd gd" style="left:-112px;top:260px;--sr:-6deg;width:44px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-crown"/></svg></span>
+    <span class="scrap gd r" style="left:-124px;top:80px;--sr:-10deg;width:42px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-star"/></svg></span>
+    <span class="scrap gd" style="right:-112px;top:270px;--sr:11deg;width:40px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-heart"/></svg></span>
+    <span class="scrap gd" style="left:-112px;top:260px;--sr:-6deg;width:44px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-crown"/></svg></span>
     <span class="scrap rstamp rs-cure" aria-hidden="true"><b>Not a cure</b><i>just a start</i></span>
-    <p class="kicker"><span class="cn">04</span> — the limits</p>
+    <p class="kicker"><span class="cn">04</span>. the limits</p>
     <h2 aria-label="What this can't do."><span aria-hidden="true"><span class="rw"><u class="rl l3">W</u><u class="rl l4">h</u><u class="rl l5">a</u><u class="rl l6">t</u></span> <span class="rw"><u class="rl l1">t</u><u class="rl l2">h</u><u class="rl l3">i</u><u class="rl l4">s</u></span> <span class="circled">can't</span> <span class="rw"><u class="rl l5">d</u><u class="rl l6">o</u><u class="rl l1">.</u></span></span></h2>
     <p class="margin-note">so nobody expects a miracle <svg viewBox="0 0 36 34" aria-hidden="true"><path d="M4 6 C 14 3, 27 10, 28 28 M28 28 l-6 -7 M28 28 l7 -8"/></svg></p>
     <ul class="limits-notes">
       <li class="sticky"><h3>Only reaches people who look</h3><p>Nothing here shows up uninvited, the way a feed post would.</p></li>
       <li class="sticky"><h3>One visit won't undo years</h3><p>It doesn't touch grading culture, school stress or family expectations. Those sit outside anything a website can fix.</p></li>
-      <li class="sticky"><h3>Those who need it may skip it</h3><p>Self-imposed pressure and perfectionism often come with not wanting to admit the message applies to you.</p></li>
+      <li class="sticky"><h3>Those who need it may skip it</h3><p>This kind of pressure often comes with not wanting to admit the message applies to you.</p></li>
       <li class="sticky"><h3>Easy to forget</h3><p>Without a school link, a counselor mention or a friend sharing it, a single visit is gone once the tab closes.</p></li>
     </ul>
     <p class="body" style="margin-top:20px;">Research on peer acceptance suggests it can directly ease perfectionistic tendencies in teens (Blackburn et al., 2025). That is part of why routing this through schools or counselors, rather than leaving it to be found cold, matters more than the site itself.</p>
@@ -2390,32 +2800,46 @@
 <section>
   <div class="wrap">
     <span class="paper" aria-hidden="true"></span>
+    <span class="scrap tk tk-fount" style="left:-208px;top:18%;--sr:73deg;--tc:#C9462E" aria-hidden="true"><svg viewBox="0 0 100 16"><use href="#tk-fount"/></svg></span>
+    <span class="scrap tk tk-mech" style="right:-206px;top:26%;--sr:-88deg;--tc:#7B4B94" aria-hidden="true"><svg viewBox="0 0 98 14"><use href="#tk-mech"/></svg></span>
+    <span class="scrap tk tk-scotch" style="left:-138px;top:59%;--sr:-3deg;--tc:#7B4B94" aria-hidden="true"><svg viewBox="0 0 64 52"><use href="#tk-scotch"/></svg></span>
+    <span class="scrap tk tk-scotch" style="right:-139px;top:78%;--sr:2deg;--tc:#C9462E" aria-hidden="true"><svg viewBox="0 0 64 52"><use href="#tk-scotch"/></svg></span>
     <span class="scrap cl-side cl-wt cl-wtp c" style="left:-140px;top:7.0%;--sr:-7deg" aria-hidden="true"></span>
     <span class="scrap cl-side cl-note" style="left:-172px;top:21.4%;--sr:5deg" aria-hidden="true"><b>not mine<br>to carry</b></span>
     <span class="scrap cl-side cl-stamps" style="left:-140px;top:35.8%;--sr:-11deg" aria-hidden="true"><u style="--sc:#2F5E47"><svg viewBox="0 0 48 48"><use href="#d-sun"/></svg></u><u style="--sc:#B5442B"><svg viewBox="0 0 48 48"><use href="#d-smile"/></svg></u></span>
-    <span class="scrap cl-side cl-pol pv1" style="left:-152px;top:50.2%;--sr:9deg" aria-hidden="true"><i></i><em>no filter</em></span>
-    <span class="scrap cl-side cl-badge" style="left:-112px;top:64.6%;--sr:-3deg;--bc:#7B4B94" aria-hidden="true"><b>yes</b></span>
+    <span class="scrap cl-side cl-pol pv1" style="left:-152px;top:50.2%;--sr:9deg" aria-hidden="true"><i></i><em>unedited</em></span>
+    <span class="scrap cl-side cl-badge" style="left:-112px;top:64.6%;--sr:-3deg;--bc:#7B4B94" aria-hidden="true"><b>right</b></span>
     <span class="scrap cl-side cl-stamps" style="right:-140px;top:14.2%;--sr:7deg" aria-hidden="true"><u style="--sc:#B5442B"><svg viewBox="0 0 48 48"><use href="#d-cloud"/></svg></u><u style="--sc:#2F5E47"><svg viewBox="0 0 48 48"><use href="#d-star"/></svg></u></span>
-    <span class="scrap cl-side cl-pol pv0" style="right:-152px;top:28.6%;--sr:-9deg" aria-hidden="true"><i></i><em>me, age 9</em></span>
-    <span class="scrap cl-side cl-badge" style="right:-112px;top:43.0%;--sr:6deg;--bc:#3F6FB5" aria-hidden="true"><b>ok</b></span>
-    <span class="scrap cl-side cl-pol pv2" style="right:-152px;top:57.4%;--sr:-4deg" aria-hidden="true"><i></i><em>summer ’14</em></span>
-    <span class="scrap cl-side cl-badge" style="right:-112px;top:71.8%;--sr:8deg;--bc:#2F5E47" aria-hidden="true"><b>hmm?</b></span>
+    <span class="scrap cl-side cl-pol pv0" style="right:-152px;top:28.6%;--sr:-9deg" aria-hidden="true"><i></i><em>first honors</em></span>
+    <span class="scrap cl-side cl-badge" style="right:-112px;top:43.0%;--sr:6deg;--bc:#3F6FB5" aria-hidden="true"><b>so?</b></span>
+    <span class="scrap cl-side cl-pol pv2" style="right:-152px;top:57.4%;--sr:-4deg" aria-hidden="true"><i></i><em>after exams</em></span>
+    <span class="scrap cl-side cl-badge" style="right:-112px;top:71.8%;--sr:8deg;--bc:#2F5E47" aria-hidden="true"><b>ugh</b></span>
     <span class="scrap cl-wt cl-c bl b" aria-hidden="true"></span>
     <span class="scrap cl-wt cl-c br d" aria-hidden="true"></span>
     <span class="scrap cl-dot b" style="left:-10px;top:58%" aria-hidden="true"></span>
     <span class="scrap cl-dot g" style="right:-10px;top:42%" aria-hidden="true"></span>
+    <span class="scrap tk tk-pin" style="left:-12px;top:14%;--sr:8deg;--tc:#2F5E47" aria-hidden="true"></span>
+    <span class="scrap tk tk-star" style="left:-15px;top:30%;--sr:-9deg;--tc:#E3B03B" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-star"/></svg></span>
+    <span class="scrap tk tk-btn" style="left:-15px;top:46%;--sr:7deg;--tc:#C9462E" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-btn"/></svg></span>
+    <span class="scrap tk tk-heart" style="left:-15px;top:78%;--sr:-8deg;--tc:#7B4B94" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-heart"/></svg></span>
+    <span class="scrap tk tk-btn" style="right:-15px;top:24%;--sr:-7deg;--tc:#3F6FB5" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-btn"/></svg></span>
+    <span class="scrap tk tk-pin" style="right:-12px;top:56%;--sr:9deg;--tc:#C9462E" aria-hidden="true"></span>
+    <span class="scrap tk tk-heart" style="right:-15px;top:70%;--sr:-8deg;--tc:#2F5E47" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-heart"/></svg></span>
+    <span class="scrap tk tk-star" style="right:-15px;top:86%;--sr:7deg;--tc:#E3B03B" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-star"/></svg></span>
+    <span class="scrap tk tk-plane" style="left:-140px;top:80%;--sr:10deg;--tc:#E2D8F0" aria-hidden="true"><svg viewBox="0 0 60 40"><use href="#tk-plane"/></svg></span>
+    <span class="scrap tk tk-aid" style="right:-150px;top:87%;--sr:-9deg" aria-hidden="true"></span>
     <span class="scrap tea" aria-hidden="true"></span>
     <span class="scrap crease cv" aria-hidden="true"></span>
     <span class="scrap spin" aria-hidden="true"><svg viewBox="0 0 64 20" aria-hidden="true"><circle cx="9" cy="10" r="5"/><path d="M9 5 H52 M9 15 H48"/><path d="M52 5 h6 a5 5 0 0 1 0 10 h-10"/><path d="M52 5 a5 5 0 0 0 0 10" opacity="0.7"/></svg></span>
     <span class="scrap env" aria-hidden="true"><i class="flap"></i><i class="ltr"></i><b class="bd">to: me, later</b><span class="env-tag">tucked in. see you later.</span></span>
     <span class="scrap flag f4" aria-hidden="true"></span>
     <span class="scrap cutout" aria-hidden="true"><u>e</u><u>n</u><u>o</u><u>u</u><u>g</u><u>h</u></span>
-    <span class="scrap dd gd" style="left:-112px;top:120px;--sr:-12deg;width:42px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-bolt"/></svg></span>
-    <span class="scrap dd gd r" style="right:-124px;top:200px;--sr:10deg;width:46px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-spiral"/></svg></span>
-    <span class="scrap dd gd" style="right:-98px;top:330px;--sr:-8deg;width:38px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-star"/></svg></span>
+    <span class="scrap gd" style="left:-112px;top:120px;--sr:-12deg;width:42px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-bolt"/></svg></span>
+    <span class="scrap gd r" style="right:-124px;top:200px;--sr:10deg;width:46px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-spiral"/></svg></span>
+    <span class="scrap gd" style="right:-98px;top:330px;--sr:-8deg;width:38px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-star"/></svg></span>
     <span class="scrap sticker s-round s-noted" aria-hidden="true"><b>noted</b></span>
     <span class="scrap dymo d2" aria-hidden="true"><b>edit the rule</b></span>
-    <p class="kicker"><span class="cn">05</span> — a way out</p>
+    <p class="kicker"><span class="cn">05</span>. a way out</p>
     <h2 aria-label="Rewrite the line."><span aria-hidden="true"><span class="rw"><u class="rl l1">R</u><u class="rl l2">e</u><u class="rl l3">w</u><u class="rl l4">r</u><u class="rl l5">i</u><u class="rl l6">t</u><u class="rl l1">e</u></span> <span class="rw"><u class="rl l2">t</u><u class="rl l3">h</u><u class="rl l4">e</u></span> <span class="rw"><u class="rl l5">l</u><u class="rl l6">i</u><u class="rl l1">n</u><u class="rl l2">e</u><u class="rl l3">.</u></span></span></h2>
     <p class="margin-note">red pen out. green pen in. <svg viewBox="0 0 36 34" aria-hidden="true"><path d="M4 6 C 14 3, 27 10, 28 28 M28 28 l-6 -7 M28 28 l7 -8"/></svg></p>
     <p class="body">Once you can see where a rule came from, you get to edit it. A few from the top of the page.</p>
@@ -2432,25 +2856,63 @@
         <label class="rw-l g" for="rwNew">green pen in. what you’d say to a friend</label>
         <input type="text" id="rwNew" maxlength="120" autocomplete="off" placeholder="Doing it at all is already worth something.">
         <div class="rw-row">
-          <button type="submit" class="share-btn rw-go">Make my card</button>
+          <button type="submit" class="share-btn">Make my card</button>
           <button type="button" class="rw-ex" id="rwEx">fill in an example</button>
         </div>
         <p class="rw-note">made on your device. nothing you type is sent anywhere.</p>
         <span class="rw-status share-msg" id="rwStatus" role="status" aria-live="polite"></span>
       </form>
     </div>
-    <div class="rw-out" id="rwOut" hidden>
+    <div class="rw-out" id="rwOut" hidden role="dialog" aria-label="Make your card">
+      <div class="rwm"><button type="button" class="rwm-close" id="rwmClose">Done</button>
       <div class="rw-pic" id="rwPic">
         <img id="rwImg" alt="">
+        <div class="rl-lay" id="rlLay" role="group" aria-label="Letters stuck on your card"></div>
         <div class="rw-slot" aria-hidden="true">in the envelope at the bottom of the page</div>
       </div>
+      <div class="rl-tools" id="rlTools">
+        <div class="rl-designs"><p class="rl-h">pick a paper</p><div class="rl-ds-row" id="rlDesigns" role="group" aria-label="Card design"></div></div>
+        <p class="rl-h">cut out your own letters</p>
+        <p class="rl-sub">drag a letter off the sticker sheet and drop it on the card (or just tap it). Drag it again to move it, then hover a corner: the top knob turns it and the bottom knob resizes it. Open the drawer for more stickers. Or type a word and peel the whole thing out. With a keyboard, tab to a letter and use the arrow keys.</p>
+        <div class="rl-sheet" id="rlSheet" role="group" aria-label="Letter sticker sheet"></div>
+        <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="pp-stamp-not-a-cure" viewBox="0 0 100 46"><g opacity=".88"><rect x="2" y="2" width="96" height="42" rx="4" fill="none" stroke="#1F4E79" stroke-width="3"/><rect x="6" y="6" width="88" height="34" rx="2" fill="none" stroke="#1F4E79" stroke-width="1"/><text x="50" y="24" font-size="16" font-family="Impact,'Arial Black',sans-serif" text-anchor="middle" fill="#1F4E79" textLength="76" lengthAdjust="spacingAndGlyphs">NOT A CURE</text><text x="50" y="35" font-size="7" font-family="monospace" font-weight="700" text-anchor="middle" fill="#1F4E79" textLength="53" lengthAdjust="spacingAndGlyphs">JUST A START</text></g></symbol><symbol id="pp-stamp-unverified" viewBox="0 0 100 46"><g opacity=".88"><rect x="2" y="2" width="96" height="42" rx="4" fill="none" stroke="#A3301A" stroke-width="3"/><rect x="6" y="6" width="88" height="34" rx="2" fill="none" stroke="#A3301A" stroke-width="1"/><text x="50" y="24" font-size="16" font-family="Impact,'Arial Black',sans-serif" text-anchor="middle" fill="#A3301A" textLength="76" lengthAdjust="spacingAndGlyphs">UNVERIFIED</text><text x="50" y="35" font-size="7" font-family="monospace" font-weight="700" text-anchor="middle" fill="#A3301A" textLength="75" lengthAdjust="spacingAndGlyphs">NO SOURCE ON FILE</text></g></symbol><symbol id="pp-stamp-says-who" viewBox="0 0 100 46"><g opacity=".88"><rect x="2" y="2" width="96" height="42" rx="4" fill="none" stroke="#5B3E8A" stroke-width="3"/><rect x="6" y="6" width="88" height="34" rx="2" fill="none" stroke="#5B3E8A" stroke-width="1"/><text x="50" y="24" font-size="16" font-family="Impact,'Arial Black',sans-serif" text-anchor="middle" fill="#5B3E8A" textLength="76" lengthAdjust="spacingAndGlyphs">SAYS WHO?</text><text x="50" y="35" font-size="7" font-family="monospace" font-weight="700" text-anchor="middle" fill="#5B3E8A" textLength="70" lengthAdjust="spacingAndGlyphs">NAME YOUR SOURCE</text></g></symbol><symbol id="pp-stamp-enough" viewBox="0 0 100 46"><g opacity=".88"><rect x="2" y="2" width="96" height="42" rx="4" fill="none" stroke="#2F6B4A" stroke-width="3"/><rect x="6" y="6" width="88" height="34" rx="2" fill="none" stroke="#2F6B4A" stroke-width="1"/><text x="50" y="24" font-size="16" font-family="Impact,'Arial Black',sans-serif" text-anchor="middle" fill="#2F6B4A" textLength="76" lengthAdjust="spacingAndGlyphs">ENOUGH</text><text x="50" y="35" font-size="7" font-family="monospace" font-weight="700" text-anchor="middle" fill="#2F6B4A" textLength="31" lengthAdjust="spacingAndGlyphs">ALREADY</text></g></symbol><symbol id="pp-ticket-stub" viewBox="0 0 80 44"><path d="M2 4h76v13a5 5 0 0 0 0 10v13H2V27a5 5 0 0 0 0-10z" fill="#E8C86A" stroke="#7A5A12" stroke-width="1.5"/><path d="M56 6v32" stroke="#7A5A12" stroke-dasharray="2 2"/><text x="29" y="20" font-size="9" font-family="monospace" font-weight="700" text-anchor="middle" fill="#5A3E08">ADMIT</text><text x="29" y="31" font-size="9" font-family="monospace" font-weight="700" text-anchor="middle" fill="#5A3E08">ONE</text></symbol><symbol id="pp-film-strip" viewBox="0 0 100 34"><rect width="100" height="34" rx="2" fill="#1F1F24"/><path d="M4 3h4v3h-4zM12 3h4v3h-4zM20 3h4v3h-4zM28 3h4v3h-4zM36 3h4v3h-4zM44 3h4v3h-4zM52 3h4v3h-4zM60 3h4v3h-4zM68 3h4v3h-4zM76 3h4v3h-4zM84 3h4v3h-4zM4 28h4v3h-4zM12 28h4v3h-4zM20 28h4v3h-4zM28 28h4v3h-4zM36 28h4v3h-4zM44 28h4v3h-4zM52 28h4v3h-4zM60 28h4v3h-4zM68 28h4v3h-4zM76 28h4v3h-4zM84 28h4v3h-4z" fill="#F2E4C8"/><rect x="5" y="9" width="27" height="16" fill="#8DA7B8"/><rect x="36" y="9" width="27" height="16" fill="#D9B77E"/><rect x="67" y="9" width="27" height="16" fill="#9DB59A"/></symbol><symbol id="pp-newspaper-clipping" viewBox="0 0 60 70"><rect x="1" y="1" width="58" height="68" fill="#EFE6CF" stroke="#8A7B5A"/><rect x="6" y="7" width="48" height="8" fill="#2A2A2A"/><rect x="6" y="19" width="20" height="16" fill="#B9AD8C"/><path d="M28 21H54" stroke="#6E6450" stroke-width="2"/><path d="M28 26H54" stroke="#6E6450" stroke-width="2"/><path d="M28 31H54" stroke="#6E6450" stroke-width="2"/><path d="M6 40H54" stroke="#6E6450" stroke-width="2"/><path d="M6 45H54" stroke="#6E6450" stroke-width="2"/><path d="M6 50H54" stroke="#6E6450" stroke-width="2"/><path d="M6 55H54" stroke="#6E6450" stroke-width="2"/><path d="M6 60H54" stroke="#6E6450" stroke-width="2"/></symbol><symbol id="pp-index-card" viewBox="0 0 80 52"><rect x="1" y="1" width="78" height="50" fill="#FFFDF2" stroke="#8A8A7A"/><path d="M1 11H79" stroke="#C0392B"/><path d="M1 21H79" stroke="#9DB7D5"/><path d="M1 29H79" stroke="#9DB7D5"/><path d="M1 37H79" stroke="#9DB7D5"/><path d="M1 45H79" stroke="#9DB7D5"/></symbol><symbol id="pp-envelope" viewBox="0 0 70 48"><rect x="1" y="1" width="68" height="46" fill="#EFE4C8" stroke="#8A7040"/><path d="M1 3L35 28L69 3M1 47L26 24M69 47L44 24" fill="none" stroke="#8A7040"/></symbol><symbol id="pp-polaroid" viewBox="0 0 52 62"><rect x="1" y="1" width="50" height="60" fill="#FDFBF4" stroke="#9A9A90"/><rect x="5" y="5" width="42" height="42" fill="#C9B48A"/><circle cx="17" cy="17" r="5" fill="#F2E4C8"/><path d="M5 47L20 30L30 40L38 33L47 44V47z" fill="#6F8B6A"/></symbol><symbol id="pp-washi-tape" viewBox="0 0 80 24"><rect width="80" height="24" fill="#E9A7B8"/><path d="M8 0h6l-8 24h-6z" fill="#fff" opacity=".55"/><path d="M22 0h6l-8 24h-6z" fill="#fff" opacity=".55"/><path d="M36 0h6l-8 24h-6z" fill="#fff" opacity=".55"/><path d="M50 0h6l-8 24h-6z" fill="#fff" opacity=".55"/><path d="M64 0h6l-8 24h-6z" fill="#fff" opacity=".55"/><path d="M78 0h6l-8 24h-6z" fill="#fff" opacity=".55"/><path d="M92 0h6l-8 24h-6z" fill="#fff" opacity=".55"/></symbol><symbol id="pp-masking-tape" viewBox="0 0 80 22"><path d="M0 0H80L77 5L80 11L77 16L80 22H0L3 16L0 11L3 5z" fill="#EBD27A" opacity=".92"/></symbol><symbol id="pp-dymo-label" viewBox="0 0 90 24"><rect width="90" height="24" rx="3" fill="#1B1B1F"/><text x="45" y="16" font-size="11" font-family="monospace" font-weight="700" letter-spacing="1" text-anchor="middle" fill="#fff">EDIT THE RULE</text></symbol><symbol id="pp-noted-sticker" viewBox="0 0 56 56"><circle cx="28" cy="28" r="26" fill="#2F5E47" stroke="#FBF7EC" stroke-width="2"/><text x="28" y="33" font-size="14" font-family="Georgia,serif" font-style="italic" font-weight="700" text-anchor="middle" fill="#FBF7EC">noted</text></symbol><symbol id="pp-pennant-flag" viewBox="0 0 40 56"><path d="M8 4V54" stroke="#5A4630" stroke-width="3" stroke-linecap="round"/><path d="M10 6L38 18L10 32z" fill="#8F2D18"/></symbol></defs></svg>
+        <div class="ep-drawer"><button type="button" class="ep-pull" id="epPull" aria-expanded="false" aria-controls="epBox">the ephemera drawer<i aria-hidden="true"></i></button><div class="ep-box" id="epBox" hidden><div class="ep-grid" id="epGrid" role="group" aria-label="Ephemera stickers"></div></div></div>
+        <div class="rl-stamps" id="rlStamps">
+  <div class="sd-tray" id="sd-tray" role="group" aria-label="Rubber stamps">
+    <p class="sd-hint">pick one, then tap the card</p>
+    <span class="sd-sr">With a keyboard, pressing a stamp button stamps the middle of the card.</span>
+    <button type="button" class="sd-pick k0" aria-pressed="true">Not a cure</button>
+    <button type="button" class="sd-pick k1" aria-pressed="false">Unverified</button>
+    <button type="button" class="sd-pick k2" aria-pressed="false">Says who?</button>
+    <button type="button" class="sd-pick k3" aria-pressed="false">Enough</button>
+    <button type="button" class="sd-clear">wipe the stamps off</button>
+  </div>
+  <button type="button" class="sd-toggle" id="sd-toggle" aria-label="Rubber stamps" aria-pressed="false" aria-expanded="false" aria-controls="sd-tray">
+    <svg class="pad-shut" viewBox="0 0 124 66" width="124" height="66" aria-hidden="true" focusable="false"><path d="M18 8H114L123 48H5Z" fill="#23252E"/><path d="M18 8H114L116 16H16Z" fill="rgba(255,255,255,.1)"/><path d="M40 8L30 48H46L56 8ZM84 8L76 48H88L96 8Z" fill="rgba(255,255,255,.06)"/><path d="M5 48H123L121 60H7Z" fill="#101116"/><rect x="88" y="48" width="11" height="9" rx="1.5" fill="#D64B2C" stroke="#8E2C16" stroke-width=".8"/><g transform="rotate(-3 62 28)"><rect x="32" y="17" width="60" height="22" rx="2" fill="#FBF6E3" stroke="rgba(27,47,102,.45)" stroke-width="1" stroke-dasharray="3 2"/><text x="62" y="33.5" text-anchor="middle" font-family="Caveat, cursive" font-weight="700" font-size="19" fill="#1B2F66">stamps</text></g></svg>
+    <svg class="pad-open" viewBox="0 0 124 112" width="124" height="112" aria-hidden="true" focusable="false"><defs><linearGradient id="pad-sheen" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".28"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/></linearGradient></defs><path d="M14 6Q62 -1 110 7L116 58L10 60Z" fill="#1B1D25"/><path d="M26 10L40 9L22 56H14ZM58 8L70 8L50 57H38ZM92 8L100 9L84 56H72Z" fill="rgba(255,255,255,.07)"/><path d="M8 58H116L122 98H4Z" fill="#15161C"/><path d="M15 64H109L114 92H10Z" class="pad-ink"/><path d="M15 64H109L114 92H10Z" fill="url(#pad-sheen)"/><path d="M4 98H122L120 109H6Z" fill="#0D0E13"/><rect x="88" y="98" width="11" height="9" rx="1.5" fill="#D64B2C" stroke="#8E2C16" stroke-width=".8"/><path d="M8 58H116" stroke="rgba(255,255,255,.3)" stroke-width="1"/></svg>
+  </button>
+  <span class="sd-sr" id="sd-live" role="status" aria-live="polite"></span>
+</div>
+        <div class="rl-wordrow">
+          <label for="rlWord">or type a word</label>
+          <input type="text" id="rlWord" maxlength="16" autocomplete="off" placeholder="enough">
+          <button type="button" class="rw-sec" id="rlWordBtn">Peel out the word</button>
+        </div>
+        <div class="rl-ctl" id="rlCtl" role="group" aria-label="Edit the selected letter" hidden>
+          <button type="button" data-act="look">change look</button>
+          <button type="button" data-act="remove">remove</button>
+          <button type="button" data-act="clear">clear all</button>
+        </div>
+        <span class="rl-status" id="rlStatus" role="status" aria-live="polite"></span>
+        <p class="rl-note">letters are stuck on in your browser and printed into the picture when you press Save image. nothing is sent anywhere.</p>
+      </div>
       <div class="rw-row">
-        <button type="button" class="share-btn rw-go" id="rwSave">Save image</button>
+        <button type="button" class="share-btn" id="rwSave">Save image</button>
         <button type="button" class="rw-sec" id="rwShare" hidden>Share image</button>
         <button type="button" class="rw-ex" id="rwBack" hidden>take it back out</button>
         <span class="share-msg" id="rwOutMsg" role="status" aria-live="polite"></span>
       </div>
-    </div>
+    </div></div>
     <div class="sharebar">
       <button class="share-btn" type="button" data-share><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.6l6.8-4M8.6 13.4l6.8 4"/></svg>Send this to a friend</button>
       <span class="share-msg" role="status" aria-live="polite"></span>
@@ -2461,26 +2923,43 @@
 <section class="schools" id="schools">
   <div class="wrap">
     <span class="paper" aria-hidden="true"></span>
+    <span class="scrap tk tk-pen" style="left:-248px;top:16%;--sr:67deg;--tc:#1B1B1F" aria-hidden="true"><svg viewBox="0 0 100 14"><use href="#tk-pen"/></svg></span>
+    <span class="scrap tk tk-corr" style="right:-157px;top:34%;--sr:28deg;--tc:#2F5E8F" aria-hidden="true"><svg viewBox="0 0 80 40"><use href="#tk-corr"/></svg></span>
+    <span class="scrap tk tk-scotch" style="left:-139px;top:60%;--sr:2deg;--tc:#C9462E" aria-hidden="true"><svg viewBox="0 0 64 52"><use href="#tk-scotch"/></svg></span>
+    <span class="scrap tk tk-pencil" style="right:-260px;top:75%;--sr:-70deg;--tc:#7B4B94" aria-hidden="true"><svg viewBox="0 0 104 16"><use href="#tk-pencil"/></svg></span>
     <span class="scrap cl-side cl-pol pv2" style="left:-152px;top:8%;--sr:-8deg" aria-hidden="true"><i></i><em>after hours</em></span>
     <span class="scrap cl-side cl-badge" style="left:-112px;top:30%;--sr:6deg;--bc:#3F6FB5" aria-hidden="true"><b>psst</b></span>
     <span class="scrap cl-side cl-note" style="left:-172px;top:48%;--sr:-5deg" aria-hidden="true"><b>for the people<br>who listen</b></span>
     <span class="scrap cl-side cl-stamps" style="left:-140px;top:68%;--sr:8deg" aria-hidden="true"><u style="--sc:#B5442B"><svg viewBox="0 0 48 48"><use href="#d-heart"/></svg></u><u style="--sc:#2F5E47"><svg viewBox="0 0 48 48"><use href="#d-star"/></svg></u></span>
     <span class="scrap cl-side cl-stamps" style="right:-140px;top:10%;--sr:-7deg" aria-hidden="true"><u style="--sc:#2F5E47"><svg viewBox="0 0 48 48"><use href="#d-sun"/></svg></u><u style="--sc:#B5442B"><svg viewBox="0 0 48 48"><use href="#d-smile"/></svg></u></span>
     <span class="scrap cl-side cl-pol pv0" style="right:-152px;top:30%;--sr:7deg" aria-hidden="true"><i></i><em>pin it up</em></span>
-    <span class="scrap cl-side cl-badge" style="right:-112px;top:52%;--sr:-6deg;--bc:#2F5E47" aria-hidden="true"><b>yes</b></span>
+    <span class="scrap cl-side cl-badge" style="right:-112px;top:52%;--sr:-6deg;--bc:#2F5E47" aria-hidden="true"><b>mhm</b></span>
     <span class="scrap cl-side cl-wt cl-wtp b" style="right:-140px;top:70%;--sr:5deg" aria-hidden="true"></span>
     <span class="scrap cl-wt cl-c bl b" aria-hidden="true"></span>
     <span class="scrap cl-wt cl-c br d" aria-hidden="true"></span>
     <span class="scrap cl-dot g" style="left:-10px;top:46%" aria-hidden="true"></span>
     <span class="scrap cl-dot r" style="right:-10px;top:60%" aria-hidden="true"></span>
+    <span class="scrap tk tk-pin" style="left:-12px;top:20%;--sr:-8deg;--tc:#3F6FB5" aria-hidden="true"></span>
+    <span class="scrap tk tk-star" style="left:-15px;top:38%;--sr:8deg;--tc:#E3B03B" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-star"/></svg></span>
+    <span class="scrap tk tk-btn" style="left:-15px;top:58%;--sr:-7deg;--tc:#7B4B94" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-btn"/></svg></span>
+    <span class="scrap tk tk-heart" style="left:-15px;top:82%;--sr:9deg;--tc:#2F5E47" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-heart"/></svg></span>
+    <span class="scrap tk tk-pin" style="right:-12px;top:22%;--sr:7deg;--tc:#C9462E" aria-hidden="true"></span>
+    <span class="scrap tk tk-star" style="right:-15px;top:40%;--sr:-9deg;--tc:#3F6FB5" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-star"/></svg></span>
+    <span class="scrap tk tk-btn" style="right:-15px;top:78%;--sr:8deg;--tc:#E3B03B" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-btn"/></svg></span>
+    <span class="scrap tk tk-heart" style="right:-15px;top:88%;--sr:-6deg;--tc:#C9462E" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#tk-heart"/></svg></span>
+    <span class="scrap tk tk-eraser" style="left:-148px;top:24.5%;--sr:-9deg" aria-hidden="true"></span>
+    <span class="scrap tk tk-stub" style="right:-152px;top:22.5%;--sr:7deg" aria-hidden="true"></span>
+    <span class="scrap tk tk-pinsafe" style="right:-140px;top:46%;--sr:-8deg" aria-hidden="true"><svg viewBox="0 0 46 22"><use href="#tk-safety"/></svg></span>
+    <span class="scrap tk tk-plane" style="right:-136px;top:64%;--sr:9deg;--tc:#D6EBD2" aria-hidden="true"><svg viewBox="0 0 60 40"><use href="#tk-plane"/></svg></span>
+    <span class="scrap tk tk-leaf" style="left:-140px;top:89%;--sr:8deg;--tc:#B9632E" aria-hidden="true"><svg viewBox="0 0 46 58"><use href="#tk-leaf"/></svg></span>
     <span class="scrap pclip c3" aria-hidden="true"><svg viewBox="0 0 24 56" aria-hidden="true"><path class="pc-shade" d="M14 40 V10 a5 5 0 0 0 -10 0 V42 a8 8 0 0 0 16 0 V14"/><path class="pc-wire" d="M14 40 V10 a5 5 0 0 0 -10 0 V42 a8 8 0 0 0 16 0 V14"/></svg></span>
     <span class="scrap flag f4" aria-hidden="true"></span>
     <span class="scrap dborder b2" aria-hidden="true"></span>
     <span class="scrap sticker s-round" style="--sr:10deg;left:auto;right:14px;top:-26px;background:#BFD9B2;color:#20472F;font-size:24px" aria-hidden="true"><b>free</b></span>
-    <span class="scrap dd gd r" style="left:-124px;top:150px;--sr:-10deg;width:42px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-bolt"/></svg></span>
-    <span class="scrap dd gd" style="right:-116px;top:330px;--sr:12deg;width:44px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-crown"/></svg></span>
-    <span class="scrap dd gd" style="left:-100px;top:650px;--sr:-6deg;width:40px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-spiral"/></svg></span>
-    <p class="kicker"><span class="cn">06</span> — for schools and counselors</p>
+    <span class="scrap gd r" style="left:-124px;top:150px;--sr:-10deg;width:42px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-bolt"/></svg></span>
+    <span class="scrap gd" style="right:-116px;top:330px;--sr:12deg;width:44px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-crown"/></svg></span>
+    <span class="scrap gd" style="left:-100px;top:650px;--sr:-6deg;width:40px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-spiral"/></svg></span>
+    <p class="kicker"><span class="cn">06</span>. for schools and counselors</p>
     <h2>Hand it to the <span class="circled">people</span> who can use it.</h2>
     <p class="margin-note">print it. pin it. pass it on. <svg viewBox="0 0 36 34" aria-hidden="true"><path d="M4 6 C 14 3, 27 10, 28 28 M28 28 l-6 -7 M28 28 l7 -8"/></svg></p>
     <p class="body">Who Told You That? is a short, anonymous page where students look at self-imposed pressure and maladaptive perfectionism, trace a rule they hold themselves to back to where it came from, then rewrite it in a kinder way. It asks for no name or account and works on a phone. It is a starting point for a conversation, not a screening tool and not a replacement for counseling.</p>
@@ -2497,7 +2976,7 @@
       </div>
       <div class="sc-card">
         <p class="dear">A message you can send,</p>
-        <p class="sc-msg" id="sc-msg">Hello! This is a short page called Who Told You That? about self-imposed pressure and maladaptive perfectionism. It helps students notice where their own "rules" came from and try a kinder version. It is anonymous, needs no account and works on a phone. It is a starting point, not a replacement for counseling.</p>
+        <p class="sc-msg" id="sc-msg">Hello! This is a short page called Who Told You That? about the pressure students put on themselves to be perfect. It helps students notice where their own "rules" came from and try a kinder version. It is anonymous, needs no account and works on a phone. Nobody has to put their name on anything.</p>
         <div class="sc-actions">
           <button class="sc-btn" type="button" id="sc-copy">Copy message and link</button>
           <button class="sc-btn" type="button" data-share>Share the link</button>
@@ -2515,6 +2994,17 @@
 </footer>
 
 <button id="to-top" type="button" aria-label="Scroll back to the top" title="Back to top"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+
+
+<div class="desk-pile" aria-hidden="true">
+  <span class="dp dp-scotch" style="left:118.0px;top:111.0px;--r:-10deg"><svg viewBox="0 0 64 52"><use href="#tk-scotch"/></svg></span>
+  <span class="dp dp-corr" style="left:96.0px;top:156.0px;--r:4deg"><svg viewBox="0 0 80 40"><use href="#tk-corr"/></svg></span>
+  <span class="dp dp-pencil" style="left:36.0px;top:81.0px;--r:-40deg;--tc:#E8B33F"><svg viewBox="0 0 104 16"><use href="#tk-pencil"/></svg></span>
+  <span class="dp dp-pen" style="left:49.5px;top:89.0px;--r:-24deg;--tc:#D8602F"><svg viewBox="0 0 100 14"><use href="#tk-pen"/></svg></span>
+  <span class="dp dp-fount" style="left:37.5px;top:95.0px;--r:-8deg"><svg viewBox="0 0 100 16"><use href="#tk-fount"/></svg></span>
+  <span class="dp dp-pen" style="left:47.5px;top:107.0px;--r:10deg;--tc:#3F7FC4"><svg viewBox="0 0 100 14"><use href="#tk-pen"/></svg></span>
+  <span class="dp dp-mech" style="left:39.5px;top:117.0px;--r:26deg;--tc:#4E9A3C"><svg viewBox="0 0 98 14"><use href="#tk-mech"/></svg></span>
+</div>
 
 <script>
   // ---- Dark / light toggle ----
@@ -2798,7 +3288,6 @@
     const counts = words.map(w => freq[w]);
     const min = Math.min(...counts);
     const max = Math.max(...counts);
-    const colors = ['var(--ink)', 'var(--red)', 'var(--ink-soft)'];
 
     words.sort((a, b) => freq[b] - freq[a]); // biggest/most-mentioned first, placed at the center
 
@@ -3405,10 +3894,9 @@ function qrMatrix(text){
     var exBtn = document.getElementById('rwEx');
     var pic = document.getElementById('rwPic'), backBtn = document.getElementById('rwBack');
     var sect = out.closest('section'), env = sect ? sect.querySelector('.scrap.env') : null;
-    var blob = null, url = null, exN = 0, busy = false, tucked = false, runId = 0;
+    var blob = null, url = null, sendBlob = null, sendUrl = null, exN = 0, busy = false, tucked = false, runId = 0;
     var W = 1080, H = 1350, LEFT = 190, MAXW = 800;
     var HAND = '"Caveat", "Bradley Hand", "Segoe Script", cursive';
-    var SANS = '"Outfit", system-ui, sans-serif';
     var TYPE = '"Special Elite", "Courier New", monospace';
     var NAME = 'who-told-you-that-my-rewrite.png';
 
@@ -3594,7 +4082,9 @@ function qrMatrix(text){
       ctx.strokeStyle = 'rgba(3,29,68,0.14)'; ctx.lineWidth = 2; ctx.strokeRect(1, 1, w - 2, h - 2);
     }
 
+    var DESIGNS = [{"name": "notebook", "desk": "#DAB785", "glow": "rgba(255,240,205,0.35)", "edge": "rgba(120,80,30,0.35)", "paper": "#F8F0DC", "rule": "lined", "ruleCol": "rgba(4,57,94,0.2)", "margin": "#8F2D18", "holes": true, "hole": "#D3B07A", "ink": "#031D44", "sub": "rgba(4,57,94,0.85)", "foot": "#04395E", "foot2": "rgba(4,57,94,0.75)", "loop": "#8F2D18", "arrow": "#2F5E47"}, {"name": "graph paper", "desk": "#8FB3A3", "glow": "rgba(230,255,240,0.3)", "edge": "rgba(20,60,50,0.35)", "paper": "#FBFDF8", "rule": "grid", "ruleCol": "rgba(47,120,140,0.28)", "margin": null, "holes": false, "hole": "#7FA392", "ink": "#031D44", "sub": "rgba(4,57,94,0.85)", "foot": "#04395E", "foot2": "rgba(4,57,94,0.75)", "loop": "#8F2D18", "arrow": "#2F5E47"}, {"name": "dotted journal", "desk": "#3E5C4B", "glow": "rgba(200,255,220,0.15)", "edge": "rgba(0,0,0,0.4)", "paper": "#F3EBDA", "rule": "dots", "ruleCol": "rgba(70,60,40,0.45)", "margin": null, "holes": false, "hole": "#2F4A3B", "ink": "#031D44", "sub": "rgba(4,57,94,0.85)", "foot": "#04395E", "foot2": "rgba(4,57,94,0.75)", "loop": "#8F2D18", "arrow": "#2F5E47"}, {"name": "blueprint", "desk": "#1A2B4A", "glow": "rgba(120,160,230,0.18)", "edge": "rgba(0,0,0,0.45)", "paper": "#1F4E79", "rule": "grid", "ruleCol": "rgba(220,235,255,0.22)", "margin": null, "holes": false, "hole": "#14233D", "ink": "#F2F6FF", "sub": "rgba(235,242,255,0.9)", "foot": "#E6EEFF", "foot2": "rgba(230,238,255,0.75)", "loop": "#FFD66B", "arrow": "#9FE0B8"}, {"name": "kraft", "desk": "#5A4636", "glow": "rgba(255,220,170,0.15)", "edge": "rgba(0,0,0,0.4)", "paper": "#C79A62", "rule": "none", "ruleCol": "", "margin": null, "holes": false, "hole": "#4A3829", "ink": "#2B1A0C", "sub": "rgba(43,26,12,0.85)", "foot": "#2B1A0C", "foot2": "rgba(43,26,12,0.75)", "loop": "#8F2D18", "arrow": "#20472F"}, {"name": "legal pad", "desk": "#2C3A52", "glow": "rgba(150,180,230,0.15)", "edge": "rgba(0,0,0,0.4)", "paper": "#F5E27A", "rule": "lined", "ruleCol": "rgba(60,90,160,0.35)", "margin": "#C0392B", "holes": false, "hole": "#222E44", "ink": "#031D44", "sub": "rgba(4,57,94,0.85)", "foot": "#04395E", "foot2": "rgba(4,57,94,0.75)", "loop": "#8F2D18", "arrow": "#2F5E47"}, {"name": "blush", "desk": "#D9A5B3", "glow": "rgba(255,235,240,0.35)", "edge": "rgba(120,40,70,0.3)", "paper": "#FFF8EE", "rule": "none", "ruleCol": "", "margin": null, "holes": true, "hole": "#C98FA0", "ink": "#031D44", "sub": "rgba(4,57,94,0.85)", "foot": "#04395E", "foot2": "rgba(4,57,94,0.75)", "loop": "#8F2D18", "arrow": "#2F5E47"}], design = 0;
     function draw(oldT, newT) {
+      var th = DESIGNS[design];
       // phones draw at 3/4 size (about 800 by 1000, 44% fewer pixels). Everything below still uses the 1080 by 1350 layout through scale().
       var S = lite() ? 0.75 : 1;
       var c = document.createElement('canvas'); c.width = Math.round(W * S); c.height = Math.round(H * S);
@@ -3604,9 +4094,9 @@ function qrMatrix(text){
       try { x.letterSpacing = '0px'; } catch (e) {}
 
       // the desk
-      x.fillStyle = '#DAB785'; x.fillRect(0, 0, W, H);
+      x.fillStyle = th.desk; x.fillRect(0, 0, W, H);
       var dg = x.createRadialGradient(W / 2, H / 2, 200, W / 2, H / 2, 900);
-      dg.addColorStop(0, 'rgba(255,240,205,0.35)'); dg.addColorStop(1, 'rgba(120,80,30,0.35)');
+      dg.addColorStop(0, th.glow); dg.addColorStop(1, th.edge);
       x.fillStyle = dg; x.fillRect(0, 0, W, H);
       grain(x, rnd, 0, 0, W, H, 9000, 0.12); fibers(x, rnd, 0, 0, W, H, 220);
 
@@ -3615,21 +4105,21 @@ function qrMatrix(text){
       var SX0 = 70, SY0 = 70, SX1 = 1010, SY1 = 1280;
       var pts = tornPts(SX0, SY0, SX1, SY1, rnd, 5);
       x.save(); x.shadowColor = 'rgba(3,29,68,0.4)'; x.shadowBlur = S < 1 ? 16 : 40; x.shadowOffsetY = 18;
-      trace(x, pts); x.fillStyle = '#F8F0DC'; x.fill(); x.restore();
+      trace(x, pts); x.fillStyle = th.paper; x.fill(); x.restore();
       x.save(); trace(x, pts); x.clip();
       var pg = x.createRadialGradient(W / 2, H / 2, 300, W / 2, H / 2, 900);
       pg.addColorStop(0, 'rgba(255,255,255,0)'); pg.addColorStop(1, 'rgba(150,110,60,0.2)');
       x.fillStyle = pg; x.fillRect(SX0, SY0, SX1 - SX0, SY1 - SY0);
-      x.strokeStyle = 'rgba(4,57,94,0.2)'; x.lineWidth = 2;
-      for (var ly = 140; ly < SY1; ly += 58) { x.beginPath(); x.moveTo(SX0, ly); x.lineTo(SX1, ly); x.stroke(); }
-      x.strokeStyle = 'rgba(143,45,24,0.5)'; x.lineWidth = 3; x.beginPath(); x.moveTo(170, SY0); x.lineTo(170, SY1); x.stroke();
-      x.strokeStyle = 'rgba(143,45,24,0.25)'; x.lineWidth = 1.5; x.beginPath(); x.moveTo(177, SY0); x.lineTo(177, SY1); x.stroke();
+      if (th.rule === 'lined') { x.strokeStyle = th.ruleCol; x.lineWidth = 2; for (var ly = 140; ly < SY1; ly += 58) { x.beginPath(); x.moveTo(SX0, ly); x.lineTo(SX1, ly); x.stroke(); } }
+      else if (th.rule === 'grid') { x.strokeStyle = th.ruleCol; x.lineWidth = 1.5; for (var gx = SX0 + 30; gx < SX1; gx += 40) { x.beginPath(); x.moveTo(gx, SY0); x.lineTo(gx, SY1); x.stroke(); } for (var gy = SY0 + 30; gy < SY1; gy += 40) { x.beginPath(); x.moveTo(SX0, gy); x.lineTo(SX1, gy); x.stroke(); } }
+      else if (th.rule === 'dots') { x.fillStyle = th.ruleCol; for (var dx = SX0 + 30; dx < SX1; dx += 40) for (var dy = SY0 + 30; dy < SY1; dy += 40) x.fillRect(dx - 1.5, dy - 1.5, 3, 3); }
+      if (th.margin) { x.save(); x.strokeStyle = th.margin; x.globalAlpha = 0.5; x.lineWidth = 3; x.beginPath(); x.moveTo(170, SY0); x.lineTo(170, SY1); x.stroke(); x.globalAlpha = 0.25; x.lineWidth = 1.5; x.beginPath(); x.moveTo(177, SY0); x.lineTo(177, SY1); x.stroke(); x.restore(); }
       // fold crease
       x.strokeStyle = 'rgba(90,60,30,0.2)'; x.lineWidth = 2; x.beginPath(); x.moveTo(SX0, 715); x.lineTo(SX1, 715); x.stroke();
       x.strokeStyle = 'rgba(255,255,255,0.4)'; x.beginPath(); x.moveTo(SX0, 718); x.lineTo(SX1, 718); x.stroke();
       // punched holes
-      [240, 675, 1110].forEach(function (hy) {
-        x.beginPath(); x.arc(112, hy, 20, 0, Math.PI * 2); x.fillStyle = '#D3B07A'; x.fill();
+      (th.holes ? [240, 675, 1110] : []).forEach(function (hy) {
+        x.beginPath(); x.arc(112, hy, 20, 0, Math.PI * 2); x.fillStyle = th.hole; x.fill();
         x.lineWidth = 3; x.strokeStyle = 'rgba(60,40,20,0.4)'; x.stroke();
         x.beginPath(); x.arc(112, hy, 20, 0.3, Math.PI - 0.3); x.strokeStyle = 'rgba(60,40,20,0.35)'; x.lineWidth = 5; x.stroke();
       });
@@ -3645,11 +4135,11 @@ function qrMatrix(text){
       // title with "that?" circled in red pen
       x.textBaseline = 'alphabetic'; x.textAlign = 'left';
       var tF = fit(x, 'who told you that?', HAND, 700, 700, 1, 100, 64), ty = 205;
-      x.font = '700 ' + tF.size + 'px ' + HAND; x.fillStyle = '#031D44';
+      x.font = '700 ' + tF.size + 'px ' + HAND; x.fillStyle = th.ink;
       var pre = 'who told you ', preW = x.measureText(pre).width, thatW = x.measureText('that?').width;
       x.fillText(pre, LEFT, ty); x.fillText('that?', LEFT + preW, ty);
-      loop(x, LEFT + preW + thatW / 2, ty - tF.size * 0.3, thatW / 2 + 24, tF.size * 0.6, '#8F2D18', 6, rnd);
-      x.font = '400 26px ' + TYPE; x.fillStyle = 'rgba(4,57,94,0.85)';
+      loop(x, LEFT + preW + thatW / 2, ty - tF.size * 0.3, thatW / 2 + 24, tF.size * 0.6, th.loop, 6, rnd);
+      x.font = '400 26px ' + TYPE; x.fillStyle = th.sub;
       x.fillText('A RULE I WAS HANDED. A LINE I WROTE BACK.', LEFT, 258);
 
       // fit the two cards into the space under the title
@@ -3685,8 +4175,8 @@ function qrMatrix(text){
       x.restore();
 
       // curly arrow and a small note
-      arrow(x, 330, arrowY, '#2F5E47');
-      x.font = '600 34px ' + HAND; x.fillStyle = '#2F5E47'; x.fillText('say it kinder.', 500, arrowY + 62);
+      arrow(x, 330, arrowY, th.arrow);
+      x.font = '600 34px ' + HAND; x.fillStyle = th.arrow; x.fillText('say it kinder.', 500, arrowY + 62);
 
       // green pen in: sage graph paper note, highlighted rewrite, a "noted" sticker
       x.save(); x.translate(NX + NCW / 2, newY + newH / 2); x.rotate(-0.014); x.translate(-NCW / 2, -newH / 2);
@@ -3720,12 +4210,12 @@ function qrMatrix(text){
       tape(x, 124, 1250, 130, 44, 0.6, 'stripe');
 
       // footer
-      x.fillStyle = '#04395E'; x.font = '400 25px ' + TYPE;
+      x.fillStyle = th.foot; x.font = '400 25px ' + TYPE;
       x.fillText('WHO TOLD YOU THAT? \u00b7 UNDERSTANDING THE SELF', LEFT, 1218);
       if (/^https?:$/.test(location.protocol)) {
         var addr = (location.host + location.pathname).replace(/index\.html$/, '').replace(/\/$/, '');
         if (addr.length > 52) addr = addr.slice(0, 51) + '\u2026';
-        x.font = '400 22px ' + TYPE; x.fillStyle = 'rgba(4,57,94,0.75)'; x.fillText(addr, LEFT, 1252);
+        x.font = '400 22px ' + TYPE; x.fillStyle = th.foot2; x.fillText(addr, LEFT, 1252);
       }
       x.restore();
       return c;
@@ -3742,6 +4232,7 @@ function qrMatrix(text){
     function resetTuck() {
       runId++; busy = false; tucked = false;
       pic.classList.remove('tucked'); backBtn.hidden = true;
+      if (lay) lay.style.visibility = '';
       var fly = document.getElementById('rwFly'); if (fly) fly.remove();
       if (env) {
         env.classList.remove('open', 'sealed', 'tagged');
@@ -3776,7 +4267,7 @@ function qrMatrix(text){
       var r0 = img.getBoundingClientRect();
       var FW = 110, FH = Math.round(FW * H / W);
       var clone = document.createElement('img');
-      clone.id = 'rwFly'; clone.src = url; clone.alt = ''; clone.setAttribute('aria-hidden', 'true');
+      clone.id = 'rwFly'; clone.src = sendUrl || url; clone.alt = ''; clone.setAttribute('aria-hidden', 'true');
       clone.style.cssText = 'position:fixed;left:0;top:0;margin:0;z-index:9999;pointer-events:none;border-radius:3px;' + (lite() ? '' : 'box-shadow:0 8px 20px rgba(3,29,68,0.35);') + 'transform-origin:50% 50%;width:' + FW + 'px;height:' + FH + 'px;';
       function frame(cx, cy, sc, rot) { return 'translate(' + (cx - FW / 2) + 'px,' + (cy - FH / 2) + 'px) rotate(' + rot + 'deg) scale(' + sc + ')'; }
       var cx0 = r0.left + r0.width / 2, cy0 = r0.top + r0.height / 2, s0 = r0.width / FW;
@@ -3842,7 +4333,7 @@ function qrMatrix(text){
           url = URL.createObjectURL(b);
           img.src = url;
           img.alt = 'Your rewrite card. Crossed out in red: ' + o + '. Written in green: ' + n;
-          out.hidden = false;
+          out.hidden = false; openM();
           resetTuck();
           img.classList.remove('fresh'); void img.offsetWidth; img.classList.add('fresh');
           if (env && !lite()) env.classList.add('open');
@@ -3857,10 +4348,14 @@ function qrMatrix(text){
 
     saveBtn.addEventListener('click', function () {
       if (!blob) return;
-      var a = document.createElement('a'); a.href = url; a.download = NAME;
-      document.body.appendChild(a); a.click(); a.remove();
-      outMsg.textContent = tucked ? 'Saved again.' : 'Saved. If nothing downloaded, press and hold the picture.';
-      tuck();
+      function go() {
+        var a = document.createElement('a'); a.href = sendUrl || url; a.download = NAME;
+        document.body.appendChild(a); a.click(); a.remove();
+        outMsg.textContent = tucked ? 'Saved again.' : 'Saved. If nothing downloaded, press and hold the picture.';
+        if (!tucked && !busy && env && lay) lay.style.visibility = 'hidden';
+        tuck();
+      }
+      if (baked) go(); else bake(go);
     });
     // reverse of tuck(): the flap opens, the card slides up out of the pocket, then flies back to where it was
     function untuck() {
@@ -3869,7 +4364,7 @@ function qrMatrix(text){
       var id = ++runId, easy = lite();
       var FW = 110, FH = Math.round(FW * H / W);
       var clone = document.createElement('img');
-      clone.id = 'rwFly'; clone.src = url; clone.alt = ''; clone.setAttribute('aria-hidden', 'true');
+      clone.id = 'rwFly'; clone.src = sendUrl || url; clone.alt = ''; clone.setAttribute('aria-hidden', 'true');
       clone.style.cssText = 'position:fixed;left:0;top:0;margin:0;z-index:9999;pointer-events:none;border-radius:3px;' + (easy ? '' : 'box-shadow:0 8px 20px rgba(3,29,68,0.35);') + 'transform-origin:50% 50%;opacity:0;width:' + FW + 'px;height:' + FH + 'px;';
       document.body.appendChild(clone);
       env.scrollIntoView({ behavior: easy ? 'auto' : 'smooth', block: 'center' });
@@ -3928,9 +4423,587 @@ function qrMatrix(text){
     });
     shareBtn.addEventListener('click', function () {
       if (!blob) return;
-      var f = new File([blob], NAME, { type: 'image/png' });
-      navigator.share({ files: [f], title: 'Who told you that?', text: 'I rewrote a rule I was handed.' }).catch(function (e) {
-        if (e && e.name !== 'AbortError') outMsg.textContent = 'Could not open the share sheet. Try Save image instead.';
+      function go() {
+        var f = new File([sendBlob || blob], NAME, { type: 'image/png' });
+        navigator.share({ files: [f], title: 'Who told you that?', text: 'I rewrote a rule I was handed.' }).catch(function (e) {
+          if (e && e.name !== 'AbortError') outMsg.textContent = 'Could not open the share sheet. Try Save image instead.';
+        });
+      }
+      if (baked) go(); else bake(go);
+    });
+
+    // ---- Ransom letters: peel a cut-out letter onto the card, drag it, and print it into the picture on save ----
+    var rlSize = document.getElementById('rlSize'), lay = document.getElementById('rlLay'), rlSheet = document.getElementById('rlSheet'), rlWord = document.getElementById('rlWord');
+    var rlWordBtn = document.getElementById('rlWordBtn'), rlCtl = document.getElementById('rlCtl'), rlStatus = document.getElementById('rlStatus');
+    var LET = [], sel = null, zTop = 5, nextId = 1, MAXL = 30, baked = true, bakeId = 0, bakeTimer = 0, drag = null;
+    var STY = [null,
+      { bg: '#031D44', fg: '#F2E4C8', ff: 'Georgia, serif', fw: '700', fs: 'italic' },
+      { bg: '#FBF7EC', fg: '#031D44', ff: 'Verdana, sans-serif', fw: '800', fs: 'normal' },
+      { bg: '#8F2D18', fg: '#FBF7EC', ff: '"Special Elite", "Courier New", monospace', fw: '400', fs: 'normal' },
+      { bg: '#EBD27A', fg: '#031D44', ff: '"Arial Black", Arial, sans-serif', fw: '900', fs: 'normal' },
+      { bg: '#2F5E47', fg: '#FBF7EC', ff: 'Georgia, serif', fw: '700', fs: 'normal' },
+      { bg: '#7B4B94', fg: '#FBF7EC', ff: '"Outfit", sans-serif', fw: '600', fs: 'normal' }
+    ];
+    STY.push(
+      { bg: '#E9A7B8', fg: '#3B1220', ff: '"Courier New", monospace', fw: '700', fs: 'normal' },
+      { bg: '#D9772B', fg: '#FBF7EC', ff: 'Impact, "Arial Narrow", sans-serif', fw: '400', fs: 'normal' },
+      { bg: '#2A7F8A', fg: '#FBF7EC', ff: 'Georgia, serif', fw: '700', fs: 'italic' },
+      { bg: '#1B1B1F', fg: '#F2E4C8', ff: 'Verdana, sans-serif', fw: '800', fs: 'normal' },
+      { bg: '#D8D3C4', fg: '#1B1B1F', ff: 'Georgia, serif', fw: '700', fs: 'normal' },
+      { bg: '#9CC3E0', fg: '#031D44', ff: '"Outfit", sans-serif', fw: '700', fs: 'normal' }
+    );
+    var NS = STY.length - 1;
+    // four scissor shapes (every fourth letter is left square), as fractions of the cutting
+    var PTS = [
+      [[0, 0], [1, 0], [1, 1], [0, 1]],
+      [[0.02, 0.06], [0.48, 0], [0.98, 0.04], [1, 0.94], [0.52, 1], [0, 0.97]],
+      [[0, 0.03], [0.55, 0], [1, 0.07], [0.97, 1], [0.45, 0.96], [0.03, 1]],
+      [[0.04, 0], [1, 0.03], [0.96, 0.54], [1, 1], [0.03, 0.96], [0, 0.48]]
+    ];
+    function clipCss(id) { return 'polygon(' + PTS[id % 4].map(function (p) { return (p[0] * 100) + '% ' + (p[1] * 100) + '%'; }).join(',') + ')'; }
+    function look(c, st, id) {
+      var s = STY[st];
+      c.style.cssText = 'background:' + s.bg + ';color:' + s.fg + ';font-family:' + s.ff + ';font-weight:' + s.fw + ';font-style:' + s.fs + ';' + (id == null ? '' : 'clip-path:' + clipCss(id));
+    }
+    function say(t) { rlStatus.textContent = t; }
+    function byEl(el) { for (var i = 0; i < LET.length; i++) if (LET[i].el === el) return LET[i]; return null; }
+    function align() {
+      if (!img.clientWidth) return;
+      lay.style.left = (img.offsetLeft + img.clientLeft) + 'px'; lay.style.top = (img.offsetTop + img.clientTop) + 'px';
+      lay.style.width = img.clientWidth + 'px'; lay.style.height = img.clientHeight + 'px';
+    }
+    img.addEventListener('load', align);
+    window.addEventListener('resize', align);
+    if (window.ResizeObserver) new ResizeObserver(align).observe(pic);
+
+    function paint(L) {
+      var e = L.el;
+      e.style.left = (L.x * 100) + '%'; e.style.top = (L.y * 100) + '%'; e.style.rotate = L.rot + 'deg';
+      e.style.setProperty('--sz', L.sz);
+      if (L.sym) { e.firstChild.className = 'cut ep'; e.firstChild.style.cssText = ''; e.firstChild.innerHTML = epSvg(L.sym, L.st); } else { e.firstChild.textContent = L.ch; look(e.firstChild, L.st, L.id); }
+      if (sel === L && rlSize) rlSize.value = Math.round(L.sz * 1000);
+      e.setAttribute('aria-label', 'Letter ' + L.ch + ', stuck on the card. Drag to move, or use the arrow keys. R turns it, plus and minus resize, S changes the look, Delete removes it.');
+    }
+    function changed(msg) {
+      lay.setAttribute('aria-label', LET.length ? 'Letters stuck on your card: ' + LET.map(function (l) { return l.ch; }).join('') : 'Letters stuck on your card');
+      rlCtl.hidden = !LET.length;
+      Array.prototype.forEach.call(rlCtl.querySelectorAll('button'), function (b) { b.disabled = b.getAttribute('data-act') !== 'clear' && !sel; });
+      if (msg) say(msg);
+      baked = false; clearTimeout(bakeTimer); bakeTimer = setTimeout(function () { bake(function () {}); }, 350);
+    }
+    function pick(L) {
+      if (sel && sel.el) sel.el.classList.remove('sel');
+      sel = L || null;
+      if (sel) sel.el.classList.add('sel');
+      if (rlSize) { rlSize.disabled = !sel; if (sel) rlSize.value = Math.round(sel.sz * 1000); }
+      Array.prototype.forEach.call(rlCtl.querySelectorAll('button'), function (b) { b.disabled = b.getAttribute('data-act') !== 'clear' && !sel; });
+    }
+    function add(ch, o) {
+      if (LET.length >= MAXL) { say('That is plenty of letters. Remove one to add another.'); return null; }
+      o = o || {};
+      var r = Math.random;
+      var L = { id: nextId++, ch: ch, st: o.st || 1 + Math.floor(r() * NS), x: o.x != null ? o.x : 0.5 + (r() - 0.5) * 0.4, y: o.y != null ? o.y : 0.52 + (r() - 0.5) * 0.24, rot: o.rot != null ? o.rot : Math.round((r() - 0.5) * 24), sz: o.sz || (o.sym ? (o.sym.charAt(0) === 'p' ? 0.15 : 0.1) : 0.05), sym: o.sym || null };
+      var w = document.createElement('span'); w.className = 'rls'; w.setAttribute('role', 'button'); w.tabIndex = 0;
+      w.appendChild(document.createElement('b')).className = 'cut';
+      var kn = document.createElement('i'); kn.className = 'rot'; kn.setAttribute('aria-hidden', 'true'); w.appendChild(kn);
+      var kz = document.createElement('i'); kz.className = 'siz'; kz.setAttribute('aria-hidden', 'true'); w.appendChild(kz);
+      L.el = w; LET.push(L); paint(L);
+      w.style.zIndex = ++zTop; if (o.delay) w.style.animationDelay = o.delay + 'ms';
+      lay.appendChild(w); align();
+      return L;
+    }
+    function remove(L) {
+      var i = LET.indexOf(L); if (i < 0) return;
+      LET.splice(i, 1); L.el.remove(); if (sel === L) pick(null);
+      changed('Letter ' + L.ch + ' removed.');
+    }
+
+    // the sticker sheet
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZ?!.,'.split('').forEach(function (ch, i) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'rls-key'; b.setAttribute('aria-label', 'Add letter ' + ch);
+      var c = document.createElement('b'); c.className = 'cut'; c.textContent = ch; look(c, i % NS + 1, i + 1); b.appendChild(c);
+      b.addEventListener('click', function () {
+        var L = add(ch, { st: i % NS + 1 });
+        if (!L) return;
+        b.classList.add('gone'); setTimeout(function () { b.classList.remove('gone'); }, 450);
+        pick(L); changed('Letter ' + ch + ' stuck on. Drag it where you want it.');
+      });
+      rlSheet.appendChild(b);
+    });
+
+    // type a word and peel it out letter by letter
+    function addWord() {
+      var t = (rlWord.value || '').replace(/\s+/g, ' ').trim();
+      if (!t) { say('Type a word first.'); rlWord.focus(); return; }
+      var room = MAXL - LET.length;
+      if (room <= 0) { say('That is plenty of letters. Remove one to add another.'); return; }
+      var chars = Array.from(t), units = 0, n = 0, kept = [];
+      chars.forEach(function (c) { if (c === ' ') { if (n) { kept.push(c); units += 0.7; } } else if (n < room) { kept.push(c); n++; units += 1; } });
+      var sz = Math.min(0.045, 0.84 / ((units - 1) * 0.74 + 0.9)), step = sz * 0.74, pos = 0, i = 0, last = null;
+      var x0 = 0.5 - ((units - 1) * step) / 2, y = 0.5 + (Math.random() - 0.5) * 0.1;
+      kept.forEach(function (c) {
+        if (c === ' ') { pos += 0.7; return; }
+        last = add(c, { x: x0 + pos * step, y: y + (Math.random() - 0.5) * 0.02, rot: Math.round((Math.random() - 0.5) * 14), sz: sz * (0.9 + Math.random() * 0.25), st: 1 + (i * 2 + Math.floor(Math.random() * 2)) % NS, delay: i * 55 });
+        pos += 1; i++;
+      });
+      rlWord.value = '';
+      if (last) { pick(last); changed('Added ' + n + ' letters. Drag each one, or tab to a letter and use the arrow keys.'); }
+    }
+    rlWordBtn.addEventListener('click', addWord);
+    rlWord.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); addWord(); } });
+
+    // edit buttons for the selected letter
+    function act(a) {
+      var L = sel;
+      if (a === 'clear') { LET.slice().forEach(function (l) { l.el.remove(); }); LET.length = 0; pick(null); changed('All letters removed.'); return; }
+      if (!L) return;
+      if (a === 'left') L.rot -= 15; else if (a === 'right') L.rot += 15;
+      else if (a === 'smaller') L.sz = Math.max(0.02, L.sz / 1.15); else if (a === 'bigger') L.sz = Math.min(mx(L), L.sz * 1.15);
+      else if (a === 'look') L.st = L.st % NS + 1;
+      else if (a === 'remove') { remove(L); return; }
+      paint(L); changed('');
+    }
+    rlCtl.addEventListener('click', function (e) { var b = e.target.closest('button'); if (b && !b.disabled) act(b.getAttribute('data-act')); });
+
+    // drag
+    lay.addEventListener('pointerdown', function (e) {
+      var w = e.target.closest && e.target.closest('.rls'); if (!w || (e.button > 0)) return;
+      var L = byEl(w); if (!L) return;
+      pick(L); w.style.zIndex = ++zTop;
+      var r = lay.getBoundingClientRect();
+      if (e.target.classList && e.target.classList.contains('siz')) { var sb = w.getBoundingClientRect(), sx = sb.left + sb.width / 2, sy2 = sb.top + sb.height / 2; drag = { L: L, id: e.pointerId, sizMode: true, cx: sx, cy: sy2, d0: Math.max(8, Math.hypot(e.clientX - sx, e.clientY - sy2)), s0: L.sz, raf: 0 }; w.classList.add('drag'); try { w.setPointerCapture(e.pointerId); } catch (err) {} e.preventDefault(); return; }
+      if (e.target.classList && e.target.classList.contains('rot')) { var wb = w.getBoundingClientRect(), cx = wb.left + wb.width / 2, cy = wb.top + wb.height / 2; drag = { L: L, id: e.pointerId, rotMode: true, cx: cx, cy: cy, a0: Math.atan2(e.clientY - cy, e.clientX - cx), r0: L.rot, raf: 0 }; w.classList.add('drag'); try { w.setPointerCapture(e.pointerId); } catch (err) {} e.preventDefault(); return; }
+      drag = { L: L, id: e.pointerId, dx: (e.clientX - r.left) / r.width - L.x, dy: (e.clientY - r.top) / r.height - L.y, px: e.clientX, py: e.clientY, raf: 0 };
+      w.classList.add('drag');
+      try { w.setPointerCapture(e.pointerId); } catch (err) {}
+      try { w.focus({ preventScroll: true }); } catch (err) {}
+      e.preventDefault();
+    });
+    lay.addEventListener('pointermove', function (e) {
+      if (!drag || e.pointerId !== drag.id) return;
+      if (drag.sizMode) { var Ls = drag.L; Ls.sz = Math.min(mx(Ls), Math.max(0.02, drag.s0 * Math.hypot(e.clientX - drag.cx, e.clientY - drag.cy) / drag.d0)); Ls.el.style.setProperty('--sz', Ls.sz); return; }
+      if (drag.rotMode) { var Lr = drag.L; Lr.rot = drag.r0 + (Math.atan2(e.clientY - drag.cy, e.clientX - drag.cx) - drag.a0) * 180 / Math.PI; if (e.shiftKey) Lr.rot = Math.round(Lr.rot / 15) * 15; Lr.el.style.rotate = Lr.rot + 'deg'; return; }
+      drag.px = e.clientX; drag.py = e.clientY;
+      if (drag.raf) return;
+      drag.raf = requestAnimationFrame(function () {
+        if (!drag) return; drag.raf = 0;
+        var r = lay.getBoundingClientRect(), L = drag.L;
+        L.x = Math.min(0.98, Math.max(0.02, (drag.px - r.left) / r.width - drag.dx));
+        L.y = Math.min(0.98, Math.max(0.02, (drag.py - r.top) / r.height - drag.dy));
+        L.el.style.left = (L.x * 100) + '%'; L.el.style.top = (L.y * 100) + '%';
+      });
+    });
+    function drop(e) {
+      if (!drag || e.pointerId !== drag.id) return;
+      cancelAnimationFrame(drag.raf);
+      var L = drag.L; L.el.classList.remove('drag');
+      try { L.el.releasePointerCapture(drag.id); } catch (err) {}
+      drag = null; changed('');
+    }
+    lay.addEventListener('pointerup', drop); lay.addEventListener('pointercancel', drop);
+    document.addEventListener('pointerdown', function (e) { if (sel && !(e.target.closest && e.target.closest('.rls, .rl-tools'))) pick(null); });
+
+    // keyboard: arrows move, R turns, + and - resize, S changes the look, Delete removes
+    lay.addEventListener('keydown', function (e) {
+      var w = e.target.closest && e.target.closest('.rls'); if (!w) return;
+      var L = byEl(w); if (!L) return;
+      var k = e.key, step = e.shiftKey ? 0.04 : 0.01, ok = true;
+      if (k === 'ArrowLeft') L.x = Math.max(0.02, L.x - step); else if (k === 'ArrowRight') L.x = Math.min(0.98, L.x + step);
+      else if (k === 'ArrowUp') L.y = Math.max(0.02, L.y - step); else if (k === 'ArrowDown') L.y = Math.min(0.98, L.y + step);
+      else if (k === 'r' || k === 'R') L.rot += e.shiftKey ? -10 : 10;
+      else if (k === '+' || k === '=') L.sz = Math.min(mx(L), L.sz * 1.1); else if (k === '-' || k === '_') L.sz = Math.max(0.02, L.sz / 1.1);
+      else if (k === 's' || k === 'S') L.st = L.st % NS + 1;
+      else if (k === 'Delete' || k === 'Backspace') { var nx = LET[LET.indexOf(L) + 1] || LET[LET.indexOf(L) - 1]; remove(L); if (nx) nx.el.focus(); else rlWord.focus(); e.preventDefault(); return; }
+      else ok = false;
+      if (!ok) return;
+      e.preventDefault(); pick(L); paint(L); changed('');
+    });
+
+    // print the letters into the picture (done a moment after each change, so Save and Share can run straight away)
+    function bake(cb) {
+      var id = ++bakeId;
+      if (!LET.length) { sendBlob = null; if (sendUrl) { URL.revokeObjectURL(sendUrl); sendUrl = null; } baked = true; cb(); bakeWait.splice(0).forEach(function (f) { f(); }); return; }
+      Promise.all([loadFonts(), epImgs()]).then(function () {
+        if (id !== bakeId) { baked ? cb() : bakeWait.push(cb); return; }
+        var cw = img.naturalWidth || W, chh = img.naturalHeight || H, c = document.createElement('canvas'); c.width = cw; c.height = chh;
+        var x = c.getContext('2d');
+        x.drawImage(img, 0, 0, cw, chh);
+        LET.slice().sort(function (a, b) { return (parseInt(a.el.style.zIndex, 10) || 0) - (parseInt(b.el.style.zIndex, 10) || 0); }).forEach(function (L) {
+          if (L.sym) { var im = epC[epKey(L)]; if (im) { var ew = 1.8 * L.sz * cw, eh = ew * im.height / im.width; x.save(); x.translate(L.x * cw, L.y * chh); x.rotate(L.rot * Math.PI / 180); x.drawImage(im, -ew / 2, -eh / 2, ew, eh); x.restore(); } return; }
+          var s = STY[L.st], fs = L.sz * cw;
+          x.font = s.fs + ' ' + s.fw + ' ' + fs + 'px ' + s.ff;
+          var w = Math.max(x.measureText(L.ch).width + 0.4 * fs, 0.9 * fs), h = 1.22 * fs, pts = PTS[L.id % 4];
+          x.save(); x.translate(L.x * cw, L.y * chh); x.rotate(L.rot * Math.PI / 180);
+          x.beginPath(); pts.forEach(function (p, i) { var px = (p[0] - 0.5) * w, py = (p[1] - 0.5) * h; if (i) x.lineTo(px, py); else x.moveTo(px, py); }); x.closePath();
+          x.fillStyle = s.bg; x.fill();
+          x.fillStyle = s.fg; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(L.ch, 0, -h / 2 + 0.12 * fs + 0.54 * fs);
+          x.restore();
+        });
+        c.toBlob(function (b) {
+          c.width = c.height = 0;
+          if (id !== bakeId) { baked ? cb() : bakeWait.push(cb); return; }
+          if (!b) { outMsg.textContent = 'Could not print the letters into the picture on this browser.'; cb(); return; }
+          if (sendUrl) URL.revokeObjectURL(sendUrl);
+          sendBlob = b; sendUrl = URL.createObjectURL(b); baked = true;
+          cb(); bakeWait.splice(0).forEach(function (f) { f(); });
+        }, 'image/png');
+      });
+    }
+
+    // ---- Update 93: pop-up editor, sticker sheet drag, size slider ----
+    var rwmX = document.getElementById('rwmClose'), sd = null, sdSkip = false, rlT = document.getElementById('rlTools');
+    var rwmHome = null;
+    function openM() { if (!rwmHome) { rwmHome = document.createComment('card'); out.parentNode.insertBefore(rwmHome, out); } document.body.appendChild(out); out.classList.add('rwm-open'); document.documentElement.style.overflow = 'hidden'; if (!out.classList.contains('rwm-open')) out.scrollTop = 0; try { rwmX.focus({ preventScroll: true }); } catch (e) {} align(); }
+    function closeM() { if (!out.classList.contains('rwm-open')) return; out.classList.remove('rwm-open'); document.documentElement.style.overflow = ''; if (rwmHome && rwmHome.parentNode) rwmHome.parentNode.insertBefore(out, rwmHome); align(); }
+    rwmX.addEventListener('click', function () { closeM(); pic.scrollIntoView({ behavior: 'auto', block: 'center' }); });
+    out.addEventListener('pointerdown', function (e) { if (e.target === out) closeM(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeM(); });
+    saveBtn.addEventListener('click', closeM, true); shareBtn.addEventListener('click', closeM, true);
+    lay.addEventListener('wheel', function (e) {
+      var w = e.target.closest && e.target.closest('.rls'), L = w && byEl(w); if (!L) return;
+      e.preventDefault(); pick(L); L.sz = Math.min(mx(L), Math.max(0.02, L.sz * (e.deltaY < 0 ? 1.08 : 1 / 1.08))); paint(L); changed('');
+    }, { passive: false });
+    rlT.addEventListener('click', function (e) { if (sdSkip) { e.stopPropagation(); e.preventDefault(); sdSkip = false; } }, true);
+    rlT.addEventListener('pointerdown', function (e) { var b = e.target.closest('.rls-key, .ep-key'); if (b && e.button <= 0) sd = { b: b, id: e.pointerId, x: e.clientX, y: e.clientY, g: null }; });
+    document.addEventListener('pointermove', function (e) {
+      if (!sd || e.pointerId !== sd.id) return;
+      if (!sd.g) {
+        if (Math.hypot(e.clientX - sd.x, e.clientY - sd.y) < 8) return;
+        var c = sd.b.firstChild.cloneNode(true);
+        c.style.cssText += ';position:fixed;z-index:9999;pointer-events:none;translate:-50% -50%;display:block;box-sizing:border-box;line-height:1;text-align:center;min-width:0.9em;padding:0.12em 0.2em 0.1em;font-size:' + (dsz(sd.b) * (img.clientWidth || 380)) + 'px;filter:drop-shadow(0 5px 6px rgba(3,29,68,.35));rotate:-6deg';
+        document.body.appendChild(c); sd.g = c; sd.b.classList.add('gone');
+      }
+      sd.g.style.left = e.clientX + 'px'; sd.g.style.top = e.clientY + 'px';
+    });
+    function sdEnd(e) {
+      if (!sd || e.pointerId !== sd.id) return;
+      var s2 = sd; sd = null; if (!s2.g) return;
+      s2.g.remove(); sdSkip = true; setTimeout(function () { sdSkip = false; }, 60);
+      var r = lay.getBoundingClientRect(), sym = s2.b.getAttribute('data-sym'), ch = sym ? (s2.b.title || 'sticker') : s2.b.firstChild.textContent, i = Array.prototype.indexOf.call(rlSheet.children, s2.b);
+      if (e.type === 'pointerup' && e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom) {
+        var L = add(ch, { sym: sym, st: (i < 0 ? Math.floor(Math.random() * 6) : i % NS) + 1, x: (e.clientX - r.left) / r.width, y: (e.clientY - r.top) / r.height, rot: Math.round((Math.random() - 0.5) * 16) });
+        if (L) { pick(L); changed('Letter ' + ch + ' stuck on. Drag it to move it, or use the size slider.'); }
+        setTimeout(function () { s2.b.classList.remove('gone'); }, 450);
+      } else s2.b.classList.remove('gone');
+    }
+    document.addEventListener('pointerup', sdEnd); document.addEventListener('pointercancel', sdEnd);
+
+    // ephemera drawer: every sprite doodle and desk trinket on the page, as stickers
+    function mx(L) { return L.sym ? 0.35 : 0.12; }
+    function dsz(b) { var y = b.getAttribute('data-sym'); return y ? (y.charAt(0) === 'p' ? 0.15 : 0.1) : 0.05; }
+    var EPC = ['#8F2D18', '#031D44', '#2F5E47', '#7B4B94', '#B4690E', '#04395E'], epC = {};
+    function epVB(id) { var sy = document.getElementById(id), v = ((sy && sy.getAttribute('viewBox')) || '0 0 48 48').split(' '); return [+v[2], +v[3]]; }
+    function epKey(L) { return L.sym + (L.sym.charAt(0) === 'd' ? '|' + L.st : ''); }
+    function epSvg(id, st) { var d = id.charAt(0) === 'd', vb = epVB(id); return '<svg viewBox="0 0 ' + vb[0] + ' ' + vb[1] + '" aria-hidden="true" style="display:block;width:1.8em;height:' + (1.8 * vb[1] / vb[0]) + 'em' + (d ? ';fill:none;stroke:' + EPC[(st - 1) % 6] + ';stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round' : '') + '"><use href="#' + id + '"/></svg>'; }
+    function epImgs() {
+      var seen = {}, jobs = [];
+      LET.forEach(function (L) { if (!L.sym) return; var k = epKey(L); if (epC[k] || seen[k]) return; seen[k] = 1; jobs.push(L); });
+      return Promise.all(jobs.map(function (L) {
+        return new Promise(function (res) {
+          var sy = document.getElementById(L.sym); if (!sy) { res(); return; }
+          var vb = epVB(L.sym), d = L.sym.charAt(0) === 'd', inner = sy.innerHTML.replace(/var\(--[\w-]+,\s*([^()]+)\)/g, '$1'), im = new Image();
+          im.onload = function () { epC[epKey(L)] = im; res(); }; im.onerror = function () { res(); };
+          im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="' + vb[0] * 8 + '" height="' + vb[1] * 8 + '" viewBox="0 0 ' + vb[0] + ' ' + vb[1] + '"' + (d ? ' fill="none" stroke="' + EPC[(L.st - 1) % 6] + '" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"' : '') + '>' + inner + '</svg>');
+        });
+      }));
+    }
+    var epGrid = document.getElementById('epGrid'), epBox = document.getElementById('epBox'), epPull = document.getElementById('epPull');
+    Array.prototype.forEach.call(document.querySelectorAll('symbol[id^="d-"], symbol[id^="tk-"], symbol[id^="pp-"]:not([id^="pp-stamp"])'), function (sy, i) {
+      var id = sy.id, nm = id.slice(id.indexOf('-') + 1).replace(/-/g, ' '), b = document.createElement('button');
+      b.type = 'button'; b.className = 'ep-key'; b.setAttribute('data-sym', id); b.title = nm; b.setAttribute('aria-label', 'Add ' + nm + ' sticker'); b.innerHTML = epSvg(id, i % 6 + 1);
+      b.addEventListener('click', function () { var L = add(nm, { sym: id, st: i % 6 + 1 }); if (!L) return; pick(L); changed(nm + ' sticker added. Drag it where you want it.'); });
+      epGrid.appendChild(b);
+    });
+    epPull.addEventListener('click', function () { var o = epBox.hidden; epBox.hidden = !o; epPull.setAttribute('aria-expanded', String(o)); });
+
+    // ---- Update 98: the rubber stamp pad lives in the pop-up. Pick a stamp, tap the card, then turn or resize it like any sticker ----
+    var STP = [{ id: 'pp-stamp-not-a-cure', t: 'Not a cure' }, { id: 'pp-stamp-unverified', t: 'Unverified' }, { id: 'pp-stamp-says-who', t: 'Says who?' }, { id: 'pp-stamp-enough', t: 'Enough' }];
+    var INKS = ['#1F4E79', '#A3301A', '#5B3E8A', '#2F6B4A'], padOn = false, padI = 0;
+    var stampsEl = document.getElementById('rlStamps'), sdToggle = document.getElementById('sd-toggle'), sdPicks = Array.prototype.slice.call(stampsEl.querySelectorAll('.sd-pick')), sdClear = stampsEl.querySelector('.sd-clear');
+    function padSet(v) { padOn = v; stampsEl.classList.toggle('open', v); sdToggle.setAttribute('aria-pressed', String(v)); sdToggle.setAttribute('aria-expanded', String(v)); pic.classList.toggle('stamping', v); }
+    function padSel(i) { padI = i; stampsEl.style.setProperty('--pad', INKS[i]); sdPicks.forEach(function (b, j) { b.setAttribute('aria-pressed', j === i ? 'true' : 'false'); }); }
+    function stampAt(x, y) {
+      var L = add(STP[padI].t, { sym: STP[padI].id, st: 1, x: x, y: y, rot: Math.round(Math.random() * 18 - 9) });
+      if (L) { pick(L); changed(STP[padI].t + ' stamped. Hover its corners to turn or resize it.'); }
+    }
+    sdToggle.addEventListener('click', function () { padSet(!padOn); });
+    sdPicks.forEach(function (b, i) { b.addEventListener('click', function (e) { padSel(i); if (e.detail === 0) stampAt(0.5, 0.5); }); });
+    sdClear.addEventListener('click', function () {
+      LET.slice().forEach(function (L) { if (L.sym && L.sym.indexOf('pp-stamp') === 0) { LET.splice(LET.indexOf(L), 1); L.el.remove(); if (sel === L) pick(null); } });
+      changed('Stamps wiped off.');
+    });
+    pic.addEventListener('click', function (e) {
+      if (!padOn || tucked || (e.target.closest && e.target.closest('.rls'))) return;
+      var r = lay.getBoundingClientRect(); if (!r.width) return;
+      stampAt(Math.min(0.97, Math.max(0.03, (e.clientX - r.left) / r.width)), Math.min(0.97, Math.max(0.03, (e.clientY - r.top) / r.height)));
+    });
+    padSel(0);
+
+    // ---- Update 99: card designs ----
+    var dsEl = document.getElementById('rlDesigns');
+    DESIGNS.forEach(function (d, i) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'rl-ds'; b.setAttribute('aria-pressed', i === design ? 'true' : 'false');
+      b.innerHTML = '<i style="background:linear-gradient(135deg,' + d.desk + ' 0 50%,' + d.paper + ' 50%)"></i><span>' + d.name + '</span>';
+      b.addEventListener('click', function () {
+        design = i; Array.prototype.forEach.call(dsEl.children, function (c, j) { c.setAttribute('aria-pressed', j === i ? 'true' : 'false'); });
+        if (form.requestSubmit) form.requestSubmit(); else form.dispatchEvent(new Event('submit', { cancelable: true }));
+      });
+      dsEl.appendChild(b);
+    });
+    var bakeWait = [];
+    align();
+  })();
+</script>
+<script>
+  // ---- Draggable clutter: pick up the margin pieces (polaroids, notes, stamps, badges, tape, trinkets, doodles) and move them around their own sheet ----
+  (function () {
+    var SEL = '.scrap.cl-side, .scrap.tk, .scrap.gd';
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var moved = [];          // pieces that are away from their home spot
+    var zTop = 10;
+    var d = null;            // the drag in progress
+    var last = { el: null, t: 0 };
+    var btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'dg-reset'; btn.textContent = 'put it all back';
+    document.body.appendChild(btn);
+
+    function pageY(e) { return e.clientY + window.scrollY; }
+    function clamp(v, lo, hi) { return Math.min(Math.max(v, lo), Math.max(lo, hi)); }
+    function sync() { btn.classList.toggle('show', moved.length > 0); }
+    function setPos(el, x, y) {
+      el._dx = x; el._dy = y;
+      el.style.translate = (x || y) ? x + 'px ' + y + 'px' : '';
+      var i = moved.indexOf(el);
+      if ((x || y) && i < 0) moved.push(el);
+      if (!(x || y) && i >= 0) moved.splice(i, 1);
+      sync();
+    }
+    function sendHome(el) {
+      if (!reduced.matches) {
+        el.classList.add('dg-back');
+        setTimeout(function () { el.classList.remove('dg-back'); }, 500);
+      }
+      setPos(el, 0, 0);
+    }
+
+    // where the piece may go: sideways inside the window, up and down inside its own sheet (a piece dragged under the next sheet would vanish)
+    function limits(el) {
+      var r = el.getBoundingClientRect();
+      var sheet = el.closest('.wrap') || document.body;
+      var sr = sheet.getBoundingClientRect();
+      var top = sr.top + window.scrollY - 20, bottom = sr.bottom + window.scrollY + 20;
+      return {
+        minX: -r.left + 4, maxX: document.documentElement.clientWidth - r.right - 4,
+        minY: top - (r.top + window.scrollY), maxY: bottom - (r.bottom + window.scrollY)
+      };
+    }
+
+    function apply() {
+      var dx = clamp(d.px - d.sx, d.lim.minX, d.lim.maxX);
+      var dy = clamp(d.py - d.sy, d.lim.minY, d.lim.maxY);
+      setPos(d.el, d.x0 + dx, d.y0 + dy);
+    }
+
+    document.addEventListener('pointerdown', function (e) {
+      if (e.button > 0) return;
+      var el = e.target.closest && e.target.closest(SEL);
+      if (!el || !window.matchMedia('(min-width: 1180px)').matches) return;
+      e.preventDefault();
+      // a second press on the same piece within a third of a second sends it home
+      var now = Date.now();
+      if (last.el === el && now - last.t < 350) { last.el = null; if (el._dx || el._dy) sendHome(el); return; }
+      last.el = el; last.t = now;
+      el.classList.remove('dg-back');
+      el._dx = el._dx || 0; el._dy = el._dy || 0;
+      d = { el: el, id: e.pointerId, sx: e.clientX, sy: pageY(e), px: e.clientX, py: pageY(e), x0: el._dx, y0: el._dy, lim: limits(el), cy: e.clientY };
+      el.style.zIndex = ++zTop;
+      el.classList.add('dg-on');
+      try { el.setPointerCapture(e.pointerId); } catch (err) {}
+    });
+
+    document.addEventListener('pointermove', function (e) {
+      if (!d || e.pointerId !== d.id) return;
+      d.px = e.clientX; d.py = pageY(e); d.cy = e.clientY;
+      // near the top or bottom of the window: nudge the page along so a long drag is possible
+      if (e.clientY < 50) window.scrollBy(0, -14); else if (e.clientY > window.innerHeight - 50) window.scrollBy(0, 14);
+      apply();
+    });
+    window.addEventListener('scroll', function () {
+      if (!d) return;
+      d.py = d.cy + window.scrollY; apply();
+    }, { passive: true });
+
+    function drop(e) {
+      if (!d || e.pointerId !== d.id) return;
+      d.el.classList.remove('dg-on');
+      try { d.el.releasePointerCapture(d.id); } catch (err) {}
+      d = null;
+    }
+    document.addEventListener('pointerup', drop);
+    document.addEventListener('pointercancel', drop);
+
+    btn.addEventListener('click', function () {
+      moved.slice().forEach(sendHome);
+    });
+    // a resize changes where the margins are, so everything goes home
+    var lastW = window.innerWidth;
+    window.addEventListener('resize', function () {
+      if (window.innerWidth !== lastW) { lastW = window.innerWidth; moved.slice().forEach(function (el) { setPos(el, 0, 0); }); }
+    });
+  })();
+</script>
+<script>
+  // ---- Update 88: polaroid backs (click a margin polaroid to flip it) and the rubber stamp tool ----
+  (function () {
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var wide = window.matchMedia('(min-width: 1180px)');
+
+    // ---------- 1. Polaroid backs ----------
+    // keyed by the caption on the front (lower case, letters and digits only). Each back is a pencil note and a small lab stamp
+    var BACKS = {
+      'me age 9': ['nobody was grading this.', 'AUG 02'],
+      'no filter': ['just a face. it was fine.', 'MAY 17'],
+      'before the rules': ['before anyone gave me a score.', 'JUN 08'],
+      'mid cram': ['tired. not failing.', 'NOV 21'],
+      'grade 4': ['first time a number felt like me.', 'MAR 11'],
+      'day off': ['nothing got done. good.', 'JUL 30'],
+      'report card day': ['it was only a piece of paper.', 'DEC 14'],
+      'age 11': ['I was never actually late.', 'OCT 05'],
+      'summer 14': ['no one kept score all summer.', 'AUG 19'],
+      'the recital': ['one wrong note. nobody left.', 'APR 26'],
+      '3 am again': ['go to sleep. it will keep.', 'FEB 03'],
+      'just because': ['no reason. that is the reason.', 'SEP 12'],
+      'unedited': ['left exactly as it was.', 'JAN 28'],
+      'first honors': ['proud, then scared to lose it.', 'JUN 22'],
+      'after exams': ['I am still allowed to rest.', 'MAR 30'],
+      'after hours': ['listening counts as work.', 'OCT 16'],
+      'pin it up': ['share it, then breathe.', 'NOV 02']
+    };
+    var FALL = [['it was fine already.', 'JUL 09'], ['nobody was keeping score.', 'APR 14'], ['still me.', 'SEP 27']];
+    Array.prototype.forEach.call(document.querySelectorAll('.cl-pol'), function (el, i) {
+      var em = el.querySelector('em');
+      var key = (em ? em.textContent : '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+      var b = BACKS[key] || FALL[i % FALL.length];
+      var pb = document.createElement('span'); pb.className = 'pb';
+      var note = document.createElement('b'); note.textContent = b[0];
+      var lab = document.createElement('u'); lab.textContent = b[1];
+      pb.appendChild(note); pb.appendChild(lab); el.appendChild(pb);
+    });
+
+    function flip(el) {
+      var now = Date.now();
+      if (el._flAt && now - el._flAt < 650) return;   // a quick double press flips once, so it does not fight the "send it home" double press
+      el._flAt = now;
+      var toBack = !el.classList.contains('pol-back');
+      if (reduced.matches) { el.classList.toggle('pol-back', toBack); return; }
+      el.classList.remove('pol-flip'); void el.offsetWidth; el.classList.add('pol-flip');
+      setTimeout(function () { el.classList.toggle('pol-back', toBack); }, 250);   // swap faces while it is edge on
+      setTimeout(function () { el.classList.remove('pol-flip'); }, 520);
+    }
+    // a press that barely moves is a flip. A press that moves is the drag from Update 87 and is left alone
+    var down = null;
+    document.addEventListener('pointerdown', function (e) {
+      if (e.button > 0) { down = null; return; }
+      var el = e.target.closest && e.target.closest('.cl-pol');
+      down = el ? { el: el, x: e.clientX, y: e.clientY, t: Date.now(), id: e.pointerId } : null;
+    });
+    document.addEventListener('pointerup', function (e) {
+      if (!down || e.pointerId !== down.id) return;
+      var d = down; down = null;
+      if (Math.abs(e.clientX - d.x) > 5 || Math.abs(e.clientY - d.y) > 5 || Date.now() - d.t > 500) return;
+      if (!wide.matches || document.body.classList.contains('stamping')) return;
+      flip(d.el);
+    });
+    document.addEventListener('pointercancel', function () { down = null; });
+
+    // ---------- 2. Rubber stamp tool ----------
+    var STAMPS = [
+      { t: 'Not a cure', s: 'just a start' },
+      { t: 'Unverified', s: 'no source on file' },
+      { t: 'Says who?', s: 'name your source' },
+      { t: 'Enough', s: 'already' }
+    ];
+    var MAX = 40;
+    var INK = ['#1F4E79', '#A3301A', '#5B3E8A', '#2F6B4A'];   // the pad takes the color of the chosen stamp
+    var dock = document.getElementById('stamp-dock');
+    var toggle = document.getElementById('sd-toggle');
+    var live = document.getElementById('sd-live');
+    if (!dock || !toggle) return;
+    var picks = Array.prototype.slice.call(dock.querySelectorAll('.sd-pick'));
+    var clear = dock.querySelector('.sd-clear');
+    var layer = document.createElement('div');
+    layer.className = 'stamp-layer'; layer.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(layer);
+    var on = false, sel = 0;
+    var SHEET = 'body > section > .wrap, .hero.wrap';
+
+    function say(msg) { live.textContent = ''; setTimeout(function () { live.textContent = msg; }, 30); }
+    function isDark() {
+      var a = document.documentElement.getAttribute('data-theme');
+      return a === 'dark' || (a !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    }
+    function setOn(v) {
+      on = v;
+      document.body.classList.toggle('stamping', v);
+      dock.classList.toggle('open', v);
+      toggle.setAttribute('aria-pressed', v ? 'true' : 'false');
+      toggle.setAttribute('aria-expanded', v ? 'true' : 'false');
+    }
+    function select(i) {
+      sel = i;
+      dock.style.setProperty('--pad', INK[i]);
+      picks.forEach(function (b, j) { b.setAttribute('aria-pressed', j === i ? 'true' : 'false'); });
+    }
+    function clampX(el, x) {
+      var half = el.offsetWidth / 2 + 8, w = document.documentElement.clientWidth;
+      return Math.min(Math.max(x, half), Math.max(half, w - half));
+    }
+    // x and y are in layer coordinates (the layer sits at the top left of the page, so they scroll with it)
+    function place(x, y, dark) {
+      var s = STAMPS[sel];
+      var el = document.createElement('div');
+      el.className = 'rst k' + sel + (dark ? ' on-dark' : '');
+      el.style.setProperty('--r', (Math.random() * 18 - 9).toFixed(1) + 'deg');
+      el.style.setProperty('--o', (0.76 + Math.random() * 0.18).toFixed(2));
+      var b = document.createElement('b'); b.textContent = s.t;
+      var i = document.createElement('i'); i.textContent = s.s;
+      el.appendChild(b); el.appendChild(i);
+      el.style.left = '0px'; el.style.top = y + 'px';
+      layer.appendChild(el);
+      el.style.left = clampX(el, x) + 'px';
+      while (layer.children.length > MAX) layer.removeChild(layer.firstChild);
+    }
+
+    toggle.addEventListener('click', function () { setOn(!on); });
+    picks.forEach(function (b, i) {
+      b.addEventListener('click', function (e) {
+        select(i);
+        if (e.detail === 0) {   // pressed with the keyboard: stamp the middle of the screen
+          var lr = layer.getBoundingClientRect();
+          var cx = document.documentElement.clientWidth / 2, cy = window.innerHeight / 2;
+          var under = document.elementFromPoint(cx, cy);
+          place(cx - lr.left, cy - lr.top, isDark() && !(under && under.closest && under.closest(SHEET)));
+          say('Stamped ' + STAMPS[i].t + ' in the middle of the screen.');
+        }
+      });
+    });
+    clear.addEventListener('click', function () { layer.textContent = ''; say('Stamps cleared.'); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && on) { setOn(false); toggle.focus(); }
+    });
+    document.addEventListener('click', function (e) {
+      if (!on || document.body.classList.contains('splash-lock')) return;
+      var t = e.target;
+      if (!t || !t.closest || t.closest('a, button, input, textarea, select, label, summary, [role="button"], .stamp-dock')) return;
+      var lr = layer.getBoundingClientRect();
+      place(e.clientX - lr.left, e.clientY - lr.top, isDark() && !t.closest(SHEET));
+    });
+    // a resize moves the right edge, so pull any stamp that is now past it back in
+    var rz = 0;
+    window.addEventListener('resize', function () {
+      cancelAnimationFrame(rz);
+      rz = requestAnimationFrame(function () {
+        Array.prototype.forEach.call(layer.children, function (el) { el.style.left = clampX(el, parseFloat(el.style.left) || 0) + 'px'; });
       });
     });
   })();
