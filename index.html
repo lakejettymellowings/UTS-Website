@@ -2694,6 +2694,16 @@ body.flipping .hero h1 .iw span, body.flipping .wtyt .iw span, body.flipping .do
     }
   }
 </style>
+<style>
+  /* ---------- Update 130. Make a card buttons: even corners, no tilt ----------
+     These buttons had a different radius on every corner (like 14px 18px 15px 19px) and the main ones were tilted, so they looked lopsided. Each now has one radius on all four corners and sits straight. Sizes, colors and spacing are unchanged. */
+  .share-btn { border-radius: 14px; rotate: 0deg; }
+  .rw-sec { border-radius: 14px; }
+  .rw-out.rwm-open .rwm-close { border-radius: 10px; }
+  .rl-ctl button { border-radius: 10px; }
+  .sd-pick { border-radius: 8px; }
+  .ep-pull { border-radius: 10px; }
+</style>
 </head>
 <body class="splash-lock">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
