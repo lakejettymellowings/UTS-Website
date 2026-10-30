@@ -2166,11 +2166,6 @@
     .scrap.dg-on { cursor: grabbing; scale: 1.09; }
     .scrap.dg-back { transition: translate .45s cubic-bezier(.3, 1.35, .5, 1), scale .15s ease; }
   }
-  .dg-reset { position: fixed; z-index: 100; left: calc(16px + env(safe-area-inset-left, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-    display: none; padding: 6px 16px 7px; font: 700 21px/1.1 "Caveat", cursive; color: #1B2F66; background: #FBF6E3; border: 2px dashed rgba(27, 47, 102, 0.55); border-radius: 6px; rotate: -2deg; cursor: pointer; box-shadow: 0 2px 6px rgba(3, 29, 68, 0.2); }
-  .dg-reset:hover { rotate: -1deg; }
-  .dg-reset:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
-  @media (min-width: 1180px) { .dg-reset.show { display: block; } }
   @media (prefers-reduced-motion: reduce) {
     .scrap.cl-side, .scrap.tk, .scrap.gd, .scrap.dg-back { transition: none; }
     .scrap.cl-side:hover, .scrap.tk:hover, .scrap.gd:hover, .scrap.dg-on { scale: none; }
@@ -2240,8 +2235,6 @@
   .sd-pick.k1 { --s: #1F4E79; } .sd-pick.k2 { --s: #5B3E8A; } .sd-pick.k3 { --s: #2F6B4A; }
   .sd-pick[aria-pressed="true"] { color: #FBF6E3; background: var(--s); }
   .sd-clear { padding: 2px 0; font: 700 17px/1 "Caveat", cursive; color: #1B2F66; text-align: left; text-decoration: underline; background: none; border: 0; cursor: pointer; }
-  /* the "put it all back" note from the draggable clutter moves to the right of the dock so the two do not overlap */
-  @media (min-width: 1180px) { .dg-reset { left: calc(150px + env(safe-area-inset-left, 0px)); } }
   @media (max-width: 560px) {
     .sd-toggle { font-size: 19px; padding: 4px 11px 5px 8px; }
     .rst b { font-size: 18px; } .rst i { font-size: 9px; }
@@ -2277,7 +2270,6 @@
   @media (hover: hover) { .sd-toggle:hover { translate: 0 -2px; rotate: -1deg; } .sd-toggle:active { translate: 0 1px; } }
   @keyframes padOpen { from { transform: scaleY(.82); } to { transform: scaleY(1); } }
   .sd-tray { max-height: calc(100vh - 190px); max-height: calc(100dvh - 190px); overflow-y: auto; }
-  @media (min-width: 1180px) { .dg-reset { left: calc(160px + env(safe-area-inset-left, 0px)); } }
   @media (max-width: 560px) { .sd-toggle svg { width: 92px; height: auto; } }
   @media (prefers-reduced-motion: reduce) {
     .sd-toggle[aria-pressed="true"] .pad-open { animation: none; }
@@ -2291,8 +2283,6 @@
   @media (min-width: 1180px) {
     .desk-pile { display: block; position: fixed; z-index: 105; width: 280px; height: 250px; pointer-events: none; transform-origin: 0 100%; scale: 0.78;
       left: calc(6px + env(safe-area-inset-left, 0px)); bottom: calc(6px + env(safe-area-inset-bottom, 0px)); }
-    /* the "put it all back" note moves to the other side of the screen, left of the back to top button, since the corner is now taken */
-    .dg-reset { left: auto; right: calc(68px + env(safe-area-inset-right, 0px)); }
   }
   @media (min-width: 1300px) { .desk-pile { scale: 0.92; } }
   @media (min-width: 1440px) { .desk-pile { scale: 1.08; } }
@@ -2532,6 +2522,107 @@
 <style>
   /* ---------- Update 114. Pause the letter glow while it is off screen ---------- */
   .hero h1.glow-off .iw span, .wtyt.glow-off .iw span { animation-play-state: paused; }
+</style>
+<style>
+/* Update 118: the tidy-up containers are bigger and peek up from the bottom edge of the screen, with their lower bodies cut off. Update 117 drew them: trinket cabinet, smiling mug, ball of used scotch tape */
+.tidy{display:none}
+@media (min-width:1180px) and (min-height:600px){.tidy{display:block}}
+body.splash-lock .tidy{display:none}
+@media print{.tidy{display:none}}
+.tidy *{pointer-events:none}
+.tidy .td-undo{pointer-events:auto}
+.tidy{--k:1.15;--grain:repeating-linear-gradient(180deg,rgba(105,58,24,.17) 0 1px,transparent 1px 4px),repeating-linear-gradient(180deg,rgba(105,58,24,.11) 0 2px,transparent 2px 13px),repeating-linear-gradient(180deg,rgba(255,232,196,.12) 0 1px,transparent 1px 19px)}
+@media (min-width:1300px){.tidy{--k:1.3}}
+@media (min-width:1440px){.tidy{--k:1.5}}
+@media (min-width:1700px){.tidy{--k:1.8}}
+@media (min-width:1920px){.tidy{--k:2}}
+.td-cab,.td-mug,.td-ballc,.td-note{position:fixed;z-index:2}
+.td-note{left:8px;bottom:calc(var(--k) * 163px + 18px);width:176px;transform-origin:0 100%;scale:calc(.6 + .4 * var(--k));padding:12px 12px 8px;background:#fbf4dc;color:#3a2a1a;border-radius:2px;transform:rotate(-3deg);box-shadow:0 2px 6px rgba(0,0,0,.28);font-family:'Caveat',cursive}
+.td-note::before{content:"";position:absolute;top:-8px;left:50%;width:56px;height:16px;margin-left:-28px;background:rgba(236,205,92,.8);transform:rotate(3deg)}
+.td-note b{display:block;font-size:21px;line-height:1.05;font-weight:700}
+.td-note small{display:block;margin-top:4px;font:11px var(--tw,'Courier New',monospace);opacity:.75}
+.td-undo{display:none;margin-top:2px;padding:0;border:0;background:none;color:#8f2d18;font:700 17px 'Caveat',cursive;text-decoration:underline;cursor:pointer}
+.td-note.on .td-undo{display:block}
+.td-n{text-decoration:none;font:10px var(--tw,'Courier New',monospace);opacity:.8}
+.full .td-n::after{content:" \2713"}
+.td-tag{position:absolute;left:50%;bottom:0;translate:-50% 0;white-space:nowrap;display:flex;gap:5px;align-items:baseline;padding:0 7px;background:#f6efdc;border:1px solid #9d8a66;border-radius:2px;color:#3a2a1a;font:700 15px/1.25 'Caveat',cursive;box-shadow:0 1px 2px rgba(0,0,0,.25)}
+/* the cabinet: mango wood, a rounded top slab, chevron inlay drawers with brass knobs */
+.td-cab{left:6px;bottom:calc(var(--k) * -20px);width:142px;transform-origin:0 100%;scale:var(--k)}
+.td-top,.td-base{display:block;background:var(--grain),linear-gradient(90deg,#c99a63,#e0b57d 50%,#c4925a)}
+.td-top{height:12px;margin:0 -4px;border-radius:8px 8px 3px 3px;box-shadow:0 2px 3px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.4)}
+.td-base{height:9px;margin:0 -6px;border-radius:2px 2px 4px 4px;box-shadow:0 3px 5px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.3)}
+.td-body{padding:5px 6px;display:flex;flex-direction:column;gap:4px;background:var(--grain),linear-gradient(90deg,#b98652,#cf9d66 50%,#b58250);box-shadow:inset 0 0 8px rgba(30,15,5,.7)}
+.td-dr{position:relative;height:32px;display:flex;align-items:center;justify-content:space-between;padding:0 4px;border-radius:2px;background:var(--grain),linear-gradient(90deg,#d6a672,#e6bd88 50%,#d2a06a);box-shadow:inset 0 0 0 1px rgba(60,35,15,.6),inset 0 1px 0 rgba(255,238,205,.5),inset 0 -3px 4px -2px rgba(70,38,12,.35),0 2px 3px rgba(20,10,2,.5),0 calc(var(--o,0)*5px) 0 #1b120c;transform:translateY(calc(var(--o,0)*4px));transition:transform .3s,box-shadow .3s}
+.td-dr::before,.td-dr::after{content:"";flex:0 0 auto;width:10px;height:10px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff3b0,#d6a93a 55%,#8a6414);box-shadow:0 1px 2px rgba(0,0,0,.5),0 0 0 2px rgba(60,30,8,.25)}
+.td-dr span{flex:1;min-width:0;margin:0 5px;justify-content:center;white-space:nowrap;display:flex;gap:3px;align-items:baseline;padding:0 3px;background:#f7f0dc;border:1px solid #b08d4a;border-radius:2px;color:#3a2a1a;font:700 13px/1.15 'Caveat',cursive;box-shadow:0 1px 1px rgba(0,0,0,.35)}
+.td-dr.full span{background:#d9ebd3}
+.td-mug{left:calc(var(--k) * 88px);bottom:calc(var(--k) * -34px);width:90px;height:124px;border-radius:14px;transform-origin:0 100%;scale:var(--k);rotate:2deg}
+.td-ballc{right:66px;bottom:0;width:90px;height:calc(var(--d) * .68 + 22px);border-radius:14px;transform-origin:100% 100%;scale:var(--k)}
+.td-mug .td-tag{left:98px;bottom:auto;top:40px;translate:none;rotate:5deg;flex-direction:column;align-items:center;gap:0;line-height:1;padding:2px 8px 3px}
+.td-mug .td-tag::before{content:"";order:-1;align-self:center;width:5px;height:5px;border-radius:50%;background:#b9a57a;box-shadow:inset 0 0 0 1px #8a7650}
+.td-ballc .td-tag{bottom:calc(100% + 2px)}
+/* the mug */
+.td-mug svg{position:absolute;left:0;bottom:16px;width:90px;height:72px}
+.td-sticks{position:absolute;left:36px;width:28px;bottom:72px;height:60px}
+.td-sticks i{position:absolute;bottom:0;left:calc(50% - 4px);width:8px;height:var(--h);border-radius:3px 3px 1px 1px;background:linear-gradient(to top,rgba(0,0,0,.5),rgba(0,0,0,0) 20px),linear-gradient(#3b2a20 0 8px,var(--c) 8px);transform-origin:50% 100%;transform:translateX(var(--x)) rotate(var(--r));animation:tdIn .3s}
+.td-mug .td-tgt{position:absolute;left:50px;bottom:78px;width:4px;height:4px}
+/* the ball of used scotch tape. It grows with every piece */
+.td-ballc{--d:calc(34px + 50px * var(--s,0))}
+.td-ball{position:absolute;left:50%;bottom:calc(var(--d) * -.32);translate:-50% 0;width:var(--d);height:var(--d);border-radius:50%;transition:width .35s,height .35s;
+  background:radial-gradient(circle at 34% 26%,rgba(255,255,255,.95),rgba(255,255,255,0) 36%),radial-gradient(circle at 64% 16%,rgba(150,100,30,.35),transparent 22%),repeating-linear-gradient(32deg,rgba(120,90,40,.14) 0 1px,transparent 1px 6px),repeating-linear-gradient(-58deg,rgba(255,255,255,.6) 0 1px,transparent 1px 9px),repeating-linear-gradient(110deg,rgba(150,120,60,.16) 0 1px,transparent 1px 11px),radial-gradient(circle,rgba(250,240,215,.94) 0 52%,rgba(212,186,134,.94));
+  box-shadow:inset -6px -8px 12px rgba(120,90,40,.35),inset 4px 4px 8px rgba(255,255,255,.55),0 4px 8px rgba(0,0,0,.3),inset 0 -14px 14px -6px rgba(80,55,15,.28)}
+.td-ball i{position:absolute;left:50%;top:50%;width:15px;height:10px;margin:-5px 0 0 -7px;background:linear-gradient(135deg,rgba(255,255,255,.9),rgba(225,205,150,.55));clip-path:polygon(0 20%,60% 0,100% 45%,80% 100%,10% 85%);transform:rotate(var(--a)) translateY(calc(var(--d) * -.5 + 1px));transition:transform .35s;animation:tdFl .3s}
+.tidy [data-k].hot{outline:3px dashed #3f8a5a;outline-offset:3px}
+.tidy [data-k].nope{animation:tdNope .4s}
+.tidy [data-k].ping{animation:tdPing .3s}
+.tidy .td-mug.ping,.tidy .td-ballc.ping{animation-name:tdPingK}
+@keyframes tdIn{from{translate:0 24px;opacity:0}}
+@keyframes tdFl{from{opacity:0;scale:.3}}
+@keyframes tdNope{25%{translate:-5px 0}50%{translate:5px 0}75%{translate:-3px 0}}
+@keyframes tdPing{50%{scale:1.08}}
+@keyframes tdPingK{50%{scale:calc(var(--k) * 1.08)}}
+.scrap.td-fly{opacity:0!important;scale:.25!important;transition:translate .34s cubic-bezier(.5,0,.75,.4),opacity .34s,scale .34s!important}
+.scrap.td-gone{display:none!important}
+@media (prefers-reduced-motion:reduce){.td-dr,.td-ball,.td-ball i{transition:none}.tidy *{animation:none!important}.scrap.td-fly{transition:none!important}}
+/* Update 119: wood grain only on the cabinet, a stationery mug that also holds correction tape, symmetric drawer labels, and pseudo ambient occlusion (soft dark gradients and inset shadows where things meet, no filters) */
+.td-sticks i.c{width:14px;left:calc(50% - 7px);border-radius:5px 5px 2px 2px;background:linear-gradient(to top,rgba(0,0,0,.5),rgba(0,0,0,0) 16px),linear-gradient(#e6e6ec 0 9px,var(--c) 9px)}
+.td-mug .td-tag::before{margin-bottom:2px}
+.td-top,.td-base{position:relative;z-index:1}
+.td-top::after,.td-base::before{content:"";position:absolute;height:10px;pointer-events:none}
+.td-top::after{left:4px;right:4px;top:100%;background:linear-gradient(rgba(25,12,3,.55),rgba(25,12,3,0))}
+.td-base::before{left:6px;right:6px;bottom:100%;background:linear-gradient(rgba(25,12,3,0),rgba(25,12,3,.5))}
+.td-cab::before{content:"";position:absolute;z-index:-1;left:-8px;right:-8px;top:8px;bottom:0;border-radius:10px;box-shadow:0 0 14px 5px rgba(20,10,2,.3)}
+.td-mug::before{content:"";position:absolute;z-index:-1;left:-16px;right:-14px;top:34px;bottom:-12px;border-radius:50%;background:radial-gradient(ellipse at 50% 58%,rgba(25,12,3,.5),rgba(25,12,3,0) 68%)}
+.td-ballc::before{content:"";position:absolute;z-index:-1;left:50%;bottom:-4px;translate:-50% 0;width:calc(var(--d) * 1.35);height:calc(var(--d) * .5);background:radial-gradient(ellipse at 50% 80%,rgba(25,12,3,.45),rgba(25,12,3,0) 70%);transition:width .35s,height .35s}
+@media (prefers-reduced-motion:reduce){.td-ballc::before{transition:none}}
+/* Update 120: the tidy-up game now lives behind a pull out tab on the left edge, like the definitions tab. Closed, the containers and the note sit below the screen and cannot take drops */
+.td-tabw{position:fixed;z-index:120;left:0;top:96px}
+.tidy .td-tab{position:relative;display:block;width:46px;padding:18px 0 20px;writing-mode:vertical-rl;font-family:"Caveat",cursive;font-size:24px;line-height:1;color:var(--red);background:var(--card);border:1px solid var(--paper-line);border-left:0;border-radius:0 10px 10px 0;cursor:pointer;pointer-events:auto;box-shadow:2px 3px 8px rgba(3,29,68,.22)}
+.td-tab::after{content:"";position:absolute;z-index:-1;top:calc(100% - 8px);left:50%;width:16px;height:58px;margin-left:-8px;background:linear-gradient(90deg,rgba(255,255,255,.2) 0 22%,transparent 22% 78%,rgba(0,0,0,.16) 78%),var(--red);clip-path:polygon(0 0,100% 0,100% 100%,50% 80%,0 100%);transform-origin:50% 0;transform:rotate(-3deg);transition:transform .35s ease;pointer-events:none}
+.td-tab:hover::after,.tidy.open .td-tab::after{transform:rotate(3deg)}
+.td-tab:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.tidy .td-cab,.tidy .td-mug,.tidy .td-ballc,.tidy .td-note{transition:translate .45s cubic-bezier(.2,.8,.2,1),visibility 0s}
+.tidy:not(.open) .td-cab,.tidy:not(.open) .td-mug,.tidy:not(.open) .td-ballc,.tidy:not(.open) .td-note{translate:0 calc(var(--k) * 480px);visibility:hidden;transition:translate .45s cubic-bezier(.2,.8,.2,1),visibility 0s .45s}
+@media (prefers-reduced-motion:reduce){.tidy .td-cab,.tidy .td-mug,.tidy .td-ballc,.tidy .td-note,.tidy:not(.open) .td-cab,.tidy:not(.open) .td-mug,.tidy:not(.open) .td-ballc,.tidy:not(.open) .td-note,.td-tab::after{transition:none}}
+/* Update 122: the clutter that starts in the side margins sits a bit farther from the sheet, so it does not crowd the text. It uses margin, not translate, so dragging and tucking are unaffected. Pieces stuck on the sheet edge (pins, buttons, tape corners) stay where they are */
+:root{--push:clamp(0px,calc((100vw - 1180px) * .25),48px)}
+.scrap.push-l{margin-left:calc(var(--push) * -1)}
+.scrap.push-r{margin-right:calc(var(--push) * -1)}
+/* Update 125: the mug handle is on the right. The drawing is 90px wide and the handle now reaches past the right edge, so the svg may overflow. The tag hangs off the handle, and the soft shadow behind the mug leans right to match */
+.td-mug svg{overflow:visible}
+.td-mug::before{left:-10px;right:-26px}
+/* Update 126: the two pull out tabs give a small bounce when clicked. It squeezes toward the screen edge and springs back */
+.gl-tab,.tidy .td-tab{transform-origin:var(--tab-o,100% 50%)}
+.tidy .td-tab{--tab-o:0 50%}
+.gl-tab.tab-bounce,.tidy .td-tab.tab-bounce{animation:tabBounce .5s ease-out}
+@keyframes tabBounce{0%{scale:1}22%{scale:.86 1.05}50%{scale:1.1 .97}74%{scale:.97 1.01}100%{scale:1}}
+@media (prefers-reduced-motion:reduce){.gl-tab.tab-bounce,.tidy .td-tab.tab-bounce{animation:none}}
+</style>
+<style>
+/* Update 116: smoother cover flip. The glowing letters repaint every frame, and the cover title's letters sit inside the layer that is flipping, so they are paused while it moves */
+body.flipping .hero h1 .iw span, body.flipping .wtyt .iw span, body.flipping .doodles { animation-play-state: paused; }
+.nb-cover { will-change: transform; }
+.nb-shade, .nb-rings { will-change: opacity; }
 </style>
 </head>
 <body class="splash-lock">
@@ -3321,15 +3412,33 @@
   // ---- Wall (backed by a Google Apps Script web app) ----
   const API_URL = 'https://script.google.com/macros/s/AKfycbyWm-xx44Y_Rb1NWfGtfq13put0UCZWyazw6WSdv6ms-Wuxdk-DWaDT9wpsS0QyLUVf/exec';
 
+  // Seed notes. The words in the "source" field follow Zipf's law: the nth most common source word shows up
+  // about 1/n as often as the most common one (parents 8, teacher 4, social media 3, friends 2, myself 2, then five that appear once).
   let entries = [
-    { text: "Cried after a B+ because I genuinely thought my parents would be disappointed. They weren't. I never even told them the grade.", source: "an unspoken family expectation" },
-    { text: "I still can't submit anything without checking it four times, even group chats. A teacher once read my draft out loud as an example of a mistake.", source: "one classroom moment, years ago" },
+    { text: "Cried after a B+ because I genuinely thought my parents would be disappointed. They weren't. I never even told them the grade.", source: "parents" },
+    { text: "I still can't submit anything without checking it four times, even group chats. A teacher once read my draft out loud as an example of a mistake.", source: "teacher" },
+    { text: "Dad asks 'what's your average now?' as a greeting. He means hello. I hear a deadline.", source: "dad", reframe: "A greeting can be clumsy and loving at the same time. It still isn't your score." },
     { text: "Somewhere I decided that resting before finishing everything meant I was lazy. I don't know who told me that. I just believe it.", source: "unknown. still tracing it" },
     { text: "Posted a photo, then deleted it twenty minutes later because it didn't get enough likes. Then I told myself I was being dramatic and told no one.", source: "feeds", reframe: "Likes measure a feed's mood, not your worth." },
+    { text: "Mom says 'ok lang' about my 89, with the exact face. I've spent two years trying to earn a different face.", source: "mom" },
     { text: "My friends joke that I always get the highest score. Now a 91 feels like I let them down.", source: "friends" },
+    { text: "Our prof reads the top three scores out loud. I'm never in them, and somehow I'm also never okay.", source: "teacher", reframe: "A ranking read out loud says who sat where, not who learned what." },
+    { text: "My parents gave up so much that doing badly feels like a debt I'm defaulting on. Nobody ever called it a debt.", source: "parents" },
+    { text: "Everyone's highlight reel is a tiny slice of their story, and I keep measuring my whole week against it.", source: "instagram" },
     { text: "Mom never asked me to be the top student. She just told the story of how Ate got the scholarship, every single time.", source: "mom", reframe: "Her pride in Ate isn't a ruler for you." },
+    { text: "Papa fixes everyone's mistakes quietly and never mentions his own. I learned that you don't get to have any.", source: "papa" },
     { text: "A teacher once said 'you're capable of more.' I've heard it as a warning ever since.", source: "teacher", reframe: "Sometimes that means she sees you, not that you're falling short." },
+    { text: "I post a story, then watch who viewed it before I decide if it was good enough to exist.", source: "reels", reframe: "Views tell you who scrolled by. They can't tell you if it was good." },
+    { text: "Every time I pick something I like over something useful, I hear Mom's voice finishing the sentence for me.", source: "mom" },
     { text: "I rewrite my messages so many times that I've stopped replying to some people at all.", source: "myself" },
+    { text: "My Ate finished with honors and cried when she missed Latin. I took notes on what that meant.", source: "ate" },
+    { text: "At dinner my parents compare notes on whose kid is doing what. I'm not in the room, but I'm always in the conversation.", source: "parents" },
+    { text: "One teacher wrote 'careless' on my paper in red. I still proofread my grocery lists.", source: "teacher" },
+    { text: "I know the grade isn't me. My stomach just hasn't been told.", source: "grades", reframe: "Your stomach is a bad accountant. A grade is one line in a very long ledger." },
+    { text: "My group chat celebrates every small win. I still can't tell them I'm not okay, because I'm the reliable one.", source: "friends" },
+    { text: "Reunions are a performance review in disguise. 'Ano na, anong plano?' before I've even sat down.", source: "relatives" },
+    { text: "No one checks my to-do list but me, and I'm a terrible boss. Zero sick days, zero praise.", source: "myself" },
+    { text: "At church the good kid gets praised out loud. I became the good kid before I knew it was a role.", source: "church" },
     { text: "I thought I was supposed to have my whole future figured out by now. Nobody gave me a date. I just assumed.", source: "unsure", reframe: "Almost nobody does. Most people are guessing with confidence." }
   ];
 
@@ -3771,11 +3880,13 @@
     function openBook() {
       if (state !== 'closed') return;
       state = 'opening';
+      document.body.classList.add('flipping');
       const finish = () => {
         splash.classList.remove('open');
         splash.style.display = 'none';
         document.body.classList.remove('splash-lock'); window.scrollTo(0, 0);
         state = 'open';
+        document.body.classList.remove('flipping');
       };
       if (reduce()) { finish(); return; }
       splash.classList.add('open');
@@ -3785,10 +3896,11 @@
     function closeBook() {
       if (state !== 'open') return;
       state = 'closing';
+      document.body.classList.add('flipping');
       window.scrollTo(0, 0);
       document.body.classList.add('splash-lock');
       splash.style.display = '';
-      const finish = () => { splash.classList.remove('closing'); state = 'closed'; };
+      const finish = () => { splash.classList.remove('closing'); state = 'closed'; document.body.classList.remove('flipping'); };
       if (reduce()) { finish(); return; }
       splash.classList.add('closing');
       afterFlip(1300, finish);
@@ -4999,14 +5111,12 @@ function qrMatrix(text){
   // ---- Draggable clutter: pick up the margin pieces (polaroids, notes, stamps, badges, tape, trinkets, doodles) and move them around their own sheet ----
   (function () {
     var SEL = '.scrap.cl-side, .scrap.tk, .scrap.gd';
+    var tdWide = window.matchMedia('(min-width: 1180px) and (min-height: 600px)');   // the size where the tidy-up game exists
     var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
     var moved = [];          // pieces that are away from their home spot
     var zTop = 10;
     var d = null;            // the drag in progress
     var last = { el: null, t: 0 };
-    var btn = document.createElement('button');
-    btn.type = 'button'; btn.className = 'dg-reset'; btn.textContent = 'put it all back';
-    document.body.appendChild(btn);
 
     function pageY(e) { return e.clientY + window.scrollY; }
     function clamp(v, lo, hi) { return Math.min(Math.max(v, lo), Math.max(lo, hi)); }
@@ -5015,7 +5125,6 @@ function qrMatrix(text){
     var hosts = [];
     function hostOf(el) { return el.closest('section, .hero') || document.body; }
     function sync() {
-      btn.classList.toggle('show', moved.length > 0);
       hosts = hosts.filter(function (h) { return moved.some(function (m) { return h.contains(m); }); });
       document.querySelectorAll('section, .hero').forEach(function (h) {
         var i = hosts.indexOf(h);
@@ -5082,7 +5191,8 @@ function qrMatrix(text){
       if (!d || e.pointerId !== d.id) return;
       d.px = e.clientX; d.py = pageY(e); d.cy = e.clientY;
       // near the top or bottom of the window: nudge the page along so a long drag is possible
-      if (e.clientY < 50) window.scrollBy(0, -14); else if (e.clientY > window.innerHeight - 50) window.scrollBy(0, 14);
+      if (tdWide.matches && document.querySelector('#tidy.open')) { /* tidy-up is open: dragging to the top or bottom edge does not scroll the page */ }
+      else if (e.clientY < 50) window.scrollBy(0, -14); else if (e.clientY > window.innerHeight - 50) window.scrollBy(0, 14);
       apply();
     });
     window.addEventListener('scroll', function () {
@@ -5100,7 +5210,8 @@ function qrMatrix(text){
     document.addEventListener('pointerup', drop);
     document.addEventListener('pointercancel', drop);
 
-    btn.addEventListener('click', function () {
+    // the tidy-up note's "mess it up again" asks for everything to go home (there is no reset button any more)
+    document.addEventListener('dg-sendhome', function () {
       moved.slice().forEach(sendHome);
     });
     // a resize changes where the margins are, so everything goes home
@@ -5322,6 +5433,153 @@ function qrMatrix(text){
       es.forEach(function (e) { e.target.classList.toggle('glow-off', !e.isIntersecting); });
     }, { rootMargin: '120px 0px' });
     document.querySelectorAll('.wtyt, .hero h1').forEach(function (el) { io.observe(el); });
+  })();
+</script>
+<script>
+  // ---- Update 122: mark the pieces that start out in the side margins so the CSS can move them a little farther out ----
+  (function () {
+    document.querySelectorAll('.scrap.cl-side, .scrap.tk, .scrap.gd').forEach(function (el) {
+      var l = parseFloat(el.style.left), r = parseFloat(el.style.right);
+      if (l <= -60) el.classList.add('push-l'); else if (r <= -60) el.classList.add('push-r');
+    });
+  })();
+</script>
+<script>
+  // ---- Update 126: small bounce on the two pull out tabs when they are clicked. It listens on the document because the tidy-up tab is written further down the page than this script ----
+  (function () {
+    document.addEventListener('click', function (e) {
+      var t = e.target.closest && e.target.closest('#gl-tab, .td-tab');
+      if (!t) return;
+      t.classList.remove('tab-bounce'); void t.offsetWidth; t.classList.add('tab-bounce');
+    });
+    document.addEventListener('animationend', function (e) {
+      if (e.animationName === 'tabBounce') e.target.classList.remove('tab-bounce');
+    });
+  })();
+</script>
+<div class="tidy" id="tidy" aria-hidden="true">
+    <div class="td-tabw"><button type="button" class="td-tab" tabindex="-1" aria-expanded="false">tidy up</button></div>
+    <div class="td-note"><b>tidy as much or as little as you like</b><small class="td-ct">nothing tucked away yet</small><button type="button" class="td-undo" tabindex="-1">mess it up again</button></div>
+    <div class="td-cab"><i class="td-top"></i><div class="td-body">
+    <div class="td-dr" data-k="stk"><span>stickers <u class="td-n"></u></span></div>
+    <div class="td-dr" data-k="pho"><span>photos <u class="td-n"></u></span></div>
+    <div class="td-dr" data-k="pap"><span>paper bits <u class="td-n"></u></span></div>
+    <div class="td-dr" data-k="pin"><span>pins <u class="td-n"></u></span></div>
+    </div><i class="td-base"></i></div>
+      <div class="td-mug" data-k="pen">
+        <svg viewBox="0 0 90 72"><ellipse cx="50" cy="10" rx="30" ry="6.5" fill="#d8d8de" stroke="#f4f4f6" stroke-width="2"/><ellipse cx="50" cy="11" rx="26" ry="4.5" fill="#6f6f7a"/></svg>
+        <div class="td-sticks"></div><i class="td-tgt"></i>
+        <svg viewBox="0 0 90 72"><defs><linearGradient id="tdmg" x1="0" x2="1"><stop offset="0" stop-color="#e6e6ed"/><stop offset=".4" stop-color="#fff"/><stop offset="1" stop-color="#dedee7"/></linearGradient></defs><ellipse cx="50" cy="70" rx="32" ry="3" fill="rgba(0,0,0,.22)"/><path d="M78 22 C98 20 100 50 76 52" fill="none" stroke="#c9c9d1" stroke-width="9" stroke-linecap="round"/><path d="M78 22 C98 20 100 50 76 52" fill="none" stroke="#fbfbfd" stroke-width="6" stroke-linecap="round"/><path d="M20 10 A30 6.5 0 0 0 80 10 L78 60 Q78 68 68 68 L32 68 Q22 68 22 60 Z" fill="url(#tdmg)" stroke="#c9c9d1" stroke-width="1.2"/><path d="M24 62 Q50 66 76 62" fill="none" stroke="#d6d6de"/><circle cx="39" cy="24" r="3.4" fill="#1a1a1f"/><circle cx="38" cy="23" r="1" fill="#fff"/><circle cx="61" cy="24" r="3.4" fill="#1a1a1f"/><circle cx="60" cy="23" r="1" fill="#fff"/><ellipse cx="31" cy="30" rx="4.6" ry="2.8" fill="#f5a3b3"/><ellipse cx="69" cy="30" rx="4.6" ry="2.8" fill="#f5a3b3"/><path d="M44 31 Q50 37 56 31" fill="none" stroke="#1a1a1f" stroke-width="2.2" stroke-linecap="round"/></svg>
+        <div class="td-tag"><span>stationery</span><u class="td-n"></u></div>
+      </div>
+      <div class="td-ballc" data-k="tap"><div class="td-ball td-tgt"></div><div class="td-tag"><span>tapes</span><u class="td-n"></u></div></div>
+</div>
+<script>
+  // ---- Update 115: tidy-up game. Drop a margin piece on its container and it goes in. No score, no timer ----
+  (function () {
+    var root = document.getElementById('tidy'); if (!root) return;
+    var wide = window.matchMedia('(min-width: 1180px)');
+    var SEL = '.scrap.cl-side, .scrap.tk, .scrap.gd';
+    function kind(el) {
+      var c = el.classList;
+            if (c.contains('cl-pol')) return 'pho';
+      if (c.contains('cl-badge') || c.contains('tk-star') || c.contains('tk-heart')) return 'stk';
+      if (c.contains('cl-note') || c.contains('cl-stamps') || c.contains('tk-stub') || c.contains('tk-plane') || c.contains('tk-leaf') || c.contains('tk-eraser')) return 'pap';
+      if (c.contains('tk-btn') || c.contains('tk-pin') || c.contains('tk-pinsafe') || c.contains('tk-aid')) return 'pin';
+      if (c.contains('tk-pencil') || c.contains('tk-mech') || c.contains('tk-pen') || c.contains('tk-fount') || c.contains('tk-corr')) return 'pen';
+      if (c.contains('tk-scotch') || c.contains('cl-wt')) return 'tap';
+      return '';
+    }
+    var total = {}, cnt = {}, tucked = [], cur = null, raf = 0, grand = 0;
+    document.querySelectorAll(SEL).forEach(function (el) { var k = kind(el); if (k) { total[k] = (total[k] || 0) + 1; grand++; } });
+    var T = [].slice.call(root.querySelectorAll('[data-k]'));
+    var FL = [-28, 38, 112, 205, -78, 160, 75, 250];
+    var PEN = ['#e0b43a', '#c0392b', '#2e6b9e', '#3f8a5a', '#6b4a9a', '#222', '#e07b2a', '#d65d8c', '#4aa3a0'];
+    var note = root.querySelector('.td-note'), ct = root.querySelector('.td-ct');
+
+    function draw(k) {
+      var el = root.querySelector('[data-k="' + k + '"]'), n = cnt[k] || 0, t = total[k] || 0;
+      el.querySelector('.td-n').textContent = n + '/' + t;
+      el.classList.toggle('full', n > 0 && n === t);
+      if (k === 'pen') {
+        var box = el.querySelector('.td-sticks'), list = tucked.filter(function (x) { return kind(x) === 'pen'; }), want = Math.min(list.length, 9);
+        while (box.children.length < want) {
+          var j = box.children.length, i = document.createElement('i'), cr = list[j].classList.contains('tk-corr');
+          i.style.cssText = '--c:' + PEN[j % 9] + ';--h:' + (cr ? 30 : 44 + (j * 13) % 14) + 'px;--x:' + ((j % 5) - 2) * 7 + 'px;--r:' + (((j * 37) % 41) - 20) + 'deg';
+          if (cr) i.className = 'c';
+          box.appendChild(i);
+        }
+        while (box.children.length > want) box.removeChild(box.lastChild);
+      } else if (k === 'tap') {
+        el.style.setProperty('--s', t ? n / t : 0);
+        var ball = el.querySelector('.td-ball'), w2 = Math.min(n, 8);
+        while (ball.children.length < w2) { var f = document.createElement('i'); f.style.setProperty('--a', FL[ball.children.length % 8] + 'deg'); ball.appendChild(f); }
+        while (ball.children.length > w2) ball.removeChild(ball.lastChild);
+      } else el.style.setProperty('--o', t ? n / t : 0);
+    }
+    function status() {
+      var n = tucked.length;
+      ct.textContent = n === 0 ? 'nothing tucked away yet' : n === grand ? 'all of it. nobody was grading.' : n + ' tucked away';
+      note.classList.toggle('on', n > 0);
+    }
+    function again(t, c) { t.classList.remove(c); void t.offsetWidth; t.classList.add(c); setTimeout(function () { t.classList.remove(c); }, 420); }
+    function nearest(el) {
+      if (!root.classList.contains('open')) return null;
+      var r = el.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2, best = null, bd = 1e9;
+      T.forEach(function (t) {
+        var b = t.getBoundingClientRect();
+        var d = Math.hypot(Math.max(b.left - x, 0, x - b.right), Math.max(b.top - y, 0, y - b.bottom));
+        if (d < bd) { bd = d; best = t; }
+      });
+      return bd <= 14 ? best : null;
+    }
+    function stash(el, t) {
+      var b = (t.querySelector('.td-tgt') || t).getBoundingClientRect(), r = el.getBoundingClientRect(), k = kind(el);
+      el.style.translate = ((el._dx || 0) + b.left + b.width / 2 - r.left - r.width / 2) + 'px ' + ((el._dy || 0) + b.top + b.height / 2 - r.top - r.height / 2) + 'px';
+      el.classList.add('td-fly');
+      setTimeout(function () { el.classList.add('td-gone'); }, 340);
+      tucked.push(el); cnt[k] = (cnt[k] || 0) + 1;
+      draw(k); status(); again(t, 'ping');
+    }
+
+    document.addEventListener('pointerdown', function (e) {
+      cur = null;
+      if (e.button > 0 || !wide.matches) return;
+      var el = e.target.closest && e.target.closest(SEL);
+      if (el && kind(el)) cur = el;
+    }, true);
+    document.addEventListener('pointermove', function () {
+      if (!cur || raf) return;
+      raf = requestAnimationFrame(function () {
+        raf = 0; if (!cur) return;
+        var n = nearest(cur), k = kind(cur);
+        T.forEach(function (t) { t.classList.toggle('hot', t === n && t.dataset.k === k); });
+      });
+    });
+    document.addEventListener('pointerup', function () {
+      var el = cur; cur = null;
+      T.forEach(function (t) { t.classList.remove('hot'); });
+      if (!el || !wide.matches || el.classList.contains('td-gone')) return;
+      var t = nearest(el);
+      if (!t) return;
+      if (t.dataset.k === kind(el)) { stash(el, t); return; }
+      // wrong container: it wobbles and the piece slides back to where it was
+      again(t, 'nope');
+      el.classList.add('dg-back'); el._dx = 0; el._dy = 0; el.style.translate = '';
+      setTimeout(function () { el.classList.remove('dg-back'); }, 500);
+    });
+    var tab = root.querySelector('.td-tab');
+    tab.addEventListener('click', function () {
+      var o = !root.classList.contains('open');
+      root.classList.toggle('open', o); tab.setAttribute('aria-expanded', o ? 'true' : 'false');
+    });
+    root.querySelector('.td-undo').addEventListener('click', function () {
+      tucked.forEach(function (el) { el.classList.remove('td-fly', 'td-gone'); });
+      tucked = []; cnt = {};
+      Object.keys(total).forEach(draw); status();
+      document.dispatchEvent(new CustomEvent('dg-sendhome'));   // sends every moved piece home
+    });
+    Object.keys(total).forEach(draw); status();
   })();
 </script>
 </body>
