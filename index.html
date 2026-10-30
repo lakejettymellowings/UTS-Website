@@ -2409,9 +2409,9 @@
 <style>
   /* Update 99: card designs */
   .rl-designs { margin: 0 0 14px; }
-  .rl-ds-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
-  .rl-ds { display: flex; align-items: center; gap: 7px; padding: 5px 11px 5px 5px; font: 600 13px "Outfit", sans-serif; color: #20472F; background: rgba(255, 255, 255, 0.6); border: 2px solid transparent; border-radius: 10px; cursor: pointer; }
-  .rl-ds i { width: 26px; height: 26px; border-radius: 6px; box-shadow: inset 0 0 0 1.5px rgba(3, 29, 68, 0.25); }
+  .rl-ds-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .rl-ds { display: flex; align-items: center; justify-content: center; padding: 4px; background: rgba(255, 255, 255, 0.6); border: 2px solid transparent; border-radius: 12px; cursor: pointer; }
+  .rl-ds i { display: block; width: 34px; height: 34px; border-radius: 8px; box-shadow: inset 0 0 0 1.5px rgba(3, 29, 68, 0.25); }
   .rl-ds[aria-pressed="true"] { border-color: #20472F; background: #fff; }
   .rl-ds:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 </style>
@@ -2623,6 +2623,76 @@ body.splash-lock .tidy{display:none}
 body.flipping .hero h1 .iw span, body.flipping .wtyt .iw span, body.flipping .doodles { animation-play-state: paused; }
 .nb-cover { will-change: transform; }
 .nb-shade, .nb-rings { will-change: opacity; }
+</style>
+<style>
+  /* ---------- Update 129. Softer letter glow in light mode ----------
+     On the tan paper a dark saturated halo darkens the page around the letters, so it read as an ink smudge. Light mode now uses a thinner outline and a faint, see through halo. Dark mode is untouched: its pastel glow adds light, so it looks soft already. */
+  :root[data-theme="light"] .hero h1 .iw span,
+  :root[data-theme="light"] .wtyt.iri .iw span {
+    -webkit-text-stroke-width: 0.03em; text-shadow: 0 0 0.07em color-mix(in srgb, var(--i1) 26%, transparent), 0 0 0.24em color-mix(in srgb, var(--i1) 13%, transparent);
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) .hero h1 .iw span,
+    :root:not([data-theme="dark"]) .wtyt.iri .iw span {
+      -webkit-text-stroke-width: 0.03em; text-shadow: 0 0 0.07em color-mix(in srgb, var(--i1) 26%, transparent), 0 0 0.24em color-mix(in srgb, var(--i1) 13%, transparent);
+    }
+  }
+  :root[data-theme="light"] .wtyt.pr .iw span,
+  :root[data-theme="light"] .wtyt.pf .iw span {
+    -webkit-text-stroke-width: 0.02em; text-shadow: 0 0 0.1em color-mix(in srgb, var(--i1) 24%, transparent);
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) .wtyt.pr .iw span,
+    :root:not([data-theme="dark"]) .wtyt.pf .iw span {
+      -webkit-text-stroke-width: 0.02em; text-shadow: 0 0 0.1em color-mix(in srgb, var(--i1) 24%, transparent);
+    }
+  }
+  /* the softer color loops only start for people who have not asked for reduced motion */
+  @media (prefers-reduced-motion: no-preference) {
+  :root[data-theme="light"] .hero h1 .iw span,
+    :root[data-theme="light"] .wtyt.iri .iw span {
+      animation-name: irisGlowLight;
+    }
+    @media (prefers-color-scheme: light) {
+      :root:not([data-theme="dark"]) .hero h1 .iw span,
+      :root:not([data-theme="dark"]) .wtyt.iri .iw span {
+        animation-name: irisGlowLight;
+      }
+    }
+  :root[data-theme="light"] .wtyt.pr .iw span,
+    :root[data-theme="light"] .wtyt.pf .iw span {
+      animation-name: wtSoftLight;
+    }
+    @media (prefers-color-scheme: light) {
+      :root:not([data-theme="dark"]) .wtyt.pr .iw span,
+      :root:not([data-theme="dark"]) .wtyt.pf .iw span {
+        animation-name: wtSoftLight;
+      }
+    }
+  }
+  @keyframes irisGlowLight {
+    0%, 100% { -webkit-text-stroke-color: color-mix(in srgb, var(--i1) 70%, transparent); text-shadow: 0 0 0.07em color-mix(in srgb, var(--i1) 26%, transparent), 0 0 0.24em color-mix(in srgb, var(--i1) 13%, transparent); }
+    20% { -webkit-text-stroke-color: color-mix(in srgb, var(--i2) 70%, transparent); text-shadow: 0 0 0.07em color-mix(in srgb, var(--i2) 26%, transparent), 0 0 0.24em color-mix(in srgb, var(--i2) 13%, transparent); }
+    40% { -webkit-text-stroke-color: color-mix(in srgb, var(--i3) 70%, transparent); text-shadow: 0 0 0.07em color-mix(in srgb, var(--i3) 26%, transparent), 0 0 0.24em color-mix(in srgb, var(--i3) 13%, transparent); }
+    60% { -webkit-text-stroke-color: color-mix(in srgb, var(--i4) 70%, transparent); text-shadow: 0 0 0.07em color-mix(in srgb, var(--i4) 26%, transparent), 0 0 0.24em color-mix(in srgb, var(--i4) 13%, transparent); }
+    80% { -webkit-text-stroke-color: color-mix(in srgb, var(--i5) 70%, transparent); text-shadow: 0 0 0.07em color-mix(in srgb, var(--i5) 26%, transparent), 0 0 0.24em color-mix(in srgb, var(--i5) 13%, transparent); }
+  }
+  @keyframes wtSoftLight {
+    0%, 100% { -webkit-text-stroke-color: color-mix(in srgb, var(--i1) 70%, transparent); text-shadow: 0 0 0.1em color-mix(in srgb, var(--i1) 24%, transparent); }
+    20% { -webkit-text-stroke-color: color-mix(in srgb, var(--i2) 70%, transparent); text-shadow: 0 0 0.1em color-mix(in srgb, var(--i2) 24%, transparent); }
+    40% { -webkit-text-stroke-color: color-mix(in srgb, var(--i3) 70%, transparent); text-shadow: 0 0 0.1em color-mix(in srgb, var(--i3) 24%, transparent); }
+    60% { -webkit-text-stroke-color: color-mix(in srgb, var(--i4) 70%, transparent); text-shadow: 0 0 0.1em color-mix(in srgb, var(--i4) 24%, transparent); }
+    80% { -webkit-text-stroke-color: color-mix(in srgb, var(--i5) 70%, transparent); text-shadow: 0 0 0.1em color-mix(in srgb, var(--i5) 24%, transparent); }
+  }
+  @media (max-width: 700px) {
+    @keyframes irisGlowLight {
+      0%, 100% { -webkit-text-stroke-color: color-mix(in srgb, var(--i1) 70%, transparent); text-shadow: 0 0 0.14em color-mix(in srgb, var(--i1) 24%, transparent); }
+      20% { -webkit-text-stroke-color: color-mix(in srgb, var(--i2) 70%, transparent); text-shadow: 0 0 0.14em color-mix(in srgb, var(--i2) 24%, transparent); }
+      40% { -webkit-text-stroke-color: color-mix(in srgb, var(--i3) 70%, transparent); text-shadow: 0 0 0.14em color-mix(in srgb, var(--i3) 24%, transparent); }
+      60% { -webkit-text-stroke-color: color-mix(in srgb, var(--i4) 70%, transparent); text-shadow: 0 0 0.14em color-mix(in srgb, var(--i4) 24%, transparent); }
+      80% { -webkit-text-stroke-color: color-mix(in srgb, var(--i5) 70%, transparent); text-shadow: 0 0 0.14em color-mix(in srgb, var(--i5) 24%, transparent); }
+    }
+  }
 </style>
 </head>
 <body class="splash-lock">
@@ -4435,7 +4505,7 @@ function qrMatrix(text){
       ctx.strokeStyle = 'rgba(3,29,68,0.14)'; ctx.lineWidth = 2; ctx.strokeRect(1, 1, w - 2, h - 2);
     }
 
-    var DESIGNS = [{"name": "notebook", "desk": "#DAB785", "glow": "rgba(255,240,205,0.35)", "edge": "rgba(120,80,30,0.35)", "paper": "#F8F0DC", "rule": "lined", "ruleCol": "rgba(4,57,94,0.2)", "margin": "#8F2D18", "holes": true, "hole": "#D3B07A", "ink": "#031D44", "sub": "rgba(4,57,94,0.85)", "foot": "#04395E", "foot2": "rgba(4,57,94,0.75)", "loop": "#8F2D18", "arrow": "#2F5E47"}, {"name": "graph paper", "desk": "#8FB3A3", "glow": "rgba(230,255,240,0.3)", "edge": "rgba(20,60,50,0.35)", "paper": "#FBFDF8", "rule": "grid", "ruleCol": "rgba(47,120,140,0.28)", "margin": null, "holes": false, "hole": "#7FA392", "ink": "#031D44", "sub": "rgba(4,57,94,0.85)", "foot": "#04395E", "foot2": "rgba(4,57,94,0.75)", "loop": "#8F2D18", "arrow": "#2F5E47"}, {"name": "dotted journal", "desk": "#3E5C4B", "glow": "rgba(200,255,220,0.15)", "edge": "rgba(0,0,0,0.4)", "paper": "#F3EBDA", "rule": "dots", "ruleCol": "rgba(70,60,40,0.45)", "margin": null, "holes": false, "hole": "#2F4A3B", "ink": "#031D44", "sub": "rgba(4,57,94,0.85)", "foot": "#04395E", "foot2": "rgba(4,57,94,0.75)", "loop": "#8F2D18", "arrow": "#2F5E47"}, {"name": "blueprint", "desk": "#1A2B4A", "glow": "rgba(120,160,230,0.18)", "edge": "rgba(0,0,0,0.45)", "paper": "#1F4E79", "rule": "grid", "ruleCol": "rgba(220,235,255,0.22)", "margin": null, "holes": false, "hole": "#14233D", "ink": "#F2F6FF", "sub": "rgba(235,242,255,0.9)", "foot": "#E6EEFF", "foot2": "rgba(230,238,255,0.75)", "loop": "#FFD66B", "arrow": "#9FE0B8"}, {"name": "kraft", "desk": "#5A4636", "glow": "rgba(255,220,170,0.15)", "edge": "rgba(0,0,0,0.4)", "paper": "#C79A62", "rule": "none", "ruleCol": "", "margin": null, "holes": false, "hole": "#4A3829", "ink": "#2B1A0C", "sub": "rgba(43,26,12,0.85)", "foot": "#2B1A0C", "foot2": "rgba(43,26,12,0.75)", "loop": "#8F2D18", "arrow": "#20472F"}, {"name": "legal pad", "desk": "#2C3A52", "glow": "rgba(150,180,230,0.15)", "edge": "rgba(0,0,0,0.4)", "paper": "#F5E27A", "rule": "lined", "ruleCol": "rgba(60,90,160,0.35)", "margin": "#C0392B", "holes": false, "hole": "#222E44", "ink": "#031D44", "sub": "rgba(4,57,94,0.85)", "foot": "#04395E", "foot2": "rgba(4,57,94,0.75)", "loop": "#8F2D18", "arrow": "#2F5E47"}, {"name": "blush", "desk": "#D9A5B3", "glow": "rgba(255,235,240,0.35)", "edge": "rgba(120,40,70,0.3)", "paper": "#FFF8EE", "rule": "none", "ruleCol": "", "margin": null, "holes": true, "hole": "#C98FA0", "ink": "#031D44", "sub": "rgba(4,57,94,0.85)", "foot": "#04395E", "foot2": "rgba(4,57,94,0.75)", "loop": "#8F2D18", "arrow": "#2F5E47"}], design = 0;
+    var DESIGNS = [{"name": "notebook", "desk": "#DAB785", "glow": "rgba(255,240,205,0.35)", "edge": "rgba(120,80,30,0.35)", "paper": "#F8F0DC", "rule": "lined", "ruleCol": "rgba(4,57,94,0.2)", "margin": "#8F2D18", "holes": true, "hole": "#D3B07A", "ink": "#031D44", "sub": "rgba(4,57,94,0.85)", "foot": "#04395E", "foot2": "rgba(4,57,94,0.75)", "loop": "#8F2D18", "arrow": "#2F5E47"}, {"name": "graph paper", "desk": "#8FB3A3", "glow": "rgba(230,255,240,0.3)", "edge": "rgba(20,60,50,0.35)", "paper": "#FBFDF8", "rule": "grid", "ruleCol": "rgba(47,120,140,0.28)", "margin": null, "holes": false, "hole": "#7FA392", "ink": "#031D44", "sub": "rgba(4,57,94,0.85)", "foot": "#04395E", "foot2": "rgba(4,57,94,0.75)", "loop": "#8F2D18", "arrow": "#2F5E47"}, {"name": "dotted journal", "desk": "#3E5C4B", "glow": "rgba(200,255,220,0.15)", "edge": "rgba(0,0,0,0.4)", "paper": "#F3EBDA", "rule": "dots", "ruleCol": "rgba(70,60,40,0.45)", "margin": null, "holes": false, "hole": "#2F4A3B", "ink": "#031D44", "sub": "rgba(4,57,94,0.85)", "foot": "#04395E", "foot2": "rgba(4,57,94,0.75)", "loop": "#8F2D18", "arrow": "#2F5E47"}, {"name": "blueprint", "desk": "#1A2B4A", "glow": "rgba(120,160,230,0.18)", "edge": "rgba(0,0,0,0.45)", "paper": "#1F4E79", "rule": "grid", "ruleCol": "rgba(220,235,255,0.22)", "margin": null, "holes": false, "hole": "#14233D", "ink": "#F2F6FF", "sub": "rgba(235,242,255,0.9)", "foot": "#E6EEFF", "foot2": "rgba(230,238,255,0.75)", "loop": "#FFD66B", "arrow": "#9FE0B8"}, {"name": "kraft", "desk": "#5A4636", "glow": "rgba(255,220,170,0.15)", "edge": "rgba(0,0,0,0.4)", "paper": "#C79A62", "rule": "none", "ruleCol": "", "margin": null, "holes": false, "hole": "#4A3829", "ink": "#2B1A0C", "sub": "rgba(43,26,12,0.85)", "foot": "#2B1A0C", "foot2": "rgba(43,26,12,0.75)", "loop": "#8F2D18", "arrow": "#20472F"}, {"name": "legal pad", "desk": "#2C3A52", "glow": "rgba(150,180,230,0.15)", "edge": "rgba(0,0,0,0.4)", "paper": "#F5E27A", "rule": "lined", "ruleCol": "rgba(60,90,160,0.35)", "margin": "#C0392B", "holes": false, "hole": "#222E44", "ink": "#031D44", "sub": "rgba(4,57,94,0.85)", "foot": "#04395E", "foot2": "rgba(4,57,94,0.75)", "loop": "#8F2D18", "arrow": "#2F5E47"}, {"name": "blush", "desk": "#D9A5B3", "glow": "rgba(255,235,240,0.35)", "edge": "rgba(120,40,70,0.3)", "paper": "#FFF8EE", "rule": "none", "ruleCol": "", "margin": null, "holes": true, "hole": "#C98FA0", "ink": "#031D44", "sub": "rgba(4,57,94,0.85)", "foot": "#04395E", "foot2": "rgba(4,57,94,0.75)", "loop": "#8F2D18", "arrow": "#2F5E47"}, {"name": "purple", "desk": "#7C5AA6", "glow": "rgba(235,220,255,0.3)", "edge": "rgba(40,20,70,0.4)", "paper": "#F1E9FA", "rule": "lined", "ruleCol": "rgba(107,74,142,0.24)", "margin": null, "holes": true, "hole": "#5A3C78", "ink": "#2A1647", "sub": "rgba(42,22,71,0.85)", "foot": "#3F2468", "foot2": "rgba(63,36,104,0.75)", "loop": "#8F2D18", "arrow": "#2F5E47"}, {"name": "monochrome", "desk": "#4A4A4A", "glow": "rgba(255,255,255,0.12)", "edge": "rgba(0,0,0,0.45)", "paper": "#F4F4F2", "rule": "dots", "ruleCol": "rgba(0,0,0,0.3)", "margin": null, "holes": false, "hole": "#2E2E2E", "ink": "#151515", "sub": "rgba(21,21,21,0.85)", "foot": "#151515", "foot2": "rgba(21,21,21,0.75)", "loop": "#333333", "arrow": "#555555"}, {"name": "teal", "desk": "#2E7D7B", "glow": "rgba(210,255,250,0.22)", "edge": "rgba(0,40,40,0.4)", "paper": "#EAF7F4", "rule": "lined", "ruleCol": "rgba(30,110,110,0.25)", "margin": null, "holes": true, "hole": "#236361", "ink": "#0B2E33", "sub": "rgba(11,46,51,0.85)", "foot": "#0F4A52", "foot2": "rgba(15,74,82,0.75)", "loop": "#C0392B", "arrow": "#1F6B4E"}, {"name": "coral", "desk": "#E58A6B", "glow": "rgba(255,230,210,0.35)", "edge": "rgba(120,50,30,0.35)", "paper": "#FFF1E6", "rule": "none", "ruleCol": "", "margin": null, "holes": true, "hole": "#C46F52", "ink": "#3A1A12", "sub": "rgba(58,26,18,0.85)", "foot": "#5A2A1C", "foot2": "rgba(90,42,28,0.75)", "loop": "#8F2D18", "arrow": "#2F5E47"}, {"name": "sky", "desk": "#8DB8E0", "glow": "rgba(235,247,255,0.35)", "edge": "rgba(20,60,110,0.3)", "paper": "#F7FBFF", "rule": "grid", "ruleCol": "rgba(40,90,150,0.28)", "margin": null, "holes": false, "hole": "#6C98C4", "ink": "#0A2342", "sub": "rgba(10,35,66,0.85)", "foot": "#0B3A6B", "foot2": "rgba(11,58,107,0.75)", "loop": "#C0392B", "arrow": "#2F5E47"}, {"name": "midnight", "desk": "#0E0E14", "glow": "rgba(150,150,255,0.12)", "edge": "rgba(0,0,0,0.5)", "paper": "#1B1B26", "rule": "grid", "ruleCol": "rgba(255,255,255,0.1)", "margin": null, "holes": false, "hole": "#08080C", "ink": "#F4EAD0", "sub": "rgba(244,234,208,0.9)", "foot": "#F4EAD0", "foot2": "rgba(244,234,208,0.75)", "loop": "#F2C94C", "arrow": "#8FD6A8"}, {"name": "sage", "desk": "#A9B89A", "glow": "rgba(240,255,225,0.3)", "edge": "rgba(40,60,30,0.35)", "paper": "#F4F7EC", "rule": "lined", "ruleCol": "rgba(70,100,60,0.25)", "margin": "#B04A3A", "holes": true, "hole": "#8A9A7B", "ink": "#1E2D1A", "sub": "rgba(30,45,26,0.85)", "foot": "#2D4426", "foot2": "rgba(45,68,38,0.75)", "loop": "#8F2D18", "arrow": "#2F5E47"}], design = 0;
     function draw(oldT, newT) {
       var th = DESIGNS[design];
       // phones draw at 3/4 size (about 800 by 1000, 44% fewer pixels). Everything below still uses the 1080 by 1350 layout through scale().
@@ -5096,7 +5166,8 @@ function qrMatrix(text){
     var dsEl = document.getElementById('rlDesigns');
     DESIGNS.forEach(function (d, i) {
       var b = document.createElement('button'); b.type = 'button'; b.className = 'rl-ds'; b.setAttribute('aria-pressed', i === design ? 'true' : 'false');
-      b.innerHTML = '<i style="background:linear-gradient(135deg,' + d.desk + ' 0 50%,' + d.paper + ' 50%)"></i><span>' + d.name + '</span>';
+      b.setAttribute('aria-label', d.name + ' paper');
+      b.innerHTML = '<i style="background:linear-gradient(135deg,' + d.desk + ' 0 50%,' + d.paper + ' 50%)"></i>';
       b.addEventListener('click', function () {
         design = i; Array.prototype.forEach.call(dsEl.children, function (c, j) { c.setAttribute('aria-pressed', j === i ? 'true' : 'false'); });
         if (form.requestSubmit) form.requestSubmit(); else form.dispatchEvent(new Event('submit', { cancelable: true }));
