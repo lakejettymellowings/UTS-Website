@@ -381,6 +381,21 @@
     padding: 4px 0;
   }
 
+  /* ---------- Update 104. Leaning line on the self check result ---------- */
+  .lean { position: relative; height: 74px; margin: 14px 22px 6px; }
+  .lean-line { position: absolute; left: 0; top: 24px; width: 100%; height: 14px; overflow: visible; }
+  .lean-line path { fill: none; stroke: var(--ink-soft); stroke-width: 2.5; stroke-linecap: round; vector-effect: non-scaling-stroke; opacity: .85; }
+  .lean-tick { position: absolute; top: 25px; width: 2px; height: 12px; margin-left: -1px; background: var(--ink-soft); opacity: .7; transform: rotate(-5deg); }
+  .lean-mark { position: absolute; top: 14px; left: calc(var(--pos, 0) * 100%); width: 36px; height: 36px; margin-left: -18px; border: 2.5px solid var(--red); border-radius: 52% 48% 55% 45% / 60% 50% 50% 40%; transform: rotate(-6deg); pointer-events: none; }
+  .lean-end { position: absolute; top: 46px; font-family: "Caveat", cursive; font-size: 24px; line-height: 1; white-space: nowrap; }
+  .lean-end.l { left: -6px; color: var(--good); }
+  .lean-end.r { right: -6px; color: var(--red); }
+  .lean-note { font-family: "Caveat", cursive; font-size: 24px; line-height: 1.15; color: var(--red); margin: 4px 0 14px; transform: rotate(-1deg); transform-origin: left; }
+  @keyframes leanDraw { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+  .q-result.active .lean-mark { animation: leanDraw .7s .25s ease-out both; }
+  @media (prefers-reduced-motion: reduce) { .q-result.active .lean-mark { animation: none; } }
+  @media (max-width: 480px) { .lean { margin-left: 16px; margin-right: 16px; } .lean-end { font-size: 21px; } }
+
   /* ---------- Wall ---------- */
   .wall-note {
     color: var(--ink-soft);
@@ -2125,9 +2140,9 @@
   .hero h1 .iw span {
     -webkit-text-stroke: 0.05em var(--i1); paint-order: stroke fill;
     text-shadow: 0 0 0.1em var(--i1), 0 0 0.32em var(--i1);
-    animation: irisGlow 9s linear infinite; animation-delay: calc(var(--i) * -0.42s);
+    animation: irisGlow 9s linear infinite; animation-delay: calc(var(--i) * 0.42s - 18s);
   }
-  /* each letter runs the same color loop, started a little later than the one before it, so the colors travel along the title. First and last stops match, so there is no seam */
+  /* each letter runs the same color loop, started a little later than the one before it, so the colors travel along the title from left to right. First and last stops match, so there is no seam */
   @keyframes irisGlow {
     0%, 100% { -webkit-text-stroke-color: var(--i1); text-shadow: 0 0 0.1em var(--i1), 0 0 0.32em var(--i1); }
     20% { -webkit-text-stroke-color: var(--i2); text-shadow: 0 0 0.1em var(--i2), 0 0 0.32em var(--i2); }
@@ -2410,6 +2425,114 @@
   .rl-ds[aria-pressed="true"] { border-color: #20472F; background: #fff; }
   .rl-ds:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 </style>
+<style>
+  /* ---------- Update 101. Glow on two key terms and the notebook cover title, with the same per-letter loop as the hero title ---------- */
+  /* "self-imposed pressure" runs red to burnt orange and "maladaptive perfectionism" runs black and white. Both use a softer, thinner glow than the hero so the lettering stays easy to read */
+  .wtyt.pr { --i1: #C8102E; --i2: #D9380F; --i3: #CC5500; --i4: #D9380F; --i5: #C8102E; }
+  .wtyt.pf { --i1: #1A1A1A; --i2: #707070; --i3: #E2E2E2; --i4: #707070; --i5: #1A1A1A; }
+  .wtyt.iri { --i1: #3B2FB8; --i2: #B62F8F; --i3: #D2452E; --i4: #B27700; --i5: #0F8A78; }
+  :root[data-theme="dark"] .wtyt.iri { --i1: #A9B8FF; --i2: #F2A6E8; --i3: #FFC48A; --i4: #9FF0D2; --i5: #8FD3FF; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .wtyt.iri { --i1: #A9B8FF; --i2: #F2A6E8; --i3: #FFC48A; --i4: #9FF0D2; --i5: #8FD3FF; } }
+  .wtyt .iw { display: inline-block; white-space: nowrap; }
+  .wtyt .iw span { animation-duration: 9s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: calc(var(--i) * 0.42s - 18s); }
+  .wtyt.iri .iw span { -webkit-text-stroke: 0.05em var(--i1); paint-order: stroke fill; text-shadow: 0 0 0.1em var(--i1), 0 0 0.32em var(--i1); animation-name: irisGlow; }
+  .wtyt.pr .iw span, .wtyt.pf .iw span { -webkit-text-stroke: 0.025em var(--i1); paint-order: stroke fill; text-shadow: 0 0 0.12em color-mix(in srgb, var(--i1) 50%, transparent); animation-name: wtSoft; }
+  @keyframes wtSoft {
+    0%, 100% { -webkit-text-stroke-color: var(--i1); text-shadow: 0 0 0.12em color-mix(in srgb, var(--i1) 50%, transparent); }
+    20% { -webkit-text-stroke-color: var(--i2); text-shadow: 0 0 0.12em color-mix(in srgb, var(--i2) 50%, transparent); }
+    40% { -webkit-text-stroke-color: var(--i3); text-shadow: 0 0 0.12em color-mix(in srgb, var(--i3) 50%, transparent); }
+    60% { -webkit-text-stroke-color: var(--i4); text-shadow: 0 0 0.12em color-mix(in srgb, var(--i4) 50%, transparent); }
+    80% { -webkit-text-stroke-color: var(--i5); text-shadow: 0 0 0.12em color-mix(in srgb, var(--i5) 50%, transparent); }
+  }
+  @media (max-width: 700px) { .wtyt.iri .iw span { text-shadow: 0 0 0.16em var(--i1); } .wtyt.pr .iw span, .wtyt.pf .iw span { text-shadow: 0 0 0.1em color-mix(in srgb, var(--i1) 50%, transparent); } }
+  @media (prefers-reduced-motion: reduce) { .wtyt .iw span { animation: none; } }
+  /* the notebook cover styles every span inside its label as the red handwritten subtitle line (block, red, tilted). These put the glow letters back to plain inline text */
+  .nb-label .wtyt, .nb-label .wtyt .iw span { display: inline; margin: 0; font: inherit; letter-spacing: inherit; color: inherit; rotate: none; }
+  .nb-label .wtyt .iw { display: inline-block; margin: 0; font: inherit; color: inherit; rotate: none; }
+</style>
+<style>
+  /* ---------- Update 108. Softer paper texture on phones. Only strengths change, no new filters, blend modes or layers ---------- */
+  @media (pointer: coarse), (max-width: 700px) {
+    /* grain, fibres and speckle sit at half strength */
+    .paper::after, .doc .lp::after { opacity: 0.1; }
+    /* crumpled sheets (01, 03 and the schools sheet): a flat wash of the sheet colour sits inside the same background and fades the creases */
+    body > section:nth-of-type(1) > .wrap > .paper::before {
+      background-image: linear-gradient(color-mix(in srgb, var(--sheet) 42%, transparent), color-mix(in srgb, var(--sheet) 42%, transparent)), var(--crumple); background-size: auto, 640px 640px; background-position: 0 0, 0 0; background-blend-mode: normal, var(--crumple-blend);
+    }
+    body > section:nth-of-type(3) > .wrap > .paper::before {
+      background-image: linear-gradient(color-mix(in srgb, var(--sheet) 42%, transparent), color-mix(in srgb, var(--sheet) 42%, transparent)), var(--crumple); background-size: auto, 640px 640px; background-position: 0 0, 120px 80px; background-blend-mode: normal, var(--crumple-blend);
+    }
+    body > section.schools > .wrap > .paper::before {
+      background-image: linear-gradient(color-mix(in srgb, var(--sheet) 42%, transparent), color-mix(in srgb, var(--sheet) 42%, transparent)), var(--crumple); background-size: auto, 640px 640px; background-position: 0 0, 300px 200px; background-blend-mode: normal, var(--crumple-blend);
+    }
+    /* graph paper (02) */
+    body > section:nth-of-type(2) > .wrap > .paper::before {
+      background-image:
+        linear-gradient(color-mix(in srgb, var(--ink) 7%, transparent) 1px, transparent 1px),
+        linear-gradient(90deg, color-mix(in srgb, var(--ink) 7%, transparent) 1px, transparent 1px),
+        linear-gradient(color-mix(in srgb, var(--ink) 3%, transparent) 1px, transparent 1px),
+        linear-gradient(90deg, color-mix(in srgb, var(--ink) 3%, transparent) 1px, transparent 1px);
+    }
+    /* lined notebook paper (04 and 05), margin line unchanged */
+    body > section:nth-of-type(4) > .wrap > .paper::before,
+    body > section:nth-of-type(5) > .wrap > .paper::before {
+      background-image:
+        repeating-linear-gradient(to bottom, transparent 0 27px, color-mix(in srgb, var(--ink) 8%, transparent) 27px 28px),
+        linear-gradient(90deg, transparent 0 var(--margin), color-mix(in srgb, var(--red) 50%, transparent) var(--margin) calc(var(--margin) + 2px), transparent calc(var(--margin) + 2px));
+    }
+  }
+</style>
+<style>
+  /* ---------- Update 109. Pull out tab with definitions of words that can be misread ---------- */
+  .gl { position: fixed; z-index: 120; right: 0; top: 96px; display: flex; align-items: flex-start; transform: translateX(calc(100% - 46px)); transition: transform .35s cubic-bezier(.2, .8, .2, 1); }
+  .gl.open { transform: none; }
+  body.splash-lock .gl { display: none; }
+  .gl-tab { position: relative; flex: none; width: 46px; padding: 18px 0 20px; writing-mode: vertical-rl; font-family: "Caveat", cursive; font-size: 24px; line-height: 1; color: var(--red); background: var(--card); border: 1px solid var(--paper-line); border-right: 0; border-radius: 10px 0 0 10px; cursor: pointer; box-shadow: -2px 3px 8px rgba(3, 29, 68, 0.22); }
+  /* ribbon marker dangling below the tab, tucked behind it, swallowtail end */
+  .gl-tab::after { content: ""; position: absolute; z-index: -1; top: calc(100% - 8px); left: 50%; width: 16px; height: 58px; margin-left: -8px; background: linear-gradient(90deg, rgba(255, 255, 255, 0.2) 0 22%, transparent 22% 78%, rgba(0, 0, 0, 0.16) 78%), var(--red); clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%); transform-origin: 50% 0; transform: rotate(3deg); transition: transform .35s ease; pointer-events: none; }
+  .gl-tab:hover::after, .gl.open .gl-tab::after { transform: rotate(-3deg); }
+  .gl-tab:focus-visible, .gl-x:focus-visible, .gl-term summary:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  .gl-panel { width: min(330px, calc(100vw - 58px)); max-height: min(72vh, 540px); overflow-y: auto; overscroll-behavior: contain; padding: 16px 18px 12px; background: var(--card); color: var(--ink); border: 1px solid var(--paper-line); border-right: 0; border-radius: 0 0 0 6px; box-shadow: -4px 6px 16px rgba(3, 29, 68, 0.28); visibility: hidden; transition: visibility 0s .35s; }
+  .gl.open .gl-panel { visibility: visible; transition-delay: 0s; }
+  .gl-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+  .gl-title { margin: 0; font-family: "Caveat", cursive; font-weight: 700; font-size: 28px; line-height: 1.05; color: var(--red); }
+  .gl-x { flex: none; width: 30px; height: 30px; margin: -4px -6px 0 0; font-size: 24px; line-height: 1; color: var(--ink-soft); background: none; border: 0; border-radius: 50%; cursor: pointer; }
+  .gl-sub { margin: 2px 0 8px; font-family: "Outfit", sans-serif; font-size: 13px; color: var(--ink-soft); }
+  .gl-term { border-top: 1px dashed var(--paper-line); }
+  .gl-term summary { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 0; font-family: "Outfit", sans-serif; font-weight: 600; font-size: 16px; color: var(--ink); cursor: pointer; list-style: none; }
+  .gl-term summary::-webkit-details-marker { display: none; }
+  .gl-term summary::after { content: "+"; flex: none; font-weight: 400; font-size: 20px; color: var(--red); }
+  .gl-term[open] summary::after { content: "\2212"; }
+  .gl-term p { margin: 0 0 10px; font-family: "DM Sans", sans-serif; font-size: 15px; line-height: 1.45; }
+  .gl-term p.gl-nt { margin-top: -4px; font-family: "Caveat", cursive; font-size: 20px; line-height: 1.1; color: var(--red); }
+  @media (prefers-reduced-motion: reduce) { .gl, .gl-panel, .gl-tab::after { transition: none; } }
+  @media print { .gl { display: none; } }
+</style>
+<style>
+  /* ---------- Update 111. Custom scrollbar for the whole page and the glossary. The drawer keeps its own brass bar from Update 96 ---------- */
+  ::-webkit-scrollbar { width: 14px; height: 14px; }
+  ::-webkit-scrollbar-track { background: color-mix(in srgb, var(--ink) 9%, var(--paper)); border-left: 1px dashed var(--paper-line); }
+  ::-webkit-scrollbar-thumb { background: var(--red); border: 3px solid color-mix(in srgb, var(--ink) 9%, var(--paper)); border-radius: 10px; min-height: 40px; }
+  ::-webkit-scrollbar-thumb:hover { background: color-mix(in srgb, var(--red) 82%, var(--ink)); }
+  ::-webkit-scrollbar-corner { background: color-mix(in srgb, var(--ink) 9%, var(--paper)); }
+  .gl-panel::-webkit-scrollbar { width: 10px; }
+  .gl-panel::-webkit-scrollbar-track { background: color-mix(in srgb, var(--ink) 7%, var(--card)); border-left: 1px dashed var(--paper-line); }
+  .gl-panel::-webkit-scrollbar-thumb { border: 2px solid color-mix(in srgb, var(--ink) 7%, var(--card)); }
+  /* browsers without the webkit bar (Firefox) */
+  @supports not selector(::-webkit-scrollbar) {
+    html { scrollbar-width: auto; scrollbar-color: var(--red) color-mix(in srgb, var(--ink) 9%, var(--paper)); }
+    .gl-panel { scrollbar-width: thin; scrollbar-color: var(--red) color-mix(in srgb, var(--ink) 7%, var(--card)); }
+  }
+</style>
+<style>
+  /* ---------- Update 112. Red ribbon hanging from the bottom of section 01, same as the one on the definitions tab ---------- */
+  .sec-ribbon { position: absolute; z-index: -2; right: 11%; bottom: -48px; width: 16px; height: 58px; background: linear-gradient(90deg, rgba(255, 255, 255, 0.2) 0 22%, transparent 22% 78%, rgba(0, 0, 0, 0.16) 78%), var(--red); clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%); transform-origin: 50% 0; transform: rotate(3deg); pointer-events: none; }
+  @media (max-width: 560px) { .sec-ribbon { right: 9%; bottom: -36px; height: 46px; } }
+</style>
+<style>
+  /* ---------- Update 114. Pause the letter glow while it is off screen ---------- */
+  .hero h1.glow-off .iw span, .wtyt.glow-off .iw span { animation-play-state: paused; }
+</style>
 </head>
 <body class="splash-lock">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -2529,6 +2652,7 @@
 <section>
   <div class="wrap">
     <span class="paper" aria-hidden="true"></span>
+    <span class="sec-ribbon" aria-hidden="true"></span>
     <span class="scrap tk tk-pen" style="left:-227px;top:17%;--sr:-86deg;--tc:#C9462E" aria-hidden="true"><svg viewBox="0 0 100 14"><use href="#tk-pen"/></svg></span>
     <span class="scrap tk tk-mech" style="right:-236px;top:30%;--sr:-83deg;--tc:#D9772B" aria-hidden="true"><svg viewBox="0 0 98 14"><use href="#tk-mech"/></svg></span>
     <span class="scrap tk tk-pen" style="left:-238px;top:61%;--sr:83deg;--tc:#7B4B94" aria-hidden="true"><svg viewBox="0 0 100 14"><use href="#tk-pen"/></svg></span>
@@ -2623,11 +2747,11 @@
     <p class="kicker"><span class="cn">02</span>. the self-check</p>
     <h2>Notice <span class="circled">which one</span> it feels like.</h2>
     <p class="margin-note">no wrong answers, promise <svg viewBox="0 0 36 34" aria-hidden="true"><path d="M4 6 C 14 3, 27 10, 28 28 M28 28 l-6 -7 M28 28 l7 -8"/></svg></p>
-    <p class="body">Nothing clinical, nothing scored. Just three moments. Answer for how you actually react, not how you think you should.</p>
+    <p class="body">Nothing clinical, nothing scored. Just five moments. Answer for how you actually react, not how you think you should.</p>
 
     <div class="quiz" id="quiz">
       <div class="q active" data-q="0">
-        <div class="q-num">1 / 3</div>
+        <div class="q-num">1 / 5</div>
         <p class="q-prompt">You get back a grade or a result that's worse than you expected.</p>
         <div class="options">
           <button class="opt" data-lean="try">My first thought is what I'd do differently next time.</button>
@@ -2635,7 +2759,7 @@
         </div>
       </div>
       <div class="q" data-q="1">
-        <div class="q-num">2 / 3</div>
+        <div class="q-num">2 / 5</div>
         <p class="q-prompt">Someone points out a mistake in something you made.</p>
         <div class="options">
           <button class="opt" data-lean="try">It stings for a second, then I fix it.</button>
@@ -2643,7 +2767,7 @@
         </div>
       </div>
       <div class="q" data-q="2">
-        <div class="q-num">3 / 3</div>
+        <div class="q-num">3 / 5</div>
         <p class="q-prompt">You imagine turning in work that's genuinely just "good enough."</p>
         <div class="options">
           <button class="opt" data-lean="try">Fine. It did the job.</button>
@@ -2651,13 +2775,46 @@
         </div>
       </div>
 
+      <div class="q" data-q="3">
+        <div class="q-num">4 / 5</div>
+        <p class="q-prompt">A friend does better than you on the same thing.</p>
+        <div class="options">
+          <button class="opt" data-lean="try">I'm glad for them, and a little curious how they did it.</button>
+          <button class="opt" data-lean="exposed">I start comparing, and somehow I always come up short.</button>
+        </div>
+      </div>
+      <div class="q" data-q="4">
+        <div class="q-num">5 / 5</div>
+        <p class="q-prompt">It's the night before something is due and it's already solid.</p>
+        <div class="options">
+          <button class="opt" data-lean="try">I stop here and let myself rest.</button>
+          <button class="opt" data-lean="exposed">I keep tweaking, because resting feels like I haven't earned it yet.</button>
+        </div>
+      </div>
+
       <div class="q-result" data-result="try">
-        <p class="verdict">leans: try again</p>
+        <p class="verdict">leans: bounce back</p>
+        <div class="lean" role="img" aria-label="">
+          <svg class="lean-line" viewBox="0 0 300 14" preserveAspectRatio="none" aria-hidden="true"><path d="M2 8 C 40 5, 70 10, 110 7 S 190 5, 230 8 S 280 9, 298 6"/></svg>
+          <i class="lean-tick" style="left:0%"></i><i class="lean-tick" style="left:20%"></i><i class="lean-tick" style="left:40%"></i><i class="lean-tick" style="left:60%"></i><i class="lean-tick" style="left:80%"></i><i class="lean-tick" style="left:100%"></i>
+          <span class="lean-mark" aria-hidden="true"></span>
+          <span class="lean-end l" aria-hidden="true">bounce back</span>
+          <span class="lean-end r" aria-hidden="true">not enough</span>
+        </div>
+        <p class="lean-note"></p>
         <p class="body" style="margin:0;">Setbacks mostly feel like information for you, not a verdict. That's worth keeping. It's the opposite of the pattern this project is about.</p>
         <button class="restart" onclick="resetQuiz()">Answer again</button>
       </div>
       <div class="q-result" data-result="exposed">
-        <p class="verdict">leans: exposed</p>
+        <p class="verdict">leans: not enough</p>
+        <div class="lean" role="img" aria-label="">
+          <svg class="lean-line" viewBox="0 0 300 14" preserveAspectRatio="none" aria-hidden="true"><path d="M2 8 C 40 5, 70 10, 110 7 S 190 5, 230 8 S 280 9, 298 6"/></svg>
+          <i class="lean-tick" style="left:0%"></i><i class="lean-tick" style="left:20%"></i><i class="lean-tick" style="left:40%"></i><i class="lean-tick" style="left:60%"></i><i class="lean-tick" style="left:80%"></i><i class="lean-tick" style="left:100%"></i>
+          <span class="lean-mark" aria-hidden="true"></span>
+          <span class="lean-end l" aria-hidden="true">bounce back</span>
+          <span class="lean-end r" aria-hidden="true">not enough</span>
+        </div>
+        <p class="lean-note"></p>
         <p class="body" style="margin:0;">If falling short feels less like "I can improve" and more like "I've been found out," that's usually the sign worth sitting with. Not because something's wrong with you, but because a standard got fused to your worth at some point, and the pressure to meet it may now be coming from you.</p>
         <button class="restart" onclick="resetQuiz()">Answer again</button>
       </div>
@@ -2993,6 +3150,77 @@
   </div>
 </footer>
 
+<aside class="gl" id="gl" aria-label="Some important terms">
+  <button class="gl-tab" id="gl-tab" type="button" aria-expanded="false" aria-controls="gl-panel">what it means</button>
+  <div class="gl-panel" id="gl-panel">
+    <div class="gl-head"><h2 class="gl-title">some important terms</h2><button class="gl-x" id="gl-x" type="button" aria-label="Close the list of terms">×</button></div>
+    <p class="gl-sub">Tap a word to open it.</p>
+    <details class="gl-term" name="gl-terms" open>
+      <summary>Standard</summary>
+      <p>A bar or rule for what counts as good enough, like the grade you should get or how much rest you are allowed. On this site it mostly means the unwritten ones nobody ever said out loud.</p>
+    </details>
+    <details class="gl-term" name="gl-terms">
+      <summary>High standards</summary>
+      <p>Wanting to do good work and being okay when you fall short. It aims at doing well, not at being flawless.</p>
+      <p class="gl-nt">Not the same as perfectionism.</p>
+    </details>
+    <details class="gl-term" name="gl-terms">
+      <summary>Perfectionism</summary>
+      <p>Holding yourself to a very high bar and being hard on yourself when you miss it. It can push you forward or wear you down, depending on how it treats mistakes.</p>
+    </details>
+    <details class="gl-term" name="gl-terms">
+      <summary>Maladaptive perfectionism</summary>
+      <p>The kind that costs you more than it gives. It shows up as a big fear of mistakes, harsh self-criticism and putting things off.</p>
+      <p class="gl-nt">A pattern, not a diagnosis, and not the same as caring about quality.</p>
+    </details>
+    <details class="gl-term" name="gl-terms">
+      <summary>Self-imposed pressure</summary>
+      <p>Pressure that comes from inside your own head. “Self” does not mean it started with you or that it is your fault, since many of these standards were picked up from other people.</p>
+    </details>
+    <details class="gl-term" name="gl-terms">
+      <summary>Internalized standard</summary>
+      <p>A rule you absorbed from family, school or your feeds until it started to feel like your own opinion.</p>
+    </details>
+    <details class="gl-term" name="gl-terms">
+      <summary>Fused to your worth</summary>
+      <p>When a standard and your sense of value become one thing in your head, so missing the standard feels like being worth less.</p>
+    </details>
+    <details class="gl-term" name="gl-terms">
+      <summary>Self-worth</summary>
+      <p>The sense that you matter no matter how a grade, a result or a post turns out.</p>
+    </details>
+    <details class="gl-term" name="gl-terms">
+      <summary>Feeling found out</summary>
+      <p>The fear that a mistake or a lower grade proves you were never as capable as people thought. It is often called the impostor feeling.</p>
+      <p class="gl-nt">It is a feeling, not a fact.</p>
+    </details>
+    <details class="gl-term" name="gl-terms">
+      <summary>Reframe</summary>
+      <p>A kinder rewrite of a harsh thought that is still honest. It does not pretend nothing went wrong.</p>
+    </details>
+    <details class="gl-term" name="gl-terms">
+      <summary>Peer acceptance</summary>
+      <p>Feeling welcome with classmates and friends as you are, not only when you do well. The research the site points to links it with easing perfectionistic tendencies in teens.</p>
+    </details>
+    <details class="gl-term" name="gl-terms">
+      <summary>Grading culture</summary>
+      <p>A school setting where grades and rank become the main way students are measured and compared. The site says this sits outside what a website can fix.</p>
+    </details>
+    <details class="gl-term" name="gl-terms">
+      <summary>Source</summary>
+      <p>On the wall, where you think a standard came from, like a person, a place or a feed. You can leave it blank or say you are still tracing it.</p>
+    </details>
+    <details class="gl-term" name="gl-terms">
+      <summary>Word cloud</summary>
+      <p>The picture on the wall of where standards come from. The bigger a word, the more people mention it, and the color shows the kind of source.</p>
+    </details>
+    <details class="gl-term" name="gl-terms">
+      <summary>Leans</summary>
+      <p>On the self check, which way your answers tilted today. It is a tendency, not a score, a label or a diagnosis.</p>
+      <p class="gl-nt">Retake it any day and it can change.</p>
+    </details>
+  </div>
+</aside>
 <button id="to-top" type="button" aria-label="Scroll back to the top" title="Back to top"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 
 
@@ -3060,12 +3288,25 @@
     const qEl = quiz.querySelector('.q[data-q="' + currentQ + '"]');
     qEl.classList.remove('active');
     currentQ++;
-    if (currentQ < 3) {
+    if (currentQ < 5) {
       quiz.querySelector('.q[data-q="' + currentQ + '"]').classList.add('active');
     } else {
       const exposedCount = leans.filter(l => l === 'exposed').length;
-      const result = exposedCount >= 2 ? 'exposed' : 'try';
-      quiz.querySelector('.q-result[data-result="' + result + '"]').classList.add('active');
+      const result = exposedCount >= 3 ? 'exposed' : 'try';
+      const resEl = quiz.querySelector('.q-result[data-result="' + result + '"]');
+      resEl.classList.add('active');
+      const lean = resEl.querySelector('.lean');
+      lean.style.setProperty('--pos', exposedCount / 5);
+      const notes = [
+        "All five sat on the bounce back side. Slips don't seem to stick to you.",
+        "Mostly bounce back, with one moment that stung a little more.",
+        "Leaning bounce back, but a couple of these hit a nerve.",
+        "Leaning toward the not enough side, though it's close. Two answers went the other way.",
+        "Four of five made a slip feel like not being enough. That's worth a closer look.",
+        "All five made a slip feel like not being enough. That's heavy to carry, and you're far from the only one."
+      ];
+      resEl.querySelector('.lean-note').textContent = notes[exposedCount];
+      lean.setAttribute('aria-label', exposedCount + ' of 5 answers leaned toward feeling not enough. The circle sits on the line between bounce back and not enough.');
     }
   });
 
@@ -4769,7 +5010,24 @@ function qrMatrix(text){
 
     function pageY(e) { return e.clientY + window.scrollY; }
     function clamp(v, lo, hi) { return Math.min(Math.max(v, lo), Math.max(lo, hi)); }
-    function sync() { btn.classList.toggle('show', moved.length > 0); }
+    // Update 100: every section is its own stacking layer, so a piece dragged into another section used to slip underneath it.
+    // A section that has pieces away from home is lifted above the rest (the one dragged most recently on top), so the piece stays in view anywhere on the page.
+    var hosts = [];
+    function hostOf(el) { return el.closest('section, .hero') || document.body; }
+    function sync() {
+      btn.classList.toggle('show', moved.length > 0);
+      hosts = hosts.filter(function (h) { return moved.some(function (m) { return h.contains(m); }); });
+      document.querySelectorAll('section, .hero').forEach(function (h) {
+        var i = hosts.indexOf(h);
+        h.style.zIndex = i < 0 ? '' : String(3 + i);
+      });
+    }
+    function lift(el) {
+      var h = hostOf(el), i = hosts.indexOf(h);
+      if (i >= 0) hosts.splice(i, 1);
+      hosts.push(h);
+      h.style.zIndex = String(3 + hosts.length - 1);
+    }
     function setPos(el, x, y) {
       el._dx = x; el._dy = y;
       el.style.translate = (x || y) ? x + 'px ' + y + 'px' : '';
@@ -4786,12 +5044,10 @@ function qrMatrix(text){
       setPos(el, 0, 0);
     }
 
-    // where the piece may go: sideways inside the window, up and down inside its own sheet (a piece dragged under the next sheet would vanish)
+    // where the piece may go: anywhere on the page, sideways inside the window and up and down between the top and bottom of the page
     function limits(el) {
       var r = el.getBoundingClientRect();
-      var sheet = el.closest('.wrap') || document.body;
-      var sr = sheet.getBoundingClientRect();
-      var top = sr.top + window.scrollY - 20, bottom = sr.bottom + window.scrollY + 20;
+      var top = 0, bottom = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
       return {
         minX: -r.left + 4, maxX: document.documentElement.clientWidth - r.right - 4,
         minY: top - (r.top + window.scrollY), maxY: bottom - (r.bottom + window.scrollY)
@@ -4817,6 +5073,7 @@ function qrMatrix(text){
       el._dx = el._dx || 0; el._dy = el._dy || 0;
       d = { el: el, id: e.pointerId, sx: e.clientX, sy: pageY(e), px: e.clientX, py: pageY(e), x0: el._dx, y0: el._dy, lim: limits(el), cy: e.clientY };
       el.style.zIndex = ++zTop;
+      lift(el);
       el.classList.add('dg-on');
       try { el.setPointerCapture(e.pointerId); } catch (err) {}
     });
@@ -4838,6 +5095,7 @@ function qrMatrix(text){
       d.el.classList.remove('dg-on');
       try { d.el.releasePointerCapture(d.id); } catch (err) {}
       d = null;
+      sync();
     }
     document.addEventListener('pointerup', drop);
     document.addEventListener('pointercancel', drop);
@@ -5006,6 +5264,64 @@ function qrMatrix(text){
         Array.prototype.forEach.call(layer.children, function (el) { el.style.left = clampX(el, parseFloat(el.style.left) || 0) + 'px'; });
       });
     });
+  })();
+</script>
+<script>
+  // Update 101: wrap "self-imposed pressure", "maladaptive perfectionism" and the notebook cover title in the per-letter glow the hero title uses
+  (function () {
+    var SKIP = 'SCRIPT,STYLE,TEXTAREA,INPUT,CANVAS,TITLE,NOSCRIPT';
+    function glow(t, re, clsFor) {
+      var txt = t.nodeValue, frag = document.createDocumentFragment(), last = 0, m;
+      re.lastIndex = 0;
+      while ((m = re.exec(txt))) {
+        if (m.index > last) frag.appendChild(document.createTextNode(txt.slice(last, m.index)));
+        var host = document.createElement('span'); host.className = 'wtyt ' + clsFor(m[0]); host.setAttribute('aria-label', m[0]);
+        var i = 0;
+        m[0].split(' ').forEach(function (word, k) {
+          if (k) host.appendChild(document.createTextNode(' '));
+          var iw = document.createElement('span'); iw.className = 'iw'; iw.setAttribute('aria-hidden', 'true');
+          for (var c = 0; c < word.length; c++) { var l = document.createElement('span'); l.style.setProperty('--i', i++); l.textContent = word.charAt(c); iw.appendChild(l); }
+          host.appendChild(iw);
+        });
+        frag.appendChild(host);
+        last = m.index + m[0].length;
+      }
+      if (last < txt.length) frag.appendChild(document.createTextNode(txt.slice(last)));
+      t.parentNode.replaceChild(frag, t);
+    }
+    // the two key terms
+    var TERMS = /self-imposed pressure|maladaptive perfectionism/gi, nodes = [], w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null), n;
+    while ((n = w.nextNode())) {
+      var p = n.parentNode;
+      if (!p || SKIP.indexOf(p.nodeName) >= 0 || p.closest('.wtyt') || p.closest('.gl') || !/self-imposed pressure|maladaptive perfectionism/i.test(n.nodeValue)) continue;
+      nodes.push(n);
+    }
+    nodes.forEach(function (t) { glow(t, TERMS, function (s) { return /^self/i.test(s) ? 'pr' : 'pf'; }); });
+    // the title on the notebook cover, in the hero's own colors
+    var cover = document.querySelector('.nb-label > b');
+    if (cover && cover.firstChild && cover.firstChild.nodeType === 3) glow(cover.firstChild, /who told you that\??/gi, function () { return 'iri'; });
+  })();
+</script>
+<script>
+  // ---- Update 109: pull out tab of definitions ----
+  (function () {
+    var gl = document.getElementById('gl'), tab = document.getElementById('gl-tab'), x = document.getElementById('gl-x');
+    if (!gl || !tab) return;
+    function set(open) { gl.classList.toggle('open', open); tab.setAttribute('aria-expanded', open ? 'true' : 'false'); }
+    tab.addEventListener('click', function () { set(!gl.classList.contains('open')); });
+    x.addEventListener('click', function () { set(false); tab.focus(); });
+    document.addEventListener('click', function (e) { if (gl.classList.contains('open') && !gl.contains(e.target)) set(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && gl.classList.contains('open')) { set(false); tab.focus(); } });
+  })();
+</script>
+<script>
+  // ---- Update 114: the per-letter glow repaints text every frame, so letters stop animating while their title or term is off screen ----
+  (function () {
+    if (!('IntersectionObserver' in window)) return;
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { e.target.classList.toggle('glow-off', !e.isIntersecting); });
+    }, { rootMargin: '120px 0px' });
+    document.querySelectorAll('.wtyt, .hero h1').forEach(function (el) { io.observe(el); });
   })();
 </script>
 </body>
