@@ -33,6 +33,10 @@
   } catch (e) {}
 </script>
 <script>
+  // Calm mode: apply the saved choice before first paint
+  try { if (localStorage.getItem('wtyt-calm') === '1') document.documentElement.classList.add('calm'); } catch (e) {}
+</script>
+<script>
   // Update 165: site color themes use the same 14 palettes as the card papers (desk, paper, ink, soft ink, red pen, green pen). They change only some elements: the desk, the six paper sheets, and the card, ink, red, green and tape colors. Theme 1 is the original and adds nothing
   (function () {
     var R = [
@@ -3407,6 +3411,36 @@ body.flipping .hero h1 .iw span, body.flipping .wtyt .iw span, body.flipping .do
   .quiz { rotate: 0deg; }
 }
 </style>
+<style>
+/* ---------- Update 191. Calm mode. A small button at the bottom left hides the extra decoration (margin pieces, stickers, stamps, tape strips, trinkets, yarn, ribbons) and stops the glow and the drifting doodles. Reading, the quiz, the wall, the card maker, the tabs and the light and dark button all stay. Saved in this browser (wtyt-calm). Delete this block, the button and the two small scripts to go back. ---------- */
+#calm-toggle {
+  position: fixed; z-index: 140; left: calc(14px + env(safe-area-inset-left, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px 0 12px;
+  font-family: "Outfit", sans-serif; font-size: 16px; line-height: 1; color: var(--ink);
+  background: var(--card); border: 1px solid var(--paper-line); border-radius: 999px;
+  box-shadow: 1px 2px 6px rgba(var(--shc), 0.14); cursor: pointer;
+  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease, background .2s ease;
+}
+#calm-toggle:hover { border-color: var(--ink-soft); box-shadow: 1px 4px 10px rgba(var(--shc), 0.22); }
+#calm-toggle:active { transform: scale(0.95); }
+#calm-toggle:focus-visible { outline: 2px solid var(--focus, var(--red)); outline-offset: 2px; }
+#calm-toggle[aria-pressed="true"] { background: color-mix(in srgb, var(--good) 22%, var(--card)); border-color: var(--good); }
+body.splash-lock #calm-toggle { display: none; }
+@media print { #calm-toggle { display: none; } }
+@media (prefers-reduced-motion: reduce) { #calm-toggle { transition: none; } }
+@media (max-width: 700px) { #calm-toggle { height: 38px; padding: 0 13px 0 10px; font-size: 15px; } }
+
+/* what calm hides. The light and dark button (the hero polaroid) and the envelope that the card goes into stay. */
+html.calm .scrap:not(.env):not(#theme-toggle),
+html.calm .sec-ribbon,
+html.calm .tidy,
+html.calm #tdr,
+html.calm #tdr-tab,
+html.calm .td-tab { display: none !important; }
+/* what calm stops */
+html.calm .doodles { animation: none !important; }
+html.calm .iw > span { animation: none !important; text-shadow: none !important; -webkit-text-stroke: 0 !important; }
+</style>
 </head>
 <body class="splash-lock">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -4142,6 +4176,7 @@ body.flipping .hero h1 .iw span, body.flipping .wtyt .iw span, body.flipping .do
   </div>
 </aside>
 <button id="to-top" type="button" aria-label="Scroll back to the top" title="Back to top"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+<button id="calm-toggle" type="button" aria-pressed="false" title="Hide the extra decoration"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9c3-3 6 3 9 0s6 3 9 0M3 15c3-3 6 3 9 0s6 3 9 0"/></svg><span>calm</span></button>
 
 
 
@@ -6532,6 +6567,21 @@ function qrMatrix(text){
       });
       document.querySelectorAll('.gl').forEach(function (g) { mo.observe(g, { attributes: true, attributeFilter: ['class'] }); });
     } catch (e) { /* the slide just runs without the pause */ }
+  })();
+</script>
+<script>
+  // Calm mode button. The class on <html> is set in the head so a saved choice shows before first paint.
+  (function () {
+    var b = document.getElementById('calm-toggle'); if (!b) return;
+    var root = document.documentElement;
+    function sync() { b.setAttribute('aria-pressed', root.classList.contains('calm') ? 'true' : 'false'); b.title = root.classList.contains('calm') ? 'Bring the decoration back' : 'Hide the extra decoration'; }
+    sync();
+    b.addEventListener('click', function () {
+      var on = root.classList.toggle('calm');
+      try { localStorage.setItem('wtyt-calm', on ? '1' : '0'); } catch (e) {}
+      sync();
+      window.dispatchEvent(new Event('resize'));
+    });
   })();
 </script>
 </body>
