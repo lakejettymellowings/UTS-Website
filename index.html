@@ -2704,6 +2704,165 @@ body.flipping .hero h1 .iw span, body.flipping .wtyt .iw span, body.flipping .do
   .sd-pick { border-radius: 8px; }
   .ep-pull { border-radius: 10px; }
 </style>
+<style>
+  /* ---------- Update 131. Second pull out tab, the sources. It reuses the .gl classes from Update 109 ---------- */
+  .gl.rf { top: min(336px, calc(100vh - 230px)); }
+  .gl.open { z-index: 121; }
+  .gl-term p.rf-cite { font-size: 14px; line-height: 1.45; padding-left: 1.4em; text-indent: -1.4em; }
+  .gl-term a.rf-doi { display: block; margin: 2px 0 10px; font-family: "Outfit", sans-serif; font-size: 13px; font-weight: 600; line-height: 1.35; color: var(--red); text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+  .gl-term a.rf-doi:hover { color: color-mix(in srgb, var(--red) 82%, var(--ink)); }
+  .gl-term a.rf-doi:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 3px; }
+</style>
+<style>
+  /* ---------- Update 132 and 133. The two right edge tabs stack and the tab and ribbon get their own colors ---------- */
+  .gl { --tc: var(--good); }
+  .gl.rf { --tc: var(--c-online); top: min(290px, calc(100vh - 230px)); }
+  /* Update 133: only the tab itself and its ribbon take the color. Text, titles, notes and links keep the original red */
+  .gl-tab { background: var(--tc); color: var(--card); border-color: color-mix(in srgb, var(--tc) 65%, #000); }
+  .gl-tab::after { background: linear-gradient(90deg, rgba(255, 255, 255, 0.2) 0 22%, transparent 22% 78%, rgba(0, 0, 0, 0.16) 78%), color-mix(in srgb, var(--tc) 80%, #000); }
+</style>
+<style>
+  /* ---------- Update 134. Desktop scroll performance. The phone pass from Update 50 did most of this on phones only ---------- */
+  /* no blend modes on the grain layers, and one shadow per sheet instead of three */
+  body::after, .paper::after, .doc .lp::after { mix-blend-mode: normal; }
+  .paper, .doc .lp { filter: drop-shadow(0 6px 8px rgba(3, 29, 68, 0.24)); }
+  /* the endless animations stand still while the page is moving (the class is set by a small script and removed 160ms after the last scroll) */
+  html.is-scrolling .doodles, html.is-scrolling .hero h1 .iw span, html.is-scrolling .wtyt .iw span { animation-play-state: paused; }
+</style>
+<style>
+  /* ---------- Update 135. Warm brown shading and shadows on the wall notes and the limits notes, instead of navy ---------- */
+  .card, .sticky {
+    --nsh: 58, 36, 18;
+    --shade:
+      radial-gradient(120% 80% at 0% 0%, rgba(255, 255, 255, 0.45), transparent 55%),
+      radial-gradient(90% 70% at 100% 100%, rgba(var(--nsh), 0.13), transparent 62%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.55),
+      inset 0 -2px 3px rgba(var(--nsh), 0.08),
+      0 1px 1px rgba(var(--nsh), 0.22),
+      0 3px 5px rgba(var(--nsh), 0.15),
+      0 10px 16px rgba(var(--nsh), 0.15);
+  }
+  .card:hover, .card.lit, .sticky:hover {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.6),
+      inset 0 -2px 3px rgba(var(--nsh), 0.08),
+      0 2px 2px rgba(var(--nsh), 0.22),
+      0 8px 12px rgba(var(--nsh), 0.19),
+      0 18px 26px rgba(var(--nsh), 0.2);
+  }
+  .card:not(.t5)::after, .sticky:not(:nth-child(4))::after { box-shadow: 0 14px 10px -6px rgba(var(--nsh), 0.32); }
+  .card:not(.t5):hover::after, .card:not(.t5).lit::after, .sticky:not(:nth-child(4)):hover::after { box-shadow: 0 20px 14px -6px rgba(var(--nsh), 0.36); }
+  .sticky:nth-child(1) {
+    background-image:
+      linear-gradient(to bottom, rgba(var(--nsh), 0.07) 0 20px, transparent 20px),
+      radial-gradient(60% 50% at 100% 100%, rgba(var(--nsh), 0.2), transparent 70%),
+      var(--shade);
+  }
+  @media (max-width: 700px) {
+    .cards .card, .cards .card:hover, .cards .card.lit { box-shadow: 0 2px 3px rgba(var(--nsh), 0.22), 0 8px 12px rgba(var(--nsh), 0.16); }
+  }
+</style>
+<style>
+  /* ---------- Update 136. No leaf corners on buttons. Buttons are pills or squircles ---------- */
+  /* source chips on the wall: the three leaf ones become pills, the two squarish ones become squircles */
+  .chips button[data-cat="school"], .chips button[data-cat="friends"], .chips button[data-cat="myself"] { border-radius: 999px; }
+  .chips button[data-cat="online"], .chips button[data-cat="unsure"] { border-radius: 12px; corner-shape: squircle; }
+  /* Add to the wall and the three section 06 buttons */
+  .composer > button, .sc-btn { border-radius: 16px; corner-shape: squircle; }
+  /* the Make a card buttons already had even corners (Update 130). They get the squircle curve where the browser supports it */
+  .share-btn, .rw-sec, .rw-out.rwm-open .rwm-close, .rl-ctl button, .sd-pick, .ep-pull { corner-shape: squircle; }
+</style>
+<style>
+  /* ---------- Update 137. Reaction buttons (me too, I needed this, felt this) in solid colors instead of pastels ---------- */
+  .metoo { --rx: #8A5600; --stk: var(--rx); color: #FFFDF6; text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4); background: linear-gradient(160deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0) 48%), var(--rx); }
+  .metoo:nth-of-type(1) { --rx: #8A5600; --stk: var(--rx); }
+  .metoo:nth-of-type(2) { --rx: #2F5E47; --stk: var(--rx); }
+  .metoo:nth-of-type(3) { --rx: #6A3F85; --stk: var(--rx); }
+  /* pressed: the same color, darker, and pushed in */
+  .metoo.mine, .metoo.mine:hover { color: #FFFDF6; background: linear-gradient(160deg, rgba(0, 0, 0, 0.14), rgba(0, 0, 0, 0) 60%), color-mix(in srgb, var(--rx) 70%, #000); box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.4); }
+</style>
+<style>
+  /* ---------- Update 139. Small text raised. Anything the reader has to read or tap is now at least 14px ---------- */
+  .brand .mark, section > .kicker, .q-num, .q-result .verdict, .restart, .composer > button,
+  .note, .cloud-label, .card .source, .chip-label, .stat-count, .gl-sub, .gl-term a.rf-doi,
+  .prompts button, .chips button, .fchip, .bar-row, .metoo { font-size: 14px; }
+  .bar-row { grid-template-columns: 100px 1fr 26px; }
+  .chips button::before { font-size: 12px; }
+  /* tiny text on the library card */
+  .libcard b { font-size: 8px; }
+  /* the small rewrite tags on phones match the desktop size */
+  @media (max-width: 559px) { .rl { font-size: 0.74em; } }
+</style>
+<style>
+  /* ---------- Visual cleanup pass. Same look, tidier edges. Nothing here changes colors, fonts, art or layout ---------- */
+  /* no orphan words: balanced headings, tidier paragraph endings */
+  h2, h3 { text-wrap: balance; }
+  p, li, .card .quote { text-wrap: pretty; }
+  /* long placeholders end in an ellipsis instead of being chopped mid-letter */
+  input[type="text"], input:not([type]) { text-overflow: ellipsis; }
+  /* the grey flash when tapping on a phone */
+  button, a, .card, .metoo { -webkit-tap-highlight-color: transparent; }
+  /* text selection in the page's own red instead of the browser blue */
+  ::selection { background: color-mix(in srgb, var(--red) 24%, transparent); color: inherit; }
+  /* chips and reaction buttons are easier to hit on touch screens, with the text kept centered */
+  @media (pointer: coarse) {
+    .prompts button, .chips button, .fchip, .metoo { min-height: 36px; }
+    .metoo { display: inline-flex; align-items: center; justify-content: center; }
+  }
+</style>
+<style>
+  /* ---------- Contrast pass. Small text colors nudged to at least 4.5 to 1. Hues stay the same, only a touch darker or lighter ---------- */
+  /* light palette (also used by the sheets in dark mode, which re-declare it) */
+  :root { --red: #7E2814; --good: #27503C; --c-family: #7E2814; --c-friends: #27503C; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) body > section > .wrap,
+    :root:not([data-theme="light"]) .hero.wrap { --red: #7E2814; --good: #27503C; --c-family: #7E2814; --c-friends: #27503C; }
+  }
+  :root[data-theme="dark"] body > section > .wrap,
+  :root[data-theme="dark"] .hero.wrap { --red: #7E2814; --good: #27503C; --c-family: #7E2814; --c-friends: #27503C; }
+  /* the amber, grey and purple source colors read as text in the word cloud and bar labels, so they get darker only there. Card tints keep the old values */
+  .cloud, .bar-row { --c-myself: #6A4200; --c-unsure: #4A4A4A; --c-online: #66397F; }
+  /* dark palette on the page outside the sheets: secondary text, green and the highlight a little lighter or deeper */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --ink-soft: #DD9B83; --good: #82B499; --c-friends: #82B499; --highlight: #09496F; }
+  }
+  :root[data-theme="dark"] { --ink-soft: #DD9B83; --good: #82B499; --c-friends: #82B499; --highlight: #09496F; }
+  /* placeholder text */
+  input::placeholder, textarea::placeholder { color: var(--ink-soft); opacity: 0.78; }
+  .rw-form input[type=text]::placeholder { opacity: 0.78; }
+</style>
+<style>
+  /* ---------- Right edge tabs overlap like stacked index tabs. A small script (end of the page) sets the top of "the sources" so it overlaps the bottom of "what it means" ---------- */
+  .gl.open { z-index: 130; }
+  /* third right edge tab: "tidy up" (opens the same game as the left tab). Only where the game itself shows, like the left tab. Red, to go with the green and purple */
+  .gl.tdr { --tc: var(--red); display: none; }
+  /* the left "tidy up" tab is gone. The right one opens the same game (the markup stays because the game's script looks for it) */
+  .tidy .td-tabw { display: none; }
+  @media (min-width: 1180px) and (min-height: 600px) { .gl.tdr { display: flex; } }
+  /* hover: the whole pull out (tab and its paper together) slides out 5px, so the tab stays attached to its page and a strip of the page shows beside it. Deeper shadow, and the hovered one comes to the front */
+  .gl { transition: transform .35s cubic-bezier(.2, .8, .2, 1), translate .18s ease-out; }
+  .gl-tab { transition: box-shadow .18s ease-out; }
+  @media (hover: hover) {
+    .gl:not(.open):has(.gl-tab:hover), .gl:not(.open):has(.gl-tab:focus-visible) { z-index: 125; translate: -5px 0; }
+    .gl:not(.open) .gl-tab:hover, .gl:not(.open) .gl-tab:focus-visible { box-shadow: -5px 6px 14px rgba(3, 29, 68, 0.32); }
+    .gl:not(.open) .gl-tab:hover::before, .gl:not(.open) .gl-tab:focus-visible::before { opacity: 1; }
+  }
+  /* the edge of the paper the tab pulls out. The real paper stays hidden until the tab is opened, so on hover this strip fills the gap beside the tab and the page behind no longer shows through */
+  .gl-tab::before { content: ""; position: absolute; top: -1px; bottom: -1px; left: 100%; width: 10px; background: var(--card); border: 1px solid var(--paper-line); border-left: 0; box-shadow: 0 6px 10px -4px rgba(3, 29, 68, 0.22); opacity: 0; transition: opacity .18s ease-out; }
+  @media (prefers-reduced-motion: reduce) { .gl-tab::before { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .gl, .gl-tab { transition: none; } }
+</style>
+<style>
+  /* ---------- Bar chart in the wall: slower, softer growth. The script sets the lengths, this sets the motion ---------- */
+  .bar-fill { transition: width 1s cubic-bezier(.2, .8, .2, 1); }
+  @media (prefers-reduced-motion: reduce) { .bar-fill { transition: none; } }
+</style>
+<style>
+  /* ---------- Section headers 02 to 06 now match the headline of section 01 (the same size, tight line height and letter spacing). The little icons after the headers scale with the text ---------- */
+  body > section:nth-of-type(n+2) h2 { font-size: clamp(34px, 7.2vw, 58px); line-height: 1.1; letter-spacing: -0.02em; max-width: 14em; }
+  body > section:nth-of-type(n+2) h2::after { width: 0.7em; height: 0.7em; margin-left: 0.3em; vertical-align: -0.12em; }
+</style>
 </head>
 <body class="splash-lock">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -3392,6 +3551,50 @@ body.flipping .hero h1 .iw span, body.flipping .wtyt .iw span, body.flipping .do
     </details>
   </div>
 </aside>
+
+<aside class="gl rf" id="rf" aria-label="Sources used on this site">
+  <button class="gl-tab" id="rf-tab" type="button" aria-expanded="false" aria-controls="rf-panel">the sources</button>
+  <div class="gl-panel" id="rf-panel">
+    <div class="gl-head"><h2 class="gl-title">where the ideas come from</h2><button class="gl-x" id="rf-x" type="button" aria-label="Close the list of sources">×</button></div>
+    <p class="gl-sub">Tap a source to open it. The link opens the paper in a new tab.</p>
+    <details class="gl-term" name="rf-refs" open>
+      <summary>Blackburn et al., 2025</summary>
+      <p class="rf-cite">Blackburn, M., Puffer, H., Molnar, D. S., &amp; Zinga, D. (2025). Perfect front, fragile bonds: Prospective associations between perfectionistic self-presentation and peer experiences. <i>Journal of Applied Developmental Psychology, 97</i>, Article 101769.</p>
+      <p class="gl-nt">Behind the note in section 04 about peer acceptance easing perfectionism.</p>
+      <a class="rf-doi" href="https://doi.org/10.1016/j.appdev.2025.101769" target="_blank" rel="noopener noreferrer">https://doi.org/10.1016/j.appdev.2025.101769</a>
+    </details>
+    <details class="gl-term" name="rf-refs">
+      <summary>Dela Cruz et al., 2025</summary>
+      <p class="rf-cite">Dela Cruz, R. J. P., Jose, J. L. C., Paraon, R. J. R., &amp; Arcinas, M. M. (2025). Academic excellence paradox: Self-imposed academic pressure and well-being among Gen-Z students in a HyFlex learning environment. <i>International Journal of Multidisciplinary: Applied Business and Education Research, 6</i>(4), 2003–2014.</p>
+      <p class="gl-nt">Behind how section 01 describes self-imposed pressure.</p>
+      <a class="rf-doi" href="https://doi.org/10.11594/ijmaber.06.04.29" target="_blank" rel="noopener noreferrer">https://doi.org/10.11594/ijmaber.06.04.29</a>
+    </details>
+    <details class="gl-term" name="rf-refs">
+      <summary>Festinger, 1954</summary>
+      <p class="rf-cite">Festinger, L. (1954). A theory of social comparison processes. <i>Human Relations, 7</i>(2), 117–140.</p>
+      <p class="gl-nt">Behind the self check question about a friend doing better than you.</p>
+      <a class="rf-doi" href="https://doi.org/10.1177/001872675400700202" target="_blank" rel="noopener noreferrer">https://doi.org/10.1177/001872675400700202</a>
+    </details>
+    <details class="gl-term" name="rf-refs">
+      <summary>Priyadarshini &amp; Supriya, 2026</summary>
+      <p class="rf-cite">Priyadarshini, &amp; Supriya, E. (2026). Maladaptive perfectionism: A review of its psychological mechanisms and clinical implications. <i>International Journal of Indian Psychology, 14</i>(2).</p>
+      <p class="gl-nt">Behind how section 01 describes maladaptive perfectionism.</p>
+      <a class="rf-doi" href="https://doi.org/10.25215/1402.070" target="_blank" rel="noopener noreferrer">https://doi.org/10.25215/1402.070</a>
+    </details>
+    <details class="gl-term" name="rf-refs">
+      <summary>Ryan &amp; Deci, 2000</summary>
+      <p class="rf-cite">Ryan, R. M., &amp; Deci, E. L. (2000). Self-determination theory and the facilitation of intrinsic motivation, social development, and well-being. <i>American Psychologist, 55</i>(1), 68–78.</p>
+      <p class="gl-nt">Behind the self check idea that how you react to a miss shows whose standard it is.</p>
+      <a class="rf-doi" href="https://doi.org/10.1037/0003-066X.55.1.68" target="_blank" rel="noopener noreferrer">https://doi.org/10.1037/0003-066X.55.1.68</a>
+    </details>
+    <details class="gl-term" name="rf-refs">
+      <summary>Woźniak et al., 2025</summary>
+      <p class="rf-cite">Woźniak, M., van Buuren, M., &amp; Tacikowski, P. (2025). Editorial: Self-concept plasticity: Behavioral and neural evidence. <i>Frontiers in Human Neuroscience, 19</i>, Article 1584910.</p>
+      <p class="gl-nt">Behind the claim that achievement should not be your whole identity.</p>
+      <a class="rf-doi" href="https://doi.org/10.3389/fnhum.2025.1584910" target="_blank" rel="noopener noreferrer">https://doi.org/10.3389/fnhum.2025.1584910</a>
+    </details>
+  </div>
+</aside>
 <button id="to-top" type="button" aria-label="Scroll back to the top" title="Back to top"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 
 
@@ -3495,29 +3698,29 @@ body.flipping .hero h1 .iw span, body.flipping .wtyt .iw span, body.flipping .do
   // Seed notes. The words in the "source" field follow Zipf's law: the nth most common source word shows up
   // about 1/n as often as the most common one (parents 8, teacher 4, social media 3, friends 2, myself 2, then five that appear once).
   let entries = [
-    { text: "Cried after a B+ because I genuinely thought my parents would be disappointed. They weren't. I never even told them the grade.", source: "parents" },
+    { lc: 1, text: "Cried after a B+ because I genuinely thought my parents would be disappointed. They weren't. I never even told them the grade.", source: "parents" },
     { text: "I still can't submit anything without checking it four times, even group chats. A teacher once read my draft out loud as an example of a mistake.", source: "teacher" },
-    { text: "Dad asks 'what's your average now?' as a greeting. He means hello. I hear a deadline.", source: "dad", reframe: "A greeting can be clumsy and loving at the same time. It still isn't your score." },
+    { lc: 1, text: "Dad asks 'what's your average now?' as a greeting. He means hello. I hear a deadline.", source: "dad", reframe: "A greeting can be clumsy and loving at the same time. It still isn't your score." },
     { text: "Somewhere I decided that resting before finishing everything meant I was lazy. I don't know who told me that. I just believe it.", source: "unknown. still tracing it" },
-    { text: "Posted a photo, then deleted it twenty minutes later because it didn't get enough likes. Then I told myself I was being dramatic and told no one.", source: "feeds", reframe: "Likes measure a feed's mood, not your worth." },
-    { text: "Mom says 'ok lang' about my 89, with the exact face. I've spent two years trying to earn a different face.", source: "mom" },
+    { lc: 1, text: "Posted a photo, then deleted it twenty minutes later because it didn't get enough likes. Then I told myself I was being dramatic and told no one.", source: "feeds", reframe: "Likes measure a feed's mood, not your worth." },
+    { lc: 1, text: "Mom says 'ok lang' about my 89, with the exact face. I've spent two years trying to earn a different face.", source: "mom" },
     { text: "My friends joke that I always get the highest score. Now a 91 feels like I let them down.", source: "friends" },
     { text: "Our prof reads the top three scores out loud. I'm never in them, and somehow I'm also never okay.", source: "teacher", reframe: "A ranking read out loud says who sat where, not who learned what." },
     { text: "My parents gave up so much that doing badly feels like a debt I'm defaulting on. Nobody ever called it a debt.", source: "parents" },
     { text: "Everyone's highlight reel is a tiny slice of their story, and I keep measuring my whole week against it.", source: "instagram" },
     { text: "Mom never asked me to be the top student. She just told the story of how Ate got the scholarship, every single time.", source: "mom", reframe: "Her pride in Ate isn't a ruler for you." },
-    { text: "Papa fixes everyone's mistakes quietly and never mentions his own. I learned that you don't get to have any.", source: "papa" },
+    { lc: 1, text: "Papa fixes everyone's mistakes quietly and never mentions his own. I learned that you don't get to have any.", source: "papa" },
     { text: "A teacher once said 'you're capable of more.' I've heard it as a warning ever since.", source: "teacher", reframe: "Sometimes that means she sees you, not that you're falling short." },
     { text: "I post a story, then watch who viewed it before I decide if it was good enough to exist.", source: "reels", reframe: "Views tell you who scrolled by. They can't tell you if it was good." },
-    { text: "Every time I pick something I like over something useful, I hear Mom's voice finishing the sentence for me.", source: "mom" },
+    { lc: 1, text: "Every time I pick something I like over something useful, I hear Mom's voice finishing the sentence for me.", source: "mom" },
     { text: "I rewrite my messages so many times that I've stopped replying to some people at all.", source: "myself" },
-    { text: "My Ate finished with honors and cried when she missed Latin. I took notes on what that meant.", source: "ate" },
+    { lc: 1, text: "My Ate finished with honors and cried when she missed Latin. I took notes on what that meant.", source: "ate" },
     { text: "At dinner my parents compare notes on whose kid is doing what. I'm not in the room, but I'm always in the conversation.", source: "parents" },
     { text: "One teacher wrote 'careless' on my paper in red. I still proofread my grocery lists.", source: "teacher" },
     { text: "I know the grade isn't me. My stomach just hasn't been told.", source: "grades", reframe: "Your stomach is a bad accountant. A grade is one line in a very long ledger." },
     { text: "My group chat celebrates every small win. I still can't tell them I'm not okay, because I'm the reliable one.", source: "friends" },
     { text: "Reunions are a performance review in disguise. 'Ano na, anong plano?' before I've even sat down.", source: "relatives" },
-    { text: "No one checks my to-do list but me, and I'm a terrible boss. Zero sick days, zero praise.", source: "myself" },
+    { lc: 1, text: "No one checks my to-do list but me, and I'm a terrible boss. Zero sick days, zero praise.", source: "myself" },
     { text: "At church the good kid gets praised out loud. I became the good kid before I knew it was a role.", source: "church" },
     { text: "I thought I was supposed to have my whole future figured out by now. Nobody gave me a date. I just assumed.", source: "unsure", reframe: "Almost nobody does. Most people are guessing with confidence." }
   ];
@@ -3602,6 +3805,33 @@ body.flipping .hero h1 .iw span, body.flipping .wtyt .iw span, body.flipping .do
       body: JSON.stringify({ action: 'react', id, key: k, delta })
     }).catch(err => console.error('Could not save reaction.', err));
   }
+  // ---- Bar chart animation. The bars grow from empty the first time the chart scrolls into view (one after another), and after that
+  // they slide from their old length to the new one when a reaction or a new note changes the counts. Reduced motion skips it ----
+  const BAR_REDUCE = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const BAR_PREV = {};
+  let barsVisible = false, barsFirst = true, barObs = null;
+  function animateBars(el) {
+    const fills = el.querySelectorAll('.bar-fill');
+    if (!fills.length) return;
+    if (BAR_REDUCE) { fills.forEach(f => { BAR_PREV[f.dataset.c] = f.dataset.w; }); return; }
+    const go = () => {
+      fills.forEach((f, i) => {
+        f.style.transitionDelay = (barsFirst ? i * 110 : 0) + 'ms';
+        f.style.width = f.dataset.w + '%';
+        BAR_PREV[f.dataset.c] = f.dataset.w;
+      });
+      barsFirst = false;
+    };
+    if (barsVisible) { requestAnimationFrame(() => requestAnimationFrame(go)); return; }
+    if (!('IntersectionObserver' in window)) { barsVisible = true; go(); return; }
+    if (barObs) return;
+    barObs = new IntersectionObserver(es => {
+      if (!es.some(e => e.isIntersecting)) return;
+      barsVisible = true; barObs.disconnect(); barObs = null;
+      animateBars(document.getElementById('stats'));
+    }, { threshold: 0.35 });
+    barObs.observe(el);
+  }
   function renderStats() {
     const el = document.getElementById('stats');
     if (!el) return;
@@ -3615,15 +3845,18 @@ body.flipping .hero h1 .iw span, body.flipping .wtyt .iw span, body.flipping .do
       : 'The pattern shows up once people name where their standards came from.';
     let top = null, topN = 0;
     entries.forEach(e => { const n = RX.reduce((a, r) => a + rxN(e, r[0]), 0); if (n > topN) { topN = n; top = e; } });
-    const landed = top && topN >= 2 ? `<p class="stat-count">The note that landed most: \u201c${escapeHtml(top.text.split(/\s+/).slice(0, 8).join(' '))}\u2026\u201d (${topN} reactions)</p>` : '';
+    const landed = top && topN >= 2 ? `<p class="stat-count">The note that landed most: \u201c${escapeHtml(shown(top).split(/\s+/).slice(0, 8).join(' '))}\u2026\u201d (${topN} reactions)</p>` : '';
     el.innerHTML = `<p class="stat-count">${entries.length} moments shared. ${traced} sources traced.</p><p class="stat-insight">${insight}</p>${landed}` +
-      order.map(c => `<div class="bar-row"><span>${L(c)}</span><span class="bar-track"><span class="bar-fill" style="width:${counts[c] / max * 100}%;background:var(--c-${c})"></span></span><span class="bar-n">${counts[c]}</span></div>`).join('');
+      order.map(c => `<div class="bar-row"><span>${L(c)}</span><span class="bar-track"><span class="bar-fill" data-c="${c}" data-w="${(counts[c] / max * 100).toFixed(1)}" style="width:${BAR_REDUCE ? (counts[c] / max * 100).toFixed(1) : (BAR_PREV[c] || 0)}%;background:var(--c-${c})"></span></span><span class="bar-n">${counts[c]}</span></div>`).join('');
+    animateBars(el);
   }
+  // some of the starter notes are shown with a small first letter, as if typed fast on a desktop. The stored text (and so the note's id, colors and reactions) is unchanged
+  function shown(e) { return e.lc ? e.text.charAt(0).toLowerCase() + e.text.slice(1) : e.text; }
   function renderCards() {
     const el = document.getElementById('cards');
     el.innerHTML = entries.map((e, i) => `
       <div class="card${justAdded && i === 0 ? ' drop' : ''} t${hsh(e.text, 1) % 6} p${hsh(e.text, 2) % 3} n${hsh(e.text, 5) % 4}" style="--tilt:${tilt(e.text)}deg;--tx:${(hsh(e.text, 3) % 41) - 20}px;--tw:${64 + (hsh(e.text, 4) % 34)}px" data-cat="${entryCat(e)}" data-words="${canonWords(e.source).join(' ')}">
-        <p class="quote">"${escapeHtml(e.text)}"</p>
+        <p class="quote">"${escapeHtml(shown(e))}"</p>
         <div class="card-foot">
           ${e.source ? `<p class="source">source: ${escapeHtml(showSource(e.source))}</p>` : '<span></span>'}
         </div>
@@ -4047,7 +4280,7 @@ body.flipping .hero h1 .iw span, body.flipping .wtyt .iw span, body.flipping .do
         var out = '<svg width="' + w + '" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '" xmlns="http://www.w3.org/2000/svg">';
         links.forEach(function (l) {
           var a = l[0], b = l[1];
-          var sag = Math.min(44, Math.abs(b.x - a.x) * 0.1 + 10);
+          var sag = Math.min(16, Math.abs(b.x - a.x) * 0.03 + 4);
           var d = 'M' + a.x.toFixed(1) + ' ' + a.y.toFixed(1) + ' Q' + ((a.x + b.x) / 2).toFixed(1) + ' ' + (((a.y + b.y) / 2) + sag * 2).toFixed(1) + ' ' + b.x.toFixed(1) + ' ' + b.y.toFixed(1);
           out += '<path d="' + d + '" fill="none" stroke="rgba(3,29,68,0.25)" stroke-width="4.4" stroke-linecap="round" transform="translate(0 2)"/>';
           out += '<path d="' + d + '" fill="none" stroke="#A33B22" stroke-width="3.2" stroke-linecap="round"/>';
@@ -5507,6 +5740,29 @@ function qrMatrix(text){
   })();
 </script>
 <script>
+  // ---- Update 131: pull out tab of sources, same behavior as the definitions tab ----
+  (function () {
+    var rf = document.getElementById('rf'), tab = document.getElementById('rf-tab'), x = document.getElementById('rf-x');
+    if (!rf || !tab) return;
+    function set(open) { rf.classList.toggle('open', open); tab.setAttribute('aria-expanded', open ? 'true' : 'false'); }
+    tab.addEventListener('click', function () { set(!rf.classList.contains('open')); });
+    x.addEventListener('click', function () { set(false); tab.focus(); });
+    document.addEventListener('click', function (e) { if (rf.classList.contains('open') && !rf.contains(e.target)) set(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && rf.classList.contains('open')) { set(false); tab.focus(); } });
+  })();
+</script>
+<script>
+  // ---- Update 134: pause the endless animations while the page is scrolling ----
+  (function () {
+    var root = document.documentElement, t = 0;
+    window.addEventListener('scroll', function () {
+      if (!root.classList.contains('is-scrolling')) root.classList.add('is-scrolling');
+      clearTimeout(t);
+      t = setTimeout(function () { root.classList.remove('is-scrolling'); }, 160);
+    }, { passive: true });
+  })();
+</script>
+<script>
   // ---- Update 114: the per-letter glow repaints text every frame, so letters stop animating while their title or term is off screen ----
   (function () {
     if (!('IntersectionObserver' in window)) return;
@@ -5529,7 +5785,7 @@ function qrMatrix(text){
   // ---- Update 126: small bounce on the two pull out tabs when they are clicked. It listens on the document because the tidy-up tab is written further down the page than this script ----
   (function () {
     document.addEventListener('click', function (e) {
-      var t = e.target.closest && e.target.closest('#gl-tab, .td-tab');
+      var t = e.target.closest && e.target.closest('#gl-tab, #rf-tab, #tdr-tab, .td-tab');
       if (!t) return;
       t.classList.remove('tab-bounce'); void t.offsetWidth; t.classList.add('tab-bounce');
     });
@@ -5661,6 +5917,45 @@ function qrMatrix(text){
       document.dispatchEvent(new CustomEvent('dg-sendhome'));   // sends every moved piece home
     });
     Object.keys(total).forEach(draw); status();
+  })();
+</script>
+<div class="gl tdr" id="tdr"><button class="gl-tab" id="tdr-tab" type="button" aria-expanded="false" aria-controls="tidy">tidy up</button></div>
+<script>
+  // The right edge tabs overlap: each one starts 18px above the bottom of the one before, so they sit on top of each other like stacked index tabs
+  (function () {
+    try {
+      var g = document.getElementById('gl'), t = document.getElementById('gl-tab'), r = document.getElementById('rf'), t2 = document.getElementById('rf-tab');
+      var td = document.getElementById('tdr');
+      if (!g || !t || !r) return;
+      function place() {
+        var h = t.offsetHeight;
+        if (!h) return;
+        var top2 = Math.min(g.getBoundingClientRect().top + h - 18, window.innerHeight - 230);
+        r.style.top = top2 + 'px';
+        if (td && t2 && t2.offsetHeight) td.style.top = Math.min(top2 + t2.offsetHeight - 18, window.innerHeight - 150) + 'px';
+      }
+      window.addEventListener('resize', place);
+      window.addEventListener('load', place);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
+      place();
+    } catch (e) { /* the tabs fall back to their old spacing */ }
+  })();
+  // The right "tidy up" tab opens and closes the same tidy-up game as the left tab, and both tabs show the same state
+  (function () {
+    try {
+      var td = document.getElementById('tdr'), btn = document.getElementById('tdr-tab'), tidy = document.getElementById('tidy');
+      if (!td || !btn || !tidy) return;
+      var left = tidy.querySelector('.td-tab');
+      function sync() {
+        var o = tidy.classList.contains('open');
+        td.classList.toggle('open', o);
+        btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        if (left) left.setAttribute('aria-expanded', o ? 'true' : 'false');
+      }
+      btn.addEventListener('click', function () { tidy.classList.toggle('open'); sync(); });
+      new MutationObserver(sync).observe(tidy, { attributes: true, attributeFilter: ['class'] });
+      sync();
+    } catch (e) { /* the left tab still works */ }
   })();
 </script>
 </body>
