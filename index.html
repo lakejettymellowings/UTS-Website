@@ -2069,7 +2069,7 @@
   .sc-card { position: relative; padding: 20px; background: #FBF7EC; border: 1px solid rgba(3,29,68,.2); border-radius: 3px; box-shadow: 0 6px 14px rgba(3,29,68,.16), 0 1px 2px rgba(3,29,68,.2); }
   .sc-qrcard { text-align: center; rotate: -0.8deg; }
   .sc-card .dear { font-family: "Caveat", cursive; font-weight: 700; font-size: 30px; line-height: 1.1; margin: 0 0 6px; color: #20472F; }
-  .sc-qr { width: 100%; max-width: 210px; margin: 0 auto 10px; aspect-ratio: 1; background: #fff; display: grid; place-items: center; font: 400 14px/1.4 "Special Elite", "Courier New", monospace; color: #444; text-align: center; }
+  .sc-qr { width: 100%; max-width: 210px; margin: 0 auto 10px; aspect-ratio: 1; background: transparent; border-radius: 6px; filter: drop-shadow(0 2px 3px rgba(3,29,68,.22)); display: grid; place-items: center; font: 400 14px/1.4 "Special Elite", "Courier New", monospace; color: #444; text-align: center; }
   .sc-qr svg { display: block; width: 100%; height: auto; }
   .sc-qr:empty::after, .sc-qr.sc-none { content: "The QR code appears once this page is online."; padding: 14px; border: 2px dashed rgba(3,29,68,.35); }
   .sc-url { margin: 0 0 12px; font: 400 12px/1.3 "Special Elite", "Courier New", monospace; overflow-wrap: anywhere; color: var(--ink-soft); }
@@ -2096,45 +2096,77 @@
     html.printing body > *:not(#poster-print) { display: none !important; }
     html.printing #poster-print, html.printing #poster-print * { -webkit-print-color-adjust: exact; print-color-adjust: exact; box-sizing: border-box; }
     html.printing #poster-print {
-      display: block !important; position: relative; width: 210mm; height: 296mm; overflow: hidden; margin: 0; padding: 22mm 16mm 14mm 40mm;
+      display: block !important; position: relative; width: 210mm; height: 296mm; overflow: hidden; margin: 0; padding: 0;
       page-break-inside: avoid; break-inside: avoid; page-break-after: avoid; break-after: avoid;
       color: #031D44; font-family: "DM Sans", Arial, sans-serif; text-align: left;
-      background:
-        repeating-linear-gradient(to bottom, transparent 0, transparent 7.7mm, rgba(4, 57, 94, 0.3) 7.7mm, rgba(4, 57, 94, 0.3) 8mm),
-        #DAB785;
-      background-position: 0 6mm, 0 0;
+      background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .38 0 0 0 0 .24 0 0 0 0 .08 0 0 0 .2 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"), radial-gradient(ellipse at 50% 45%, #E8CE9F 0, #DAB785 55%, #C49F66 100%);
     }
-    /* notebook furniture: punched holes and the red margin rule */
-    #poster-print .pp-holes { position: absolute; left: 7mm; top: 0; bottom: 0; width: 7mm; background: radial-gradient(circle at 50% 50%, rgba(3, 29, 68, 0.78) 0 2.4mm, rgba(3, 29, 68, 0.18) 2.4mm 2.9mm, transparent 3mm); background-size: 7mm 32mm; background-position: 0 14mm; }
-    #poster-print .pp-margin { position: absolute; left: 28mm; top: 0; bottom: 0; width: 1.1mm; border-left: 0.35mm solid rgba(143, 45, 24, 0.6); border-right: 0.35mm solid rgba(143, 45, 24, 0.6); }
-    #poster-print .pp-ring { position: absolute; right: -14mm; bottom: 26mm; width: 52mm; height: 52mm; border-radius: 50%; border: 1.6mm solid rgba(110, 62, 24, 0.2); box-shadow: inset 0 0 0 0.8mm rgba(110, 62, 24, 0.1), 0 0 0 0.6mm rgba(110, 62, 24, 0.07); transform: rotate(18deg); }
-    #poster-print .pp-ring::after { content: ""; position: absolute; inset: 3mm; border-radius: 50%; border: 0.5mm solid rgba(110, 62, 24, 0.12); border-left-color: transparent; }
-    #poster-print .pp-kicker { font: 700 22pt/1 "Caveat", cursive; color: #8F2D18; transform: rotate(-2deg); transform-origin: left; margin: 0 0 3mm; }
-    #poster-print h1 { font: 800 76pt/0.98 "Plus Jakarta Sans", Arial, sans-serif; letter-spacing: -0.025em; color: #031D44; margin: 0 0 9mm; }
+    #poster-print > * { position: absolute; margin: 0; }
+    /* the torn notebook sheet on the desk */
+    #poster-print .pp-wrap { left: 8mm; top: 8mm; width: 194mm; height: 280mm; filter: drop-shadow(0 0.8mm 1mm rgba(3, 29, 68, 0.3)) drop-shadow(0 3mm 6mm rgba(3, 29, 68, 0.24)); }
+    #poster-print .pp-sheet { position: absolute; inset: 0; background:
+      radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0) 55%, rgba(150, 110, 60, 0.2) 100%),
+      repeating-linear-gradient(to bottom, transparent 0, transparent 7.6mm, rgba(4, 57, 94, 0.17) 7.6mm, rgba(4, 57, 94, 0.17) 8mm) 0 5mm,
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .38 0 0 0 0 .24 0 0 0 0 .08 0 0 0 .2 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"),
+      #F7ECD3; }
+    #poster-print .pp-hole { width: 7mm; height: 7mm; border-radius: 50%; left: 15.5mm; background: radial-gradient(circle at 50% 40%, #B48C56 0, #C9A46C 60%, #D6B27B 100%); border: 0.3mm solid rgba(60, 40, 20, 0.35); box-shadow: inset 0 0.7mm 0.9mm rgba(60, 40, 20, 0.45), 0 0.2mm 0 rgba(255, 255, 255, 0.5); }
+    #poster-print .pp-margin { left: 40mm; top: 8mm; height: 280mm; width: 1.1mm; border-left: 0.35mm solid rgba(143, 45, 24, 0.6); border-right: 0.35mm solid rgba(143, 45, 24, 0.6); }
+    #poster-print .pp-ring { left: 42mm; top: 238mm; width: 38mm; height: 38mm; border-radius: 50%; border: 1.5mm solid rgba(110, 62, 24, 0.17); box-shadow: inset 0 0 0 0.8mm rgba(110, 62, 24, 0.09); transform: rotate(18deg); }
+    #poster-print .pp-ring::after { content: ""; position: absolute; inset: 2.6mm; border-radius: 50%; border: 0.5mm solid rgba(110, 62, 24, 0.12); border-left-color: transparent; }
+    #poster-print .pp-dd { width: 10mm; height: 10mm; }
+    #poster-print .pp-dd svg { width: 100%; height: 100%; display: block; overflow: visible; fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+    /* title */
+    #poster-print .pp-kicker { left: 46mm; top: 17mm; font: 700 20pt/1 "Caveat", "Segoe Print", "Comic Sans MS", cursive; color: #8F2D18; transform: rotate(-2deg); transform-origin: left; white-space: nowrap; }
+    #poster-print h1 { left: 46mm; top: 25mm; font: 800 64pt/0.98 "Plus Jakarta Sans", Arial, sans-serif; letter-spacing: -0.025em; color: #031D44; white-space: nowrap; }
     #poster-print .pp-that { position: relative; display: inline-block; white-space: nowrap; }
     #poster-print .pp-that svg { position: absolute; left: -7mm; right: -9mm; top: -5mm; bottom: -5mm; width: calc(100% + 16mm); height: calc(100% + 10mm); overflow: visible; }
     #poster-print .pp-that path { fill: none; stroke: #8F2D18; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; stroke-width: 1.5mm; }
-    #poster-print .pp-sub { font: 400 15pt/1.45 "DM Sans", Arial, sans-serif; color: #04395E; max-width: 128mm; margin: 0 0 8mm; }
+    #poster-print .pp-sub { left: 46mm; top: 75mm; width: 136mm; font: 400 14pt/1.45 "DM Sans", Arial, sans-serif; color: #04395E; }
     #poster-print .pp-sub mark { background: linear-gradient(transparent 52%, #C9DEB9 52%, #C9DEB9 92%, transparent 92%); color: inherit; padding: 0 1mm; }
-    #poster-print .pp-rw { margin: 0 0 9mm; display: grid; gap: 3mm; }
-    #poster-print .pp-row { display: flex; align-items: baseline; gap: 6mm; flex-wrap: wrap; }
-    #poster-print .pp-old { position: relative; font: 400 13pt/1.3 "DM Sans", Arial, sans-serif; color: #04395E; }
-    #poster-print .pp-old::after { content: ""; position: absolute; left: -1mm; right: -1mm; top: 52%; height: 0.6mm; background: #8F2D18; transform: rotate(-1.5deg); transform-origin: left; }
-    #poster-print .pp-new { font: 700 20pt/1.1 "Caveat", cursive; color: #2F5E47; transform: rotate(-1deg); }
-    #poster-print .pp-scan { display: flex; align-items: flex-end; gap: 3mm; margin: 0 0 1mm 8mm; }
-    #poster-print .pp-scan span { font: 700 25pt/1 "Caveat", cursive; color: #8F2D18; transform: rotate(-3deg); }
-    #poster-print .pp-scan svg { width: 15mm; height: 14mm; fill: none; stroke: #8F2D18; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; margin-bottom: -4mm; }
-    #poster-print .pp-card { position: relative; width: 98mm; margin: 4mm 0 0 14mm; padding: 8mm 8mm 6mm; background: #F2E4C8; background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 6.6mm, rgba(3, 29, 68, 0.1) 6.6mm, rgba(3, 29, 68, 0.1) 7mm); box-shadow: 0 0.6mm 0.8mm rgba(3, 29, 68, 0.28), 0 3mm 5mm rgba(3, 29, 68, 0.22); transform: rotate(-1.4deg); text-align: center; }
-    #poster-print .pp-card::before, #poster-print .pp-card::after { content: ""; position: absolute; top: -4.5mm; width: 26mm; height: 9mm; background: repeating-linear-gradient(135deg, rgba(235, 210, 122, 0.92) 0 2mm, rgba(240, 220, 142, 0.92) 2mm 4mm); box-shadow: 0 0.3mm 0.6mm rgba(3, 29, 68, 0.2); }
-    #poster-print .pp-card::before { left: -7mm; transform: rotate(-38deg); }
-    #poster-print .pp-card::after { right: -7mm; transform: rotate(36deg); }
-    #poster-print .pp-qr { width: 78mm; height: 78mm; margin: 0 auto 4mm; background: #fff; border: 0.5mm solid rgba(3, 29, 68, 0.35); display: grid; place-items: center; }
-    #poster-print .pp-qr svg { width: 100%; height: 100%; display: block; }
-    #poster-print .pp-qr.pp-none { font: 400 12pt/1.4 "Special Elite", "Courier New", monospace; padding: 8mm; border: 0.6mm dashed rgba(3, 29, 68, 0.4); color: #444; }
-    #poster-print .pp-url { font: 400 10.5pt/1.3 "Special Elite", "Courier New", monospace; color: #031D44; overflow-wrap: anywhere; }
-    #poster-print .pp-foot { position: absolute; left: 40mm; right: 16mm; bottom: 14mm; display: flex; justify-content: flex-end; }
-    #poster-print .pp-foot span { font: 700 21pt/1.1 "Caveat", cursive; color: #031D44; transform: rotate(-2deg); text-align: right; }
+    #poster-print .pp-mag { left: 160mm; top: 24mm; width: 30mm; height: 30mm; transform: rotate(10deg); filter: drop-shadow(0 0.6mm 0.8mm rgba(3, 29, 68, 0.3)); }
+    #poster-print .pp-mag svg { width: 100%; height: 100%; display: block; overflow: visible; }
+    /* red pen out */
+    #poster-print .pp-stack { left: 46mm; top: 94mm; width: 132mm; z-index: 2; display: flex; flex-direction: column; }
+    #poster-print .pp-red { position: relative; margin-left: 4mm; width: 122mm; padding: 0 0 5mm; background: #FFFDF5 repeating-linear-gradient(to bottom, transparent 0, transparent 8.6mm, rgba(4, 57, 94, 0.14) 8.6mm, rgba(4, 57, 94, 0.14) 9mm) 0 3mm; box-shadow: 0 0.5mm 0.7mm rgba(3, 29, 68, 0.28), 0 2.6mm 4.5mm rgba(3, 29, 68, 0.2); transform: rotate(1.1deg); }
+    #poster-print .pp-bar { position: relative; height: 12mm; border-bottom: 0.5mm solid rgba(143, 45, 24, 0.6); background: #FFFDF5; }
+    #poster-print .pp-bar > span { position: absolute; left: 6mm; top: 2.4mm; font: 600 20pt/1 "Caveat", "Segoe Print", "Comic Sans MS", cursive; color: #8F2D18; white-space: nowrap; }
+    #poster-print .pp-stamp { position: absolute; right: 6mm; top: 2.6mm; padding: 1mm 2.6mm; font: 400 9.5pt/1 "Special Elite", "Courier New", monospace; letter-spacing: 0.14em; color: #B5342B; border: 0.5mm solid #B5342B; box-shadow: 0 0 0 0.5mm #FFFDF5, 0 0 0 0.9mm rgba(181, 52, 43, 0.85); transform: rotate(-5deg); opacity: 0.88; white-space: nowrap; }
+    #poster-print .pp-old { margin: 0; padding: 3.4mm 6mm 0; font: 700 22pt/1.15 "Caveat", "Segoe Print", "Comic Sans MS", cursive; color: #031D44; text-decoration: line-through; text-decoration-color: #8F2D18; text-decoration-thickness: 1mm; }
+    #poster-print .pp-red::before { content: ""; position: absolute; right: 9mm; top: -4mm; width: 28mm; height: 8.5mm; transform: rotate(6deg); background: repeating-linear-gradient(135deg, rgba(235, 210, 122, 0.92) 0 2mm, rgba(240, 220, 142, 0.92) 2mm 4mm); box-shadow: 0 0.3mm 0.6mm rgba(3, 29, 68, 0.2); }
+    #poster-print .pp-say { position: relative; margin: 2.5mm 0 2mm 12mm; display: flex; align-items: flex-end; gap: 2mm; }
+    #poster-print .pp-say svg { width: 16mm; height: 15mm; fill: none; stroke: #04395E; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+    #poster-print .pp-say span { font: 600 19pt/1 "Caveat", "Segoe Print", "Comic Sans MS", cursive; color: #04395E; transform: rotate(-2deg); margin-bottom: 1mm; white-space: nowrap; }
+    /* green pen in */
+    #poster-print .pp-green { position: relative; width: 126mm; padding: 0 0 6mm; background-color: #DCE8CF; background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 4.2mm, rgba(47, 94, 71, 0.15) 4.2mm, rgba(47, 94, 71, 0.15) 4.5mm), repeating-linear-gradient(to right, transparent 0, transparent 4.2mm, rgba(47, 94, 71, 0.15) 4.2mm, rgba(47, 94, 71, 0.15) 4.5mm); box-shadow: 0 0.5mm 0.7mm rgba(3, 29, 68, 0.28), 0 2.6mm 4.5mm rgba(3, 29, 68, 0.2); transform: rotate(-0.9deg); }
+    #poster-print .pp-green .pp-bar { border-bottom-color: rgba(47, 94, 71, 0.65); background: #DCE8CF; }
+    #poster-print .pp-green .pp-bar > span { color: #2F5E47; }
+    #poster-print .pp-sp { position: absolute; top: 2.6mm; width: 6mm; height: 6mm; overflow: visible; fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+    #poster-print .pp-new { margin: 0; padding: 4.6mm 6mm 0; font: 700 27pt/1.2 "Caveat", "Segoe Print", "Comic Sans MS", cursive; color: #20472F; }
+    #poster-print .pp-new span { background: linear-gradient(transparent 14%, rgba(235, 210, 122, 0.68) 14%, rgba(235, 210, 122, 0.68) 90%, transparent 90%); padding: 0 2mm; margin-left: -2mm; text-decoration: underline; text-decoration-color: #2F5E47; text-decoration-thickness: 0.55mm; text-underline-offset: 1.3mm; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+    #poster-print .pp-green::before { content: ""; position: absolute; left: 12mm; top: -4mm; width: 30mm; height: 8.5mm; transform: rotate(-4deg); background: repeating-linear-gradient(135deg, #CFE0C8 0 2mm, #F4F0E4 2mm 4mm); border: 0.2mm solid rgba(3, 29, 68, 0.14); box-shadow: 0 0.3mm 0.6mm rgba(3, 29, 68, 0.2); }
+    #poster-print .pp-sticker { position: absolute; right: -6mm; bottom: -7mm; width: 16mm; height: 16mm; border-radius: 50%; display: grid; place-items: center; background: #F4F0E4; border: 0.6mm dashed #2F5E47; color: #2F5E47; font: 700 14pt/1 "Caveat", "Segoe Print", "Comic Sans MS", cursive; transform: rotate(14deg); box-shadow: 0 0.4mm 0.7mm rgba(3, 29, 68, 0.3); }
+    /* scan it */
+    #poster-print .pp-cut { left: 46mm; top: 199mm; white-space: nowrap; }
+    #poster-print .pp-cut span { display: inline-block; padding: 1mm 2.2mm 0.6mm; margin-right: 0.8mm; font-size: 19pt; line-height: 1.1; box-shadow: 0 0.3mm 0.7mm rgba(3, 29, 68, 0.3); }
+    #poster-print .pp-cut span:nth-child(1) { background: #031D44; color: #F2E4C8; font: italic 700 20pt/1.1 Georgia, serif; transform: rotate(-5deg); }
+    #poster-print .pp-cut span:nth-child(2) { background: #FFFBEF; color: #031D44; font: 800 17pt/1.1 Verdana, sans-serif; transform: rotate(4deg) translateY(0.5mm); }
+    #poster-print .pp-cut span:nth-child(3) { background: #8F2D18; color: #F2E4C8; font: 700 19pt/1.1 "Courier New", monospace; transform: rotate(-3deg); }
+    #poster-print .pp-cut span:nth-child(4) { background: #2F5E47; color: #F2E4C8; font: 700 21pt/1.1 Georgia, serif; transform: rotate(-4deg); margin-right: 3mm; }
+    #poster-print .pp-cut span:nth-child(5) { background: #C7DCE8; color: #031D44; font: 600 19pt/1.1 "Outfit", Arial, sans-serif; transform: rotate(3deg); }
+    #poster-print .pp-cut span:nth-child(6) { background: #EBD27A; color: #031D44; font: 700 20pt/1.1 Georgia, serif; transform: rotate(-3deg); }
+    #poster-print .pp-anon { left: 48mm; top: 218mm; font: 700 24pt/1 "Caveat", "Segoe Print", "Comic Sans MS", cursive; color: #8F2D18; transform: rotate(-3deg); transform-origin: left; white-space: nowrap; }
+    #poster-print .pp-arr { left: 72mm; top: 228mm; width: 38mm; height: 24mm; fill: none; stroke: #8F2D18; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; overflow: visible; }
+    #poster-print .pp-foot { left: 48mm; top: 252mm; font: 700 19pt/1.1 "Caveat", "Segoe Print", "Comic Sans MS", cursive; color: #031D44; transform: rotate(-2deg); transform-origin: left; white-space: nowrap; }
     #poster-print .pp-foot b { color: #8F2D18; font-weight: 700; }
+    /* the QR card */
+    #poster-print .pp-qrcard { left: 116mm; top: 194mm; width: 80mm; padding: 6mm 7mm 4.5mm; background: #F2E4C8 repeating-linear-gradient(to bottom, transparent 0, transparent 6.6mm, rgba(3, 29, 68, 0.1) 6.6mm, rgba(3, 29, 68, 0.1) 7mm); box-shadow: 0 0.6mm 0.8mm rgba(3, 29, 68, 0.28), 0 3mm 5mm rgba(3, 29, 68, 0.22); transform: rotate(-1.2deg); text-align: center; }
+    #poster-print .pp-qrcard::before, #poster-print .pp-qrcard::after { content: ""; position: absolute; top: -4.5mm; width: 26mm; height: 9mm; background: repeating-linear-gradient(135deg, rgba(235, 210, 122, 0.92) 0 2mm, rgba(240, 220, 142, 0.92) 2mm 4mm); box-shadow: 0 0.3mm 0.6mm rgba(3, 29, 68, 0.2); }
+    #poster-print .pp-qrcard::before { left: -7mm; transform: rotate(-38deg); }
+    #poster-print .pp-qrcard::after { right: -7mm; transform: rotate(36deg); }
+    #poster-print .pp-qr { position: relative; width: 66mm; height: 66mm; margin: 0 auto 3mm; display: grid; place-items: center; filter: drop-shadow(0 0.4mm 0.6mm rgba(3, 29, 68, 0.25)); }
+    #poster-print .pp-qr svg { width: 100%; height: 100%; display: block; }
+    #poster-print .pp-qr.pp-none { font: 400 12pt/1.4 "Special Elite", "Courier New", monospace; padding: 8mm; border: 0.6mm dashed rgba(3, 29, 68, 0.4); color: #444; background: #FFFBEF; }
+    #poster-print .pp-url { font: 400 8.5pt/1.3 "Special Elite", "Courier New", monospace; color: #031D44; overflow-wrap: anywhere; }
   }
 </style>
 <style>
@@ -2284,41 +2316,13 @@
 
   /* Rubber stamp tool. A small dock at the bottom left, a layer of stamps on the page */
   .sd-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
-  .stamp-layer { position: absolute; left: 0; top: 0; width: 100%; height: 0; z-index: 90; pointer-events: none; }
-  .rst { --s: #A3301A; --sd: #F0A08C; position: absolute; display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 6px 14px 5px; width: max-content; text-transform: uppercase;
-    border: 3px solid var(--s); border-radius: 5px; color: var(--s); opacity: var(--o, 0.85); mix-blend-mode: multiply; translate: -50% -50%; rotate: var(--r, 0deg); pointer-events: none;
-    animation: rstThump .26s cubic-bezier(.2, .8, .3, 1) both; }
-  .rst.k1 { --s: #1F4E79; --sd: #8FB8E0; }
-  .rst.k2 { --s: #5B3E8A; --sd: #C9B0EA; }
-  .rst.k3 { --s: #2F6B4A; --sd: #8FD0A8; }
-  .rst.on-dark { mix-blend-mode: normal; border-color: var(--sd); color: var(--sd); }
-  .rst::before { content: ""; position: absolute; inset: 3px; border: 1.4px solid var(--s); border-radius: 3px; }
-  .rst.on-dark::before { border-color: var(--sd); }
-  .rst b { position: relative; font: 800 22px/1.1 "Plus Jakarta Sans", "DM Sans", sans-serif; letter-spacing: 0.08em; }
-  .rst i { position: relative; font: 400 10.5px/1.2 "Special Elite", "Courier New", monospace; font-style: normal; letter-spacing: 0.16em; }
-  @media (min-width: 701px) and (hover: hover) { .rst { filter: url(#stamp-ink); } }
-  @keyframes rstThump {
-    0%   { scale: 1.6; opacity: 0; }
-    55%  { scale: 0.94; opacity: var(--o, 0.85); }
-    100% { scale: 1; opacity: var(--o, 0.85); }
-  }
 
-  body.stamping { -webkit-user-select: none; user-select: none;
-    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Crect x='9' y='23' width='14' height='6' rx='1.5' fill='%231B2F66'/%3E%3Crect x='13' y='14' width='6' height='10' fill='%23C9462E'/%3E%3Crect x='11' y='5' width='10' height='10' rx='4' fill='%231B2F66'/%3E%3C/svg%3E") 16 29, crosshair; }
-  body.stamping input, body.stamping textarea { -webkit-user-select: text; user-select: text; }
-  body.stamping .scrap:not(.polaroid) { pointer-events: none; }
-  body.splash-lock.stamping { cursor: auto; }
-
-  .stamp-dock { position: fixed; z-index: 110; left: calc(16px + env(safe-area-inset-left, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-    display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
-  body.splash-lock .stamp-dock { display: none; }
   .sd-toggle { display: inline-flex; align-items: center; gap: 7px; padding: 5px 14px 6px 10px; font: 700 21px/1.1 "Caveat", cursive; color: #1B2F66; background: #FBF6E3;
     border: 2px dashed rgba(27, 47, 102, 0.55); border-radius: 6px; rotate: -2deg; cursor: pointer; box-shadow: 0 2px 6px rgba(3, 29, 68, 0.2); }
   .sd-toggle[aria-pressed="true"] { background: #F3E3A8; border-style: solid; rotate: -1deg; }
   .sd-toggle:hover { rotate: -1deg; }
   .sd-toggle:focus-visible, .sd-pick:focus-visible, .sd-clear:focus-visible { outline: 2px solid #1B2F66; outline-offset: 2px; }
   .sd-tray { display: none; flex-direction: column; align-items: stretch; gap: 7px; padding: 10px 10px 8px; background: #FBF6E3; border: 2px dashed rgba(27, 47, 102, 0.55); border-radius: 6px; box-shadow: 0 4px 12px rgba(3, 29, 68, 0.25); }
-  .stamp-dock.open .sd-tray { display: flex; }
   .sd-hint { margin: 0 0 2px; max-width: 168px; font: 700 17px/1.1 "Caveat", cursive; color: #1B2F66; }
   .sd-pick { --s: #A3301A; padding: 4px 10px; font: 800 12px/1.2 "Plus Jakarta Sans", "DM Sans", sans-serif; letter-spacing: 0.08em; text-transform: uppercase; text-align: center;
     color: var(--s); background: transparent; border: 2px solid var(--s); border-radius: 4px; cursor: pointer; }
@@ -2327,26 +2331,20 @@
   .sd-clear { padding: 2px 0; font: 700 17px/1 "Caveat", cursive; color: #1B2F66; text-align: left; text-decoration: underline; background: none; border: 0; cursor: pointer; }
   @media (max-width: 560px) {
     .sd-toggle { font-size: 19px; padding: 4px 11px 5px 8px; }
-    .rst b { font-size: 18px; } .rst i { font-size: 9px; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .rst { animation: none; }
     .scrap.cl-pol.pol-flip { animation: none; }
     .scrap.cl-pol.pol-back, .scrap.cl-pol.pol-back:hover, .scrap.cl-pol.pol-back.dg-on { transition: none; scale: 1.3; }
   }
-  @media print { .stamp-dock, .stamp-layer { display: none !important; } }
 </style>
 <style>
   /* ---------- Update 89. Pens, pencils and tapes as trinkets, and the stamp button becomes a real stamp pad ---------- */
 
   /* Fix for Update 88: the first two stamps had their colors swapped. Not a cure is blue and Unverified is red, like the stamps on the sheets */
-  .rst { --s: #1F4E79; --sd: #8FB8E0; }
-  .rst.k1 { --s: #A3301A; --sd: #F0A08C; }
   .sd-pick { --s: #1F4E79; }
   .sd-pick.k1 { --s: #A3301A; }
 
   /* The stamp pad. Closed it is a black case with a label and a red latch. Pressed, the lid lifts and the pad inside takes the color of the chosen stamp */
-  .stamp-dock { --pad: #1F4E79; }
   .sd-toggle, .sd-toggle[aria-pressed="true"] { display: block; padding: 0; line-height: 0; background: none; border: 0; border-radius: 0; box-shadow: none; transform-origin: 0 100%; }
   .sd-toggle { rotate: -2deg; }
   .sd-toggle[aria-pressed="true"] { rotate: -1deg; }
@@ -2365,27 +2363,6 @@
     .sd-toggle[aria-pressed="true"] .pad-open { animation: none; }
     .sd-toggle:hover, .sd-toggle:active { translate: none; }
   }
-</style>
-<style>
-  /* ---------- Update 91. The desk pile is bigger and sits in the same corner as the stamp pad ---------- */
-  /* wide screens only (1180px and up). It is drawn in a 280 by 250 box and scaled up with the screen so it always fits in the left margin (the sheets are 760px wide) */
-  .desk-pile { display: none; }
-  @media (min-width: 1180px) {
-    .desk-pile { display: block; position: fixed; z-index: 105; width: 280px; height: 250px; pointer-events: none; transform-origin: 0 100%; scale: 0.78;
-      left: calc(6px + env(safe-area-inset-left, 0px)); bottom: calc(6px + env(safe-area-inset-bottom, 0px)); }
-  }
-  @media (min-width: 1300px) { .desk-pile { scale: 0.92; } }
-  @media (min-width: 1440px) { .desk-pile { scale: 1.08; } }
-  body.splash-lock .desk-pile { display: none; }
-  .desk-pile .dp { position: absolute; display: block; rotate: var(--r, 0deg); }
-  .desk-pile .dp svg { display: block; width: 100%; height: 100%; overflow: visible; }
-  .dp-pencil { width: 228px; height: 34px; }
-  .dp-mech { width: 213px; height: 30px; }
-  .dp-pen { width: 217px; height: 30px; }
-  .dp-fount { width: 217px; height: 34px; }
-  .dp-corr { width: 176px; height: 88px; }
-  .dp-scotch { width: 136px; height: 110px; }
-  @media print { .desk-pile { display: none !important; } }
 </style>
 <style>
   /* Update 92: ransom note letters on the rewrite card */
@@ -2434,10 +2411,6 @@
   @media (min-width: 880px) { .rw-out.rwm-open .rwm { grid-template-columns: minmax(0, 380px) minmax(0, 1fr); } .rw-out.rwm-open .rw-row { grid-column: 1 / -1; } }
   .rl-sheet { padding: 14px 12px 10px; background-color: #FFFDF6; background-image: repeating-linear-gradient(0deg, transparent 0 23px, rgba(4, 57, 94, 0.07) 23px 24px); border-radius: 3px; box-shadow: 0 6px 14px rgba(3, 29, 68, 0.22), inset 0 0 0 1px rgba(3, 29, 68, 0.1); rotate: -0.8deg; }
   .rls-key { touch-action: none; cursor: grab; }
-  .rl-size { display: flex; align-items: center; gap: 10px; margin-top: 12px; font: 600 14px "Outfit", sans-serif; color: #20472F; }
-  .rl-size input { flex: 1; min-width: 0; accent-color: #2F5E47; }
-  .rl-size input:disabled { opacity: 0.4; }
-  .rl-size input:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
   @media print { .rw-out.rwm-open { position: static; background: none; } }
 </style>
 <style>
@@ -2480,7 +2453,6 @@
 </style>
 <style>
   /* Update 97: stamps and the pile leave the page, trinkets scatter in the margins at a bigger size */
-  .stamp-dock, .desk-pile { display: none !important; }
   .tk-pencil { width: 300px; height: 46px; }
   .tk-mech { width: 270px; height: 39px; }
   .tk-pen { width: 270px; height: 38px; }
@@ -2965,7 +2937,7 @@ body.flipping .hero h1 .iw span, body.flipping .wtyt .iw span, body.flipping .do
   .news b { font-size: 14px; }
   .scrap.ticket { font-size: 13px; }
   .libcard b { font-size: 10px; }
-  .rstamp i, .rst i { font-size: 11px; }
+  .rstamp i { font-size: 11px; }
   .nb-label .nb-stamp b { font-size: 11px; }
   @media (max-width: 559px) { .rl { font-size: 0.8em; } }
 </style>
@@ -3123,11 +3095,70 @@ body.flipping .hero h1 .iw span, body.flipping .wtyt .iw span, body.flipping .do
   /* ---------- Update 168. Right edge tabs never block each other ---------- */
   .gl { pointer-events: none; }
   .gl-tab, .gl-panel { pointer-events: auto; }
+  /* phones: the three icon tabs sit at an even 76px step (44px tab plus its ribbon), so the gaps match */
+  @media (max-width: 700px) {
+    #gl.gl { top: 96px; }
+    #rf.gl { top: 172px !important; }
+    #pl.gl { top: 248px !important; }
+  }
   @media (min-width: 701px) {
     html.tabs-s .gl-tab { font-size: 19px; padding: 13px 0 15px; }
     html.tabs-xs .gl-tab { font-size: 16px; padding: 10px 0 12px; }
     html.tabs-s .gl-tab::after, html.tabs-xs .gl-tab::after { height: 30px; }
   }
+</style>
+<style>
+  /* ---------- Update 173. Corkboard on phones: compact, not stretched. Delete this block to go back. ---------- */
+  /* the big cork glows were ellipses sized by the block, so on a tall narrow phone block they stretched into long streaks. On phones they are fixed size circles, and the block, cloud, label and chart card are tighter */
+  @media (max-width: 700px) {
+    .cloud-block {
+      border-width: 8px; border-radius: 6px; padding: 14px 10px 16px; margin-bottom: 22px;
+      background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='a' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.035' numOctaves='3' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .36 0 0 0 0 .21 0 0 0 0 .08 2.2 0 0 0 -.95'/%3E%3C/filter%3E%3Cfilter id='b' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .24 0 0 0 0 .12 0 0 0 0 .04 2 0 0 0 -.8'/%3E%3C/filter%3E%3Cfilter id='c' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='2' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .98 0 0 0 0 .86 0 0 0 0 .64 -2 0 0 0 .95'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23a)'/%3E%3Crect width='240' height='240' filter='url(%23b)'/%3E%3Crect width='240' height='240' filter='url(%23c)' opacity='.6'/%3E%3C/svg%3E") 0 0 / 240px 240px,
+        radial-gradient(circle 170px at 18% 10%, rgba(255, 236, 196, 0.32), transparent),
+        radial-gradient(circle 210px at 88% 96%, rgba(70, 38, 12, 0.24), transparent),
+        linear-gradient(var(--cork), var(--cork)),
+        linear-gradient(180deg, rgba(255, 230, 180, 0.2), transparent 30px, transparent calc(100% - 40px), rgba(0, 0, 0, 0.16)),
+        repeating-linear-gradient(90deg, rgba(60, 30, 8, 0.2) 0 1px, transparent 1px 6px, rgba(255, 220, 160, 0.1) 6px 7px, transparent 7px 13px),
+        #8A5A2C;
+      background-origin: border-box;
+      background-clip: padding-box, padding-box, padding-box, padding-box, border-box, border-box, border-box;
+    }
+    .cloud-block .cloud-label { font-size: 14px; line-height: 20px; margin: 2px 0 12px; padding: 6px 12px 5px 30px; background-image: linear-gradient(90deg, transparent 0 22px, color-mix(in srgb, var(--red) 55%, transparent) 22px 23px, transparent 23px), repeating-linear-gradient(transparent 0 19px, color-mix(in srgb, var(--paper-line) 70%, transparent) 19px 20px); background-position: 0 0, 0 5px; }
+    .cloud-block .cloud.flow { min-height: 0; gap: 7px 6px; padding: 2px 0 4px; align-content: flex-start; }
+    .cloud-block .cloud-word { padding: 0.08em 0.26em 0.12em; }
+    .cloud-block .cloud-empty-wrap { height: auto; min-height: 90px; }
+    .cloud-block .stats { margin-top: 16px; padding: 14px 12px 6px; background-size: 72px 72px, 72px 72px, 18px 18px, 18px 18px; }
+    .cloud-block .bar-row { grid-template-columns: 84px 1fr 26px; gap: 8px; font-size: 14px; }
+  }
+</style>
+<style>
+  /* ---------- Update 174. Ticket text no longer runs into itself, and the envelope note stays off the ENOUGH letters on phones. Delete this block to go back. ---------- */
+  /* Update 148 raised the ticket text from 11px to 13px, but the two text boxes stayed 56px and 70px wide, so "ADMIT ONE" and "(1) MISTAKE" grew past their boxes and ran into each other. The ticket is 190px wide with the tear line at 88px: the left box now spans 5 to 81px and the right one 89 to 185px, and the text is 10px so each line fits its box */
+  .scrap.ticket { font-size: 10px; letter-spacing: 0.08em; gap: 8px; }
+  .ticket b { flex: 0 0 76px; width: 76px; }
+  .ticket em { flex: 0 0 96px; width: 96px; }
+  /* phones: the "tucked in. see you later." note sat over the cut-out ENOUGH letters (known since Update 71). It is narrower and wraps to three lines, so it ends before the letters start */
+  @media (max-width: 700px) {
+    .env .env-tag { width: 100px; font-size: 21px; line-height: 0.95; }
+  }
+  /* very narrow phones: the two ends of the leaning line keep clear of each other */
+  @media (max-width: 380px) { .lean-end { font-size: 19px; } }
+</style>
+<style>
+  /* ---------- Update 175. Wall pile on phones is held by one binder clip, not tape and pins. Delete this block to go back. ---------- */
+  /* on phones the notes are a pile, so each note's own tape, pin or corner strips (its ::before and ::after) are hidden and one black binder clip holds the whole pile at the top. The clip belongs to the pile (.cards), so it stays put when a note is flicked away. Wide screens (above 700px) keep the pinboard with tape, pins and yarn as before */
+  @media (max-width: 700px) {
+    .cards { margin-top: 14px; }
+    .cards .card::before, .cards .card::after { display: none; }
+    .cards::after {
+      content: ""; position: absolute; top: -8px; right: 16%; width: 54px; height: 52px; z-index: 20; pointer-events: none;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 58'%3E%3Cpath d='M17 31 H47 L57 57 H7 Z' fill='%23000' opacity='.16'/%3E%3Cpath d='M17 28 C 6 16, 8 3, 21 3' fill='none' stroke='%23AAB3BD' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M43 28 C 54 16, 52 3, 39 3' fill='none' stroke='%23AAB3BD' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M15 24 H45 L55 54 H5 Z' fill='%231F2630'/%3E%3Cpath d='M18 28 L11 50' fill='none' stroke='%23ffffff' stroke-opacity='.28' stroke-width='2' stroke-linecap='round'/%3E%3Crect x='5' y='50' width='50' height='5' rx='1.5' fill='%232B3440'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+      rotate: -7deg;
+    }
+    .cards:empty::after { display: none; }
+  }
+  @media (max-width: 380px) { .cards::after { width: 46px; height: 44px; right: 12%; } }
 </style>
 </head>
 <body class="splash-lock">
@@ -3864,15 +3895,6 @@ body.flipping .hero h1 .iw span, body.flipping .wtyt .iw span, body.flipping .do
 <button id="to-top" type="button" aria-label="Scroll back to the top" title="Back to top"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 
 
-<div class="desk-pile" aria-hidden="true">
-  <span class="dp dp-scotch" style="left:118.0px;top:111.0px;--r:-10deg"><svg viewBox="0 0 64 52"><use href="#tk-scotch"/></svg></span>
-  <span class="dp dp-corr" style="left:96.0px;top:156.0px;--r:4deg"><svg viewBox="0 0 80 40"><use href="#tk-corr"/></svg></span>
-  <span class="dp dp-pencil" style="left:36.0px;top:81.0px;--r:-40deg;--tc:#E8B33F"><svg viewBox="0 0 104 16"><use href="#tk-pencil"/></svg></span>
-  <span class="dp dp-pen" style="left:49.5px;top:89.0px;--r:-24deg;--tc:#D8602F"><svg viewBox="0 0 100 14"><use href="#tk-pen"/></svg></span>
-  <span class="dp dp-fount" style="left:37.5px;top:95.0px;--r:-8deg"><svg viewBox="0 0 100 16"><use href="#tk-fount"/></svg></span>
-  <span class="dp dp-pen" style="left:47.5px;top:107.0px;--r:10deg;--tc:#3F7FC4"><svg viewBox="0 0 100 14"><use href="#tk-pen"/></svg></span>
-  <span class="dp dp-mech" style="left:39.5px;top:117.0px;--r:26deg;--tc:#4E9A3C"><svg viewBox="0 0 98 14"><use href="#tk-mech"/></svg></span>
-</div>
 
 <script>
   // ---- Dark / light toggle ----
@@ -4739,12 +4761,37 @@ function qrMatrix(text){
       return qrMatrix;
     })();
     function pageUrl() { return /^https?:$/.test(location.protocol) ? location.href.split('#')[0] : ''; }
+    // Update 171: the QR code is drawn with rounded dots, round-cornered finder eyes and a small magnifying glass (the favicon) in the middle.
+    // The glass hides about 5 percent of the code. Error correction level M repairs up to 15 percent, so it still scans.
+    function magnifier(cx, cy, u) {
+      var lx = cx - 0.08 * u, ly = cy - 0.08 * u, r = 0.24 * u, ex = cx + 0.34 * u, ey = cy + 0.34 * u;
+      var sx = lx + r * 0.7071, sy = ly + r * 0.7071, f = function (v) { return +v.toFixed(3); };
+      return '<line x1="' + f(sx) + '" y1="' + f(sy) + '" x2="' + f(ex) + '" y2="' + f(ey) + '" stroke="#031D44" stroke-width="' + f(0.17 * u) + '" stroke-linecap="round"/>' +
+        '<line x1="' + f(sx) + '" y1="' + f(sy) + '" x2="' + f(ex) + '" y2="' + f(ey) + '" stroke="#8F2D18" stroke-width="' + f(0.085 * u) + '" stroke-linecap="round"/>' +
+        '<circle cx="' + f(lx) + '" cy="' + f(ly) + '" r="' + f(r) + '" fill="#D6E8F2" stroke="#031D44" stroke-width="' + f(0.08 * u) + '"/>' +
+        '<path d="M' + f(lx - 0.59 * r) + ' ' + f(ly - 0.1 * r) + 'A' + f(0.6 * r) + ' ' + f(0.6 * r) + ' 0 0 1 ' + f(lx - 0.205 * r) + ' ' + f(ly - 0.564 * r) + '" fill="none" stroke="#fff" stroke-width="' + f(0.05 * u) + '" stroke-linecap="round"/>';
+    }
+    function rr(x, y, w, h, r) {
+      return 'M' + (x + r) + ' ' + y + 'h' + (w - 2 * r) + 'a' + r + ' ' + r + ' 0 0 1 ' + r + ' ' + r + 'v' + (h - 2 * r) + 'a' + r + ' ' + r + ' 0 0 1 -' + r + ' ' + r + 'h-' + (w - 2 * r) + 'a' + r + ' ' + r + ' 0 0 1 -' + r + ' -' + r + 'v-' + (h - 2 * r) + 'a' + r + ' ' + r + ' 0 0 1 ' + r + ' -' + r + 'z';
+    }
     function qrSvg(url) {
       var m = QR(url); if (!m) return '';
-      var n = m.length, q = 4, d = '';
-      for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) if (m[r][c]) d += 'M' + (c + q) + ' ' + (r + q) + 'h1v1h-1z';
-      var w = n + q * 2;
-      return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + ' ' + w + '" shape-rendering="crispEdges" aria-hidden="true"><rect width="' + w + '" height="' + w + '" fill="#fff"/><path d="' + d + '" fill="#000"/></svg>';
+      var n = m.length, q = 4, w = n + q * 2, INK = '#031D44', RED = '#8F2D18', PAPER = '#FFFBEF';
+      var k = 2 * Math.round((0.2 * n - 1) / 2) + 1;
+      var lo = (n - k) / 2, hi = lo + k, d = '', r, c;
+      for (r = 0; r < n; r++) for (c = 0; c < n; c++) {
+        if (!m[r][c]) continue;
+        if ((r < 8 && c < 8) || (r < 8 && c >= n - 8) || (r >= n - 8 && c < 8)) continue;
+        if (r >= lo && r < hi && c >= lo && c < hi) continue;
+        d += rr(c + q + 0.05, r + q + 0.05, 0.9, 0.9, 0.3);
+      }
+      var eyes = '', e = [[0, 0], [0, n - 7], [n - 7, 0]];
+      e.forEach(function (p) {
+        var x = p[1] + q, y = p[0] + q;
+        eyes += '<path fill-rule="evenodd" fill="' + INK + '" d="' + rr(x, y, 7, 7, 1.2) + rr(x + 1, y + 1, 5, 5, 0.6) + '"/><path fill="' + RED + '" d="' + rr(x + 2, y + 2, 3, 3, 1) + '"/>';
+      });
+      var logo = '<path d="' + rr(lo + q, lo + q, k, k, k * 0.24) + '" fill="' + PAPER + '" stroke="' + INK + '" stroke-opacity="0.85" stroke-width="0.14"/>' + magnifier(n / 2 + q, n / 2 + q, k);
+      return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + ' ' + w + '" aria-hidden="true"><path d="' + rr(0, 0, w, w, 1.6) + '" fill="' + PAPER + '"/><path d="' + d + '" fill="' + INK + '"/>' + eyes + logo + '</svg>';
     }
     function copyText(t) {
       if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(t).then(function () { return true; }, function () { return false; });
@@ -4784,25 +4831,54 @@ function qrMatrix(text){
       var u = pageUrl(), msg = document.getElementById('sc-msg').textContent.trim();
       copyText(u ? msg + ' ' + u : msg).then(function (ok) { say(copyBtn, ok ? (u ? 'Copied.' : 'Message copied. The link is added once the page is online.') : 'Could not copy. Select the text and copy it by hand.'); });
     });
+    // Update 171: the poster is a torn notebook sheet on the desk with the same cards and pens as the rewrite card
+    function tornClip(w, h) {
+      var seed = 7, rnd = function () { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+      var pts = [], st = 5, am = 1, x, y;
+      for (x = 0; x < w; x += st) pts.push([x + (rnd() - 0.5), am * rnd()]);
+      for (y = 0; y < h; y += st) pts.push([w - am * rnd(), y + (rnd() - 0.5)]);
+      for (x = w; x > 0; x -= st) pts.push([x + (rnd() - 0.5), h - am * rnd()]);
+      for (y = h; y > 0; y -= st) pts.push([am * rnd(), y + (rnd() - 0.5)]);
+      return 'polygon(' + pts.map(function (p) { return p[0].toFixed(1) + 'mm ' + p[1].toFixed(1) + 'mm'; }).join(',') + ')';
+    }
+    function doodle(kind, col, x, y, rot) {
+      var path = {
+        heart: '<path d="M20 33 C 6 24, 4 12, 12 9 C 17 7, 20 11, 20 14 C 20 11, 23 7, 28 9 C 36 12, 34 24, 20 33 Z"/>',
+        star: '<path d="M20 4 L24.5 15 L36 15.5 L27 23 L30 34.5 L20 28 L10 34.5 L13 23 L4 15.5 L15.5 15 Z"/>',
+        sparkle: '<path d="M20 5 V35 M5 20 H35 M10 10 L30 30 M30 10 L10 30"/>',
+        spiral: (function () { var d = '', i, t, r2; for (i = 0; i <= 60; i++) { t = i / 60 * Math.PI * 4; r2 = 17 * i / 60; d += (i ? 'L' : 'M') + (20 + Math.cos(t) * r2).toFixed(1) + ' ' + (20 + Math.sin(t) * r2).toFixed(1); } return '<path d="' + d + '"/>'; })()
+      }[kind];
+      return '<div class="pp-dd" style="left:' + x + 'mm;top:' + y + 'mm;transform:rotate(' + rot + 'deg)"><svg viewBox="0 0 40 40" stroke="' + col + '" aria-hidden="true">' + path + '</svg></div>';
+    }
     var printBtn = document.getElementById('sc-print');
     if (printBtn) printBtn.addEventListener('click', function () {
       var u = pageUrl(), svg2 = u ? qrSvg(u) : '';
       var p = document.createElement('div'); p.id = 'poster-print';
       var ring = 'M24 54 C 14 20, 92 2, 152 9 C 200 15, 204 72, 154 90 C 102 106, 20 94, 9 60 C 6 42, 28 26, 62 20';
+      var RED = '#8F2D18', GRN = '#2F5E47';
       p.innerHTML =
-        '<div class="pp-holes"></div><div class="pp-margin"></div><div class="pp-ring"></div>' +
+        '<div class="pp-wrap"><div class="pp-sheet" style="clip-path:' + tornClip(194, 280) + '"></div></div>' +
+        '<div class="pp-hole" style="top:54.5mm"></div><div class="pp-hole" style="top:144.5mm"></div><div class="pp-hole" style="top:234.5mm"></div>' +
+        '<div class="pp-margin"></div><div class="pp-ring"></div>' +
+        doodle('heart', RED, 26, 86, -12) + doodle('spiral', GRN, 26, 112, 0) + doodle('star', RED, 26, 178, 12) + doodle('heart', GRN, 26, 204, 10) + doodle('sparkle', RED, 26, 266, 0) +
+        doodle('star', GRN, 182, 108, -10) + doodle('sparkle', RED, 180, 140, 0) + doodle('heart', RED, 179, 166, 14) +
         '<div class="pp-kicker">a short, anonymous page</div>' +
         '<h1>Who told<br>you <span class="pp-that">that?<svg viewBox="0 0 210 110" preserveAspectRatio="none" aria-hidden="true"><path d="' + ring + '"/></svg></span></h1>' +
+        '<div class="pp-mag"><svg viewBox="0 0 10 10" aria-hidden="true"><circle cx="5" cy="5" r="4.6" fill="#FFFBEF" stroke="#031D44" stroke-opacity="0.18" stroke-width="0.1"/>' + magnifier(4.9, 4.9, 8.4) + '</svg></div>' +
         '<p class="pp-sub">Most of the standards you\u2019re failing to meet were <mark>never yours</mark> to begin with.</p>' +
-        '<div class="pp-rw">' +
-          '<div class="pp-row"><span class="pp-old">I\u2019ll earn rest once I\u2019m caught up.</span><span class="pp-new">Rest is part of the work.</span></div>' +
-          '<div class="pp-row"><span class="pp-old">Good enough isn\u2019t good enough.</span><span class="pp-new">Good enough is allowed to be enough.</span></div>' +
-        '</div>' +
-        '<div class="pp-scan"><span>scan it. it\u2019s anonymous.</span><svg viewBox="0 0 36 34" aria-hidden="true"><path d="M4 6 C 14 3, 27 10, 28 28 M28 28 l-6 -7 M28 28 l7 -8"/></svg></div>' +
-        '<div class="pp-card">' +
+        '<div class="pp-stack"><div class="pp-red"><div class="pp-bar"><span>red pen out.</span><b class="pp-stamp">UNVERIFIED</b></div><p class="pp-old">I\u2019ll earn rest once I\u2019m caught up.</p></div>' +
+        '<div class="pp-say"><svg viewBox="0 0 36 34" aria-hidden="true"><path d="M4 6 C 14 3, 27 10, 28 28 M28 28 l-6 -7 M28 28 l7 -8"/></svg><span>say it kinder.</span></div>' +
+        '<div class="pp-green"><div class="pp-bar"><span>green pen in.</span>' +
+          '<svg class="pp-sp" style="right:22mm" viewBox="0 0 40 40" stroke="' + GRN + '" aria-hidden="true"><path d="M20 5 V35 M5 20 H35 M10 10 L30 30 M30 10 L10 30"/></svg>' +
+          '<svg class="pp-sp" style="right:12mm;transform:rotate(17deg)" viewBox="0 0 40 40" stroke="' + RED + '" aria-hidden="true"><path d="M20 4 L24.5 15 L36 15.5 L27 23 L30 34.5 L20 28 L10 34.5 L13 23 L4 15.5 L15.5 15 Z"/></svg></div>' +
+          '<p class="pp-new"><span>Rest is part of the work.</span></p><div class="pp-sticker">noted</div></div></div>' +
+        '<div class="pp-cut"><span>S</span><span>C</span><span>A</span><span>N</span><span>I</span><span>T</span></div>' +
+        '<div class="pp-anon">it\u2019s anonymous.</div>' +
+        '<svg class="pp-arr" viewBox="0 0 44 32" aria-hidden="true"><path d="M3 24 C 12 6, 28 6, 41 20 M41 20 l-10 -1 M41 20 l-3 -10"/></svg>' +
+        '<div class="pp-foot">No name.<br>No account.<br><b>Just a page.</b></div>' +
+        '<div class="pp-qrcard">' +
           (svg2 ? '<div class="pp-qr">' + svg2 + '</div><div class="pp-url"></div>' : '<div class="pp-qr pp-none">The QR code appears once this page is online.</div>') +
-        '</div>' +
-        '<div class="pp-foot"><span>No name. No account.<br><b>Just a page.</b></span></div>';
+        '</div>';
       var urlBox = p.querySelector('.pp-url'); if (urlBox) urlBox.textContent = u;
       // A4 with no browser margins, only while the poster is printing
       var pg = document.createElement('style'); pg.id = 'poster-page'; pg.textContent = '@page { size: A4 portrait; margin: 0; }';
@@ -5365,7 +5441,7 @@ function qrMatrix(text){
     });
 
     // ---- Ransom letters: peel a cut-out letter onto the card, drag it, and print it into the picture on save ----
-    var rlSize = document.getElementById('rlSize'), lay = document.getElementById('rlLay'), rlSheet = document.getElementById('rlSheet'), rlWord = document.getElementById('rlWord');
+    var lay = document.getElementById('rlLay'), rlSheet = document.getElementById('rlSheet'), rlWord = document.getElementById('rlWord');
     var rlWordBtn = document.getElementById('rlWordBtn'), rlCtl = document.getElementById('rlCtl'), rlStatus = document.getElementById('rlStatus');
     var LET = [], sel = null, zTop = 5, nextId = 1, MAXL = 30, baked = true, bakeId = 0, bakeTimer = 0, drag = null;
     var STY = [null,
@@ -5413,7 +5489,6 @@ function qrMatrix(text){
       e.style.left = (L.x * 100) + '%'; e.style.top = (L.y * 100) + '%'; e.style.rotate = L.rot + 'deg';
       e.style.setProperty('--sz', L.sz);
       if (L.sym) { e.firstChild.className = 'cut ep'; e.firstChild.style.cssText = ''; e.firstChild.innerHTML = epSvg(L.sym, L.st); } else { e.firstChild.textContent = L.ch; look(e.firstChild, L.st, L.id); }
-      if (sel === L && rlSize) rlSize.value = Math.round(L.sz * 1000);
       e.setAttribute('aria-label', 'Letter ' + L.ch + ', stuck on the card. Drag to move, or use the arrow keys. R turns it, plus and minus resize, S changes the look, Delete removes it.');
     }
     function changed(msg) {
@@ -5427,7 +5502,6 @@ function qrMatrix(text){
       if (sel && sel.el) sel.el.classList.remove('sel');
       sel = L || null;
       if (sel) sel.el.classList.add('sel');
-      if (rlSize) { rlSize.disabled = !sel; if (sel) rlSize.value = Math.round(sel.sz * 1000); }
       Array.prototype.forEach.call(rlCtl.querySelectorAll('button'), function (b) { b.disabled = b.getAttribute('data-act') !== 'clear' && !sel; });
     }
     function add(ch, o) {
@@ -5860,101 +5934,11 @@ function qrMatrix(text){
       if (!down || e.pointerId !== down.id) return;
       var d = down; down = null;
       if (Math.abs(e.clientX - d.x) > 5 || Math.abs(e.clientY - d.y) > 5 || Date.now() - d.t > 500) return;
-      if (!wide.matches || document.body.classList.contains('stamping')) return;
+      if (!wide.matches) return;
       flip(d.el);
     });
     document.addEventListener('pointercancel', function () { down = null; });
 
-    // ---------- 2. Rubber stamp tool ----------
-    var STAMPS = [
-      { t: 'Not a cure', s: 'just a start' },
-      { t: 'Unverified', s: 'no source on file' },
-      { t: 'Says who?', s: 'name your source' },
-      { t: 'Enough', s: 'already' }
-    ];
-    var MAX = 40;
-    var INK = ['#1F4E79', '#A3301A', '#5B3E8A', '#2F6B4A'];   // the pad takes the color of the chosen stamp
-    var dock = document.getElementById('stamp-dock');
-    var toggle = document.getElementById('sd-toggle');
-    var live = document.getElementById('sd-live');
-    if (!dock || !toggle) return;
-    var picks = Array.prototype.slice.call(dock.querySelectorAll('.sd-pick'));
-    var clear = dock.querySelector('.sd-clear');
-    var layer = document.createElement('div');
-    layer.className = 'stamp-layer'; layer.setAttribute('aria-hidden', 'true');
-    document.body.appendChild(layer);
-    var on = false, sel = 0;
-    var SHEET = 'body > section > .wrap, .hero.wrap';
-
-    function say(msg) { live.textContent = ''; setTimeout(function () { live.textContent = msg; }, 30); }
-    function isDark() {
-      var a = document.documentElement.getAttribute('data-theme');
-      return a === 'dark' || (a !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    }
-    function setOn(v) {
-      on = v;
-      document.body.classList.toggle('stamping', v);
-      dock.classList.toggle('open', v);
-      toggle.setAttribute('aria-pressed', v ? 'true' : 'false');
-      toggle.setAttribute('aria-expanded', v ? 'true' : 'false');
-    }
-    function select(i) {
-      sel = i;
-      dock.style.setProperty('--pad', INK[i]);
-      picks.forEach(function (b, j) { b.setAttribute('aria-pressed', j === i ? 'true' : 'false'); });
-    }
-    function clampX(el, x) {
-      var half = el.offsetWidth / 2 + 8, w = document.documentElement.clientWidth;
-      return Math.min(Math.max(x, half), Math.max(half, w - half));
-    }
-    // x and y are in layer coordinates (the layer sits at the top left of the page, so they scroll with it)
-    function place(x, y, dark) {
-      var s = STAMPS[sel];
-      var el = document.createElement('div');
-      el.className = 'rst k' + sel + (dark ? ' on-dark' : '');
-      el.style.setProperty('--r', (Math.random() * 18 - 9).toFixed(1) + 'deg');
-      el.style.setProperty('--o', (0.76 + Math.random() * 0.18).toFixed(2));
-      var b = document.createElement('b'); b.textContent = s.t;
-      var i = document.createElement('i'); i.textContent = s.s;
-      el.appendChild(b); el.appendChild(i);
-      el.style.left = '0px'; el.style.top = y + 'px';
-      layer.appendChild(el);
-      el.style.left = clampX(el, x) + 'px';
-      while (layer.children.length > MAX) layer.removeChild(layer.firstChild);
-    }
-
-    toggle.addEventListener('click', function () { setOn(!on); });
-    picks.forEach(function (b, i) {
-      b.addEventListener('click', function (e) {
-        select(i);
-        if (e.detail === 0) {   // pressed with the keyboard: stamp the middle of the screen
-          var lr = layer.getBoundingClientRect();
-          var cx = document.documentElement.clientWidth / 2, cy = window.innerHeight / 2;
-          var under = document.elementFromPoint(cx, cy);
-          place(cx - lr.left, cy - lr.top, isDark() && !(under && under.closest && under.closest(SHEET)));
-          say('Stamped ' + STAMPS[i].t + ' in the middle of the screen.');
-        }
-      });
-    });
-    clear.addEventListener('click', function () { layer.textContent = ''; say('Stamps cleared.'); });
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && on) { setOn(false); toggle.focus(); }
-    });
-    document.addEventListener('click', function (e) {
-      if (!on || document.body.classList.contains('splash-lock')) return;
-      var t = e.target;
-      if (!t || !t.closest || t.closest('a, button, input, textarea, select, label, summary, [role="button"], .stamp-dock')) return;
-      var lr = layer.getBoundingClientRect();
-      place(e.clientX - lr.left, e.clientY - lr.top, isDark() && !t.closest(SHEET));
-    });
-    // a resize moves the right edge, so pull any stamp that is now past it back in
-    var rz = 0;
-    window.addEventListener('resize', function () {
-      cancelAnimationFrame(rz);
-      rz = requestAnimationFrame(function () {
-        Array.prototype.forEach.call(layer.children, function (el) { el.style.left = clampX(el, parseFloat(el.style.left) || 0) + 'px'; });
-      });
-    });
   })();
 </script>
 <script>
@@ -6265,6 +6249,26 @@ function qrMatrix(text){
     x.addEventListener('click', function () { set(false); tab.focus(); });
     document.addEventListener('click', function (e) { if (pl.classList.contains('open') && !pl.contains(e.target)) set(false); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && pl.classList.contains('open')) { set(false); tab.focus(); } });
+  })();
+</script>
+<script>
+  // Update 172: the tab or panel pressed last comes to the front. The four right edge panels share one z-index in CSS (!important), so the order is set here.
+  (function () {
+    var order = [];
+    function raise(el) {
+      var i = order.indexOf(el); if (i >= 0) order.splice(i, 1);
+      order.push(el);
+      order.forEach(function (n, k) { n.style.setProperty('z-index', String(121 + k), 'important'); });
+    }
+    document.addEventListener('pointerdown', function (e) {
+      var g = e.target.closest && e.target.closest('.gl');
+      if (g) raise(g);
+    }, true);
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      var g = e.target.closest && e.target.closest('.gl');
+      if (g) raise(g);
+    }, true);
   })();
 </script>
 </body>
