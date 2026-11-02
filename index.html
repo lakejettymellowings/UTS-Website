@@ -32,6 +32,96 @@
     }
   } catch (e) {}
 </script>
+<script>
+  // Update 165: site color themes use the same 14 palettes as the card papers (desk, paper, ink, soft ink, red pen, green pen). They change only some elements: the desk, the six paper sheets, and the card, ink, red, green and tape colors. Theme 1 is the original and adds nothing
+  (function () {
+    var R = [
+      ['notebook', '#DAB785', '#F8F0DC', '#031D44', '#04395E', '#8F2D18', '#2F5E47'],
+      ['graph', '#8FB3A3', '#FBFDF8', '#031D44', '#04395E', '#8F2D18', '#2F5E47'],
+      ['dotted', '#3E5C4B', '#F3EBDA', '#031D44', '#04395E', '#8F2D18', '#2F5E47'],
+      ['blueprint', '#1A2B4A', '#1F4E79', '#F2F6FF', '#E6EEFF', '#FFD66B', '#9FE0B8'],
+      ['kraft', '#5A4636', '#C79A62', '#2B1A0C', '#2B1A0C', '#8F2D18', '#20472F'],
+      ['legal', '#2C3A52', '#F5E27A', '#031D44', '#04395E', '#8F2D18', '#2F5E47'],
+      ['blush', '#D9A5B3', '#FFF8EE', '#031D44', '#04395E', '#8F2D18', '#2F5E47'],
+      ['purple', '#7C5AA6', '#F1E9FA', '#2A1647', '#3F2468', '#8F2D18', '#2F5E47'],
+      ['mono', '#4A4A4A', '#F4F4F2', '#151515', '#151515', '#333333', '#555555'],
+      ['teal', '#2E7D7B', '#EAF7F4', '#0B2E33', '#0F4A52', '#C0392B', '#1F6B4E'],
+      ['coral', '#E58A6B', '#FFF1E6', '#3A1A12', '#5A2A1C', '#8F2D18', '#2F5E47'],
+      ['sky', '#8DB8E0', '#F7FBFF', '#0A2342', '#0B3A6B', '#C0392B', '#2F5E47'],
+      ['midnight', '#0E0E14', '#1B1B26', '#F4EAD0', '#F4EAD0', '#F2C94C', '#8FD6A8'],
+      ['sage', '#A9B89A', '#F4F7EC', '#1E2D1A', '#2D4426', '#8F2D18', '#2F5E47']
+    ];
+    var T = R.map(function (r, i) { return { id: i ? 't' + i : 'notebook', desk: r[1], paper: r[2], ink: r[3], soft: r[4], red: r[5], good: r[6] }; });
+    function lum(h) {
+      var c = [1, 3, 5].map(function (i) { var v = parseInt(h.substr(i, 2), 16) / 255; return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); });
+      return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+    }
+    function mix(a, b, pa) { return 'color-mix(in srgb,' + a + ' ' + pa + '%,' + b + ')'; }
+    function mh(a, b, t) {
+      var r = '#', i, v;
+      for (i = 1; i < 7; i += 2) { v = Math.round(parseInt(a.substr(i, 2), 16) * (1 - t) + parseInt(b.substr(i, 2), 16) * t); r += (v < 16 ? '0' : '') + v.toString(16); }
+      return r;
+    }
+    function cr(a, b) { var x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); }
+    // nudge a text color toward black or white, by the smaller step, until it reaches the contrast on every background it can sit on
+    function fix(fg, bgs, min) {
+      function worst(c) { var m = 99; bgs.forEach(function (b) { m = Math.min(m, cr(c, b)); }); return m; }
+      if (worst(fg) >= min) return fg;
+      var best = fg, bw = worst(fg), tb = 2, tw = 2, t, c, w;
+      for (t = 0.05; t <= 1.001; t += 0.05) {
+        if (tb > 1 && worst(mh(fg, '#000000', t)) >= min) tb = t;
+        if (tw > 1 && worst(mh(fg, '#FFFFFF', t)) >= min) tw = t;
+      }
+      if (tb <= 1 || tw <= 1) return tb <= tw ? mh(fg, '#000000', tb) : mh(fg, '#FFFFFF', tw);
+      [mh(fg, '#000000', 1), mh(fg, '#FFFFFF', 1)].forEach(function (c2) { w = worst(c2); if (w > bw) { bw = w; best = c2; } });
+      return best;
+    }
+    function css(p0) {
+      // palettes with a dark paper (blueprint, midnight) keep the dark desk, but the section sheets are light paper in the palette's light ink color with the dark paper color as ink, so the textures, tape, notes and the hero title read like the default
+      var p = p0;
+      if (lum(p0.paper) < 0.3) p = { id: p0.id, desk: p0.desk, paper: p0.ink, ink: p0.paper, soft: mh(p0.paper, '#FFFFFF', 0.12), red: p0.red, good: p0.good };
+      var tape = mh('#EBD27A', p.desk, 0.3);
+      var s = [p.paper, mh(p.paper, p.good, 0.18), mh(p.paper, p.red, 0.18), mh(p.paper, p.soft, 0.14), mh(p.paper, tape, 0.2)];
+      var s0 = mh(p.paper, p.soft, 0.12), sheets = [s0].concat(s);
+      var ink = fix(p.ink, sheets, 7), soft = fix(p.soft, sheets, 4.5), red = fix(p.red, sheets, 4.5), good = fix(p.good, sheets, 4.5);
+      var sh = '--card:' + p.paper + ';--ink:' + ink + ';--ink-soft:' + soft + ';--paper-line:' + mix(ink, 'transparent', 30) + ';--red:' + red + ';--good:' + good + ';--c-family:' + red + ';--c-friends:' + good + ';--tape:' + tape + ';--s0:' + s0 + ';' +
+        '--s1:' + s[0] + ';--s2:' + s[1] + ';--s3:' + s[2] + ';--s4:' + s[3] + ';--s5:' + s[4] + ';';
+      var root;
+      if (lum(p.desk) < 0.3) root = '--paper:' + p.desk + ';--card:' + mix(p.desk, '#000', 78) + ';--ink:#F6EEDC;--ink-soft:#E3D7BC;--paper-line:rgba(246,238,220,0.3);--red:#F0A890;--good:#9FD6B0;--tape:' + tape + ';';
+      else {
+        var bgs = [p0.desk, p0.paper], rin = fix(p0.ink, bgs, 7), rsoft = fix(p0.soft, bgs, 4.5), rred = fix(p0.red, bgs, 4.5), rgood = fix(p0.good, bgs, 4.5);
+        root = '--paper:' + p0.desk + ';--card:' + p0.paper + ';--ink:' + rin + ';--ink-soft:' + rsoft + ';--paper-line:' + mix(rin, 'transparent', 30) + ';--red:' + rred + ';--good:' + rgood + ';--c-family:' + rred + ';--c-friends:' + rgood + ';--tape:' + tape + ';';
+      }
+      var Q = ':root[data-palette][data-palette]', dark = '--paper:' + mix(p.desk, '#000', 22) + ';';
+      var out = Q + ' body > section > .wrap,' + Q + ' .hero.wrap{' + sh + '}' +
+        ':root[data-palette][data-theme="light"]{' + root + '}' +
+        '@media (prefers-color-scheme: light){:root[data-palette]:not([data-theme="dark"]){' + root + '}}' +
+        ':root[data-palette][data-theme="dark"]{' + dark + '}' +
+        '@media (prefers-color-scheme: dark){:root[data-palette]:not([data-theme="light"]){' + dark + '}}';
+      return out;
+    }
+    var cur = 'notebook';
+    function apply(id, save) {
+      var p = T[0], i;
+      for (i = 0; i < T.length; i++) if (T[i].id === id) p = T[i];
+      var old = document.getElementById('pal-style');
+      if (old) old.parentNode.removeChild(old);
+      if (p.id === 'notebook') document.documentElement.removeAttribute('data-palette');
+      else {
+        document.documentElement.setAttribute('data-palette', p.id);
+        var st = document.createElement('style'); st.id = 'pal-style'; st.textContent = css(p);
+        (document.head || document.documentElement).appendChild(st);
+      }
+      cur = p.id;
+      if (save) { try { localStorage.setItem('wtyt-palette', p.id); } catch (e) {} }
+    }
+    window.wtytPal = {
+      list: T, get: function () { return cur; }, set: function (id) { apply(id, true); }, init: function () {},
+      swatch: function (t) { return [t.desk, t.paper]; }
+    };
+    try { var saved = localStorage.getItem('wtyt-palette'); if (saved) apply(saved, false); } catch (e) {}
+  })();
+</script>
 <style>
   :root {
     box-sizing: border-box;
@@ -2863,6 +2953,182 @@ body.flipping .hero h1 .iw span, body.flipping .wtyt .iw span, body.flipping .do
   body > section:nth-of-type(n+2) h2 { font-size: clamp(34px, 7.2vw, 58px); line-height: 1.1; letter-spacing: -0.02em; max-width: 14em; }
   body > section:nth-of-type(n+2) h2::after { width: 0.7em; height: 0.7em; margin-left: 0.3em; vertical-align: -0.12em; }
 </style>
+<style>
+  /* ---------- Update 148. Small text raised again. Interface text 16px, finer print 14px or more. Delete this block to go back. ---------- */
+  .brand .mark, section > .kicker, .q-num, .q-result .verdict, .restart, .composer > button,
+  .note, .cloud-label, .card .source, .chip-label, .stat-count, .gl-sub, .gl-term a.rf-doi,
+  .prompts button, .chips button, .fchip, .bar-row, .metoo { font-size: 16px; }
+  .bar-row { grid-template-columns: 116px 1fr 30px; }
+  footer, .care, .gl-term p.rf-cite { font-size: 15px; }
+  .gl-term p, .wall-note, .cloud-empty, .sc-btn, .rw-sec { font-size: 16px; }
+  .chips button::before { font-size: 14px; }
+  .news b { font-size: 14px; }
+  .scrap.ticket { font-size: 13px; }
+  .libcard b { font-size: 10px; }
+  .rstamp i, .rst i { font-size: 11px; }
+  .nb-label .nb-stamp b { font-size: 11px; }
+  @media (max-width: 559px) { .rl { font-size: 0.8em; } }
+</style>
+<style>
+  /* ---------- Update 149. Right edge tabs: ribbons always behind, small icon tabs on phones. Delete this block to go back. ---------- */
+  /* every pull out keeps the same layer whether it is closed, hovered or open, so a tab's ribbon can never come in front of the tab below it (!important because earlier blocks raise the open and hovered one) */
+  .gl { z-index: 120 !important; }
+  /* phones and small tablets: each tab is a 44px icon button instead of a long vertical label */
+  @media (max-width: 700px) {
+    .gl { transform: translateX(calc(100% - 44px)); }
+    .gl.open { transform: none; }
+    .gl .gl-tab { width: 44px; height: 44px; padding: 0; writing-mode: horizontal-tb; font-size: 0; line-height: 0; background-repeat: no-repeat; background-position: center; background-size: 24px 24px; }
+    #gl-tab { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9.5'/%3E%3Cpath d='M9.2 9.3a2.9 2.9 0 1 1 4.3 2.5c-.9.6-1.5 1.1-1.5 2.2'/%3E%3Cpath d='M12 17.3h.01'/%3E%3C/svg%3E"); }
+    #rf-tab { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 6.5C10 5 7 4.5 4 5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5zM12 6.5v13'/%3E%3C/svg%3E"); }
+    .gl-tab::after { top: calc(100% - 6px); width: 12px; height: 36px; margin-left: -6px; }
+    .gl.rf { top: 188px !important; }
+  }
+</style>
+<style>
+  /* ---------- Update 150. Ribbons start at the bottom edge of their tab instead of tucking behind it. Delete this block to go back. ---------- */
+  /* while a tab bounces (it scales for half a second when clicked) the browser gives it its own layer, and the tucked part of the ribbon showed on top of the tab's face. Starting the ribbon at the tab's bottom edge means there is nothing left to overlap, whatever the layering */
+  .gl-tab::after { top: calc(100% + 1px); height: 50px; }
+  @media (max-width: 700px) { .gl-tab::after { top: calc(100% + 1px); height: 31px; } }
+</style>
+<style>
+  /* ---------- Update 151. The word cloud area is a corkboard. Words sit on cork in a wooden frame, the label and the counts are paper notes pinned to it. Delete this block to go back. ---------- */
+  .cloud-block {
+    --cork: #CFA469;
+    border: 13px solid transparent; border-radius: 8px;
+    padding: 24px 22px 26px;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='a' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.035' numOctaves='3' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .36 0 0 0 0 .21 0 0 0 0 .08 2.2 0 0 0 -.95'/%3E%3C/filter%3E%3Cfilter id='b' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .24 0 0 0 0 .12 0 0 0 0 .04 2 0 0 0 -.8'/%3E%3C/filter%3E%3Cfilter id='c' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='2' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .98 0 0 0 0 .86 0 0 0 0 .64 -2 0 0 0 .95'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23a)'/%3E%3Crect width='240' height='240' filter='url(%23b)'/%3E%3Crect width='240' height='240' filter='url(%23c)' opacity='.6'/%3E%3C/svg%3E") 0 0 / 240px 240px,
+      radial-gradient(ellipse at 22% 18%, rgba(255, 236, 196, 0.35), transparent 55%),
+      radial-gradient(ellipse at 82% 88%, rgba(70, 38, 12, 0.28), transparent 60%),
+      linear-gradient(var(--cork), var(--cork)),
+      linear-gradient(180deg, rgba(255, 230, 180, 0.28), transparent 35%, rgba(0, 0, 0, 0.22)),
+      repeating-linear-gradient(90deg, rgba(60, 30, 8, 0.2) 0 1px, transparent 1px 6px, rgba(255, 220, 160, 0.1) 6px 7px, transparent 7px 13px),
+      #8A5A2C;
+    background-origin: border-box;
+    background-clip: padding-box, padding-box, padding-box, padding-box, border-box, border-box, border-box;
+    box-shadow: inset 0 0 0 1px rgba(40, 22, 6, 0.5), inset 0 4px 12px rgba(40, 22, 6, 0.5), inset 0 -2px 6px rgba(255, 236, 196, 0.18), 0 0 0 1px rgba(50, 28, 8, 0.7), 0 8px 18px rgba(3, 29, 68, 0.3);
+  }
+  /* the label is a paper slip with a pin */
+  .cloud-block .cloud-label { position: relative; display: inline-block; max-width: 100%; margin: 4px 0 16px; padding: 8px 14px; background: var(--card); border: 1px solid var(--paper-line); border-radius: 3px; rotate: -0.8deg; box-shadow: 0 2px 3px rgba(58, 36, 18, 0.28), 0 6px 10px rgba(58, 36, 18, 0.18); }
+  .cloud-block .cloud-label::before, .cloud-block .stats::before { content: ""; position: absolute; top: -7px; left: 50%; width: 13px; height: 13px; margin-left: -6px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ffb3a1, #C9462E 55%, #7E2814); box-shadow: 0 2px 2px rgba(40, 22, 6, 0.45); }
+  /* words sit straight on the cork, with a paper colored halo so they stay readable in light and dark mode */
+  .cloud-block .cloud-word { text-shadow: 0 0 2px var(--card), 0 0 5px var(--card), 0 0 9px var(--card), 0 1px 0 var(--card); }
+  .cloud-block .cloud-empty { padding: 10px 16px; background: var(--card); border: 1px solid var(--paper-line); border-radius: 3px; rotate: 0.8deg; box-shadow: 0 2px 3px rgba(58, 36, 18, 0.28); }
+  /* the counts and bar chart are a paper card pinned below the cloud */
+  .cloud-block .stats { position: relative; margin-top: 22px; padding: 18px 18px 10px; background: var(--card); border: 1px solid var(--paper-line); border-radius: 3px; rotate: 0.4deg; box-shadow: 0 2px 3px rgba(58, 36, 18, 0.28), 0 8px 12px rgba(58, 36, 18, 0.18); }
+  @media (max-width: 700px) {
+    .cloud-block { border-width: 10px; padding: 18px 12px 20px; }
+  }
+</style>
+<style>
+  /* ---------- Update 153. Word cloud words are paper cut-outs pinned to the cork, so they are easy to read. Delete this block to go back. ---------- */
+  .cloud-block .cloud-word { padding: 0.1em 0.32em 0.14em; background: var(--card); border-radius: 2px; text-shadow: none; box-shadow: 0 1px 2px rgba(58, 36, 18, 0.4), 0 3px 6px rgba(58, 36, 18, 0.22); rotate: 0deg; }
+  .cloud-block .cloud-word:nth-child(3n+1) { rotate: -1.8deg; }
+  .cloud-block .cloud-word:nth-child(3n+2) { rotate: 1.4deg; }
+  .cloud-block .cloud-word:nth-child(3n) { rotate: -0.6deg; }
+  @media (hover: hover) { .cloud-block .cloud-word { transition: translate .15s ease-out, box-shadow .15s ease-out; } .cloud-block .cloud-word:hover { translate: 0 -2px; box-shadow: 0 2px 3px rgba(58, 36, 18, 0.4), 0 7px 10px rgba(58, 36, 18, 0.25); } }
+  @media (prefers-reduced-motion: reduce) { .cloud-block .cloud-word { transition: none; } }
+</style>
+<style>
+  /* ---------- Update 154. The bar chart card is graph paper and the "where it's coming from" label is a ruled yellow slip. Delete this block to go back. ---------- */
+  /* graph paper: a fine grid every 18px and a slightly stronger line every 90px, in the paper line color so it follows light and dark mode */
+  .cloud-block .stats {
+    --gl: color-mix(in srgb, var(--paper-line) 55%, transparent);
+    --gl2: color-mix(in srgb, var(--paper-line) 95%, transparent);
+    background-color: var(--card);
+    background-image:
+      linear-gradient(var(--gl2) 1px, transparent 1px), linear-gradient(90deg, var(--gl2) 1px, transparent 1px),
+      linear-gradient(var(--gl) 1px, transparent 1px), linear-gradient(90deg, var(--gl) 1px, transparent 1px);
+    background-size: 90px 90px, 90px 90px, 18px 18px, 18px 18px;
+    background-position: -1px -1px;
+  }
+  /* ruled yellow slip with a red margin line, a different paper from the card below it. The yellow is the "myself" note color mixed into the card color, like the notes */
+  .cloud-block .cloud-label {
+    padding: 7px 14px 5px 34px; line-height: 22px;
+    background-color: color-mix(in srgb, var(--c-myself) 24%, var(--card));
+    background-image:
+      linear-gradient(90deg, transparent 0 24px, color-mix(in srgb, var(--red) 55%, transparent) 24px 25px, transparent 25px),
+      repeating-linear-gradient(transparent 0 21px, color-mix(in srgb, var(--paper-line) 70%, transparent) 21px 22px);
+    background-position: 0 0, 0 6px;
+  }
+</style>
+<style>
+  /* ---------- Update 155. "came from" stickers (and the matching filter stickers) in solid colors instead of pastels. Delete this block to go back. ---------- */
+  :is(.chips button, .fchip)[data-cat="family"]  { --kx: #8F2D18; }
+  :is(.chips button, .fchip)[data-cat="school"]  { --kx: #04395E; }
+  :is(.chips button, .fchip)[data-cat="online"]  { --kx: #7B4B94; }
+  :is(.chips button, .fchip)[data-cat="friends"] { --kx: #2F5E47; }
+  :is(.chips button, .fchip)[data-cat="myself"]  { --kx: #8A5600; }
+  :is(.chips button, .fchip)[data-cat="unsure"]  { --kx: #6B6B6B; }
+  :is(.chips button, .fchip)[data-cat]:not([data-cat=""]) {
+    --stk: var(--kx); color: #FFFDF6; text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0) 48%), var(--kx);
+  }
+  /* the little glyph and the filter dot turn cream so they show on the solid color */
+  .chips button[data-cat]::before { color: #FFFDF6; }
+  .fchip[data-cat]:not([data-cat=""]) i { background: #FFFDF6 !important; }
+  /* chosen: the same color, darker, pushed in */
+  :is(.chips button, .fchip).on[data-cat]:not([data-cat=""]) { background: linear-gradient(160deg, rgba(0, 0, 0, 0.14), rgba(0, 0, 0, 0) 60%), color-mix(in srgb, var(--kx) 70%, #000); box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.4); }
+</style>
+<style>
+  /* ---------- Update 156. Sticky notes in muted, varied colors (not pastel, not vivid). Delete this block to go back. ---------- */
+  /* wall notes: eight colors, picked per note from its text. Section 4 notes: the first four, in the same order as before */
+  .card.n0, .sticky:nth-child(1) { --nc: #E6D488; } /* lemon */
+  .card.n1, .sticky:nth-child(2) { --nc: #DB9A94; } /* dusty rose */
+  .card.n2, .sticky:nth-child(3) { --nc: #B2A3D0; } /* lilac */
+  .card.n3, .sticky:nth-child(4) { --nc: #A5C294; } /* sage */
+  .card.n4 { --nc: #93B5D0; } /* dusty blue */
+  .card.n5 { --nc: #82BDB2; } /* teal */
+  .card.n6 { --nc: #D68C72; } /* clay */
+  .card.n7 { --nc: #C99BBB; } /* mauve */
+  .card.n0, .card.n1, .card.n2, .card.n3, .card.n4, .card.n5, .card.n6, .card.n7, .sticky { background-color: var(--nc); --sticky: var(--nc); }
+  /* a darker edge in the note's own color, so no note melts into the tan textured paper behind it */
+  .card, .sticky { border-color: color-mix(in srgb, var(--nc) 60%, #3A2412); }
+  /* the notes are paper, so their writing stays dark ink in light and dark mode */
+  .card, .sticky { --ink: #031D44; --ink-soft: #04395E; --red: #6E2010; --paper-line: rgba(4, 57, 94, 0.28); color: #031D44; }
+</style>
+<style>
+  /* ---------- Update 157. Sticky notes are matte paper: no gloss, no light in the corner. Delete this block to go back. ---------- */
+  /* --shade was a white glow in the top left corner and a dark one in the bottom right. It is now only a fine paper grain, so the light is even across the whole note */
+  .card, .sticky { --shade: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='f' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' seed='5' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .23 0 0 0 0 .14 0 0 0 0 .06 .7 0 0 0 -.26'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23f)'/%3E%3C/svg%3E"); }
+  /* no white edge along the top of each note, only the soft drop shadows */
+  .card, .sticky { box-shadow: 0 1px 1px rgba(var(--nsh), 0.22), 0 3px 5px rgba(var(--nsh), 0.15), 0 9px 14px rgba(var(--nsh), 0.13); }
+  .card:hover, .card.lit, .sticky:hover { box-shadow: 0 2px 2px rgba(var(--nsh), 0.22), 0 8px 12px rgba(var(--nsh), 0.19), 0 18px 26px rgba(var(--nsh), 0.2); }
+</style>
+<style>
+  /* ---------- Update 158. Fake ambient occlusion on the papers: a thin dark line right where each paper meets what is under it, then the soft shadow further out. Delete this block to go back. ---------- */
+  :root { --ao: 40, 22, 8; }
+  /* the big sheets: a hairline and a tight shadow hugging the torn edge, under the existing soft shadow. Phones get one tight layer to keep scrolling light */
+  .paper, .doc .lp { filter: drop-shadow(0 0 1px rgba(var(--ao), 0.6)) drop-shadow(0 1px 2px rgba(var(--ao), 0.34)) drop-shadow(0 6px 8px rgba(3, 29, 68, 0.24)); }
+  @media (max-width: 700px) { .paper, .doc .lp { filter: drop-shadow(0 1px 1.5px rgba(var(--ao), 0.5)) drop-shadow(0 5px 7px rgba(3, 29, 68, 0.26)); } }
+  /* notes lying flat: the darkest part is the thin gap right under the edge */
+  .card, .sticky { box-shadow: 0 0 0 0.5px rgba(var(--ao), 0.3), 0 1px 1.5px rgba(var(--ao), 0.4), 0 3px 5px rgba(var(--nsh), 0.15), 0 9px 14px rgba(var(--nsh), 0.13); }
+  /* when a note lifts on hover the gap opens up, so the tight dark line fades and the soft shadow grows */
+  .card:hover, .card.lit, .sticky:hover { box-shadow: 0 0 0 0.5px rgba(var(--ao), 0.18), 0 2px 2px rgba(var(--nsh), 0.22), 0 8px 12px rgba(var(--nsh), 0.19), 0 18px 26px rgba(var(--nsh), 0.2); }
+  @media (max-width: 700px) { .cards .card, .cards .card:hover, .cards .card.lit { box-shadow: 0 0 0 0.5px rgba(var(--ao), 0.3), 0 1px 1.5px rgba(var(--ao), 0.35), 0 2px 3px rgba(var(--nsh), 0.22), 0 8px 12px rgba(var(--nsh), 0.16); } }
+  /* the small papers pinned to the cork */
+  .cloud-block .stats, .cloud-block .cloud-label, .cloud-block .cloud-empty { box-shadow: 0 0 0 0.5px rgba(var(--ao), 0.3), 0 1px 1.5px rgba(var(--ao), 0.4), 0 3px 4px rgba(58, 36, 18, 0.22), 0 8px 12px rgba(58, 36, 18, 0.16); }
+  .cloud-block .cloud-word { box-shadow: 0 0 0 0.5px rgba(var(--ao), 0.3), 0 1px 1.5px rgba(var(--ao), 0.4), 0 3px 6px rgba(58, 36, 18, 0.2); }
+</style>
+<style>
+  /* ---------- Update 159. Color themes pull out tab. Reuses the .gl classes ---------- */
+  #pl-tab { color: #FBF6E3; }
+  .gl.pl { --tc: #2B5F8E; top: min(244px, calc(100vh - 230px)); }
+  @media (max-width: 700px) {
+    .gl.pl { top: 244px !important; }
+    #pl-tab { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3a9 9 0 1 0 0 18c1.2 0 1.8-.9 1.4-1.9-.4-1 .3-2.1 1.4-2.1H17a4 4 0 0 0 4-4c0-5-4-10-9-10z'/%3E%3Ccircle cx='7.5' cy='11' r='1'/%3E%3Ccircle cx='10' cy='7' r='1'/%3E%3Ccircle cx='14.5' cy='7' r='1'/%3E%3C/svg%3E"); }
+  }
+</style>
+<style>
+  /* ---------- Update 168. Right edge tabs never block each other ---------- */
+  .gl { pointer-events: none; }
+  .gl-tab, .gl-panel { pointer-events: auto; }
+  @media (min-width: 701px) {
+    html.tabs-s .gl-tab { font-size: 19px; padding: 13px 0 15px; }
+    html.tabs-xs .gl-tab { font-size: 16px; padding: 10px 0 12px; }
+    html.tabs-s .gl-tab::after, html.tabs-xs .gl-tab::after { height: 30px; }
+  }
+</style>
 </head>
 <body class="splash-lock">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -3855,7 +4121,7 @@ body.flipping .hero h1 .iw span, body.flipping .wtyt .iw span, body.flipping .do
   function renderCards() {
     const el = document.getElementById('cards');
     el.innerHTML = entries.map((e, i) => `
-      <div class="card${justAdded && i === 0 ? ' drop' : ''} t${hsh(e.text, 1) % 6} p${hsh(e.text, 2) % 3} n${hsh(e.text, 5) % 4}" style="--tilt:${tilt(e.text)}deg;--tx:${(hsh(e.text, 3) % 41) - 20}px;--tw:${64 + (hsh(e.text, 4) % 34)}px" data-cat="${entryCat(e)}" data-words="${canonWords(e.source).join(' ')}">
+      <div class="card${justAdded && i === 0 ? ' drop' : ''} t${hsh(e.text, 1) % 6} p${hsh(e.text, 2) % 3} n${hsh(e.text, 5) % 8}" style="--tilt:${tilt(e.text)}deg;--tx:${(hsh(e.text, 3) % 41) - 20}px;--tw:${64 + (hsh(e.text, 4) % 34)}px" data-cat="${entryCat(e)}" data-words="${canonWords(e.source).join(' ')}">
         <p class="quote">"${escapeHtml(shown(e))}"</p>
         <div class="card-foot">
           ${e.source ? `<p class="source">source: ${escapeHtml(showSource(e.source))}</p>` : '<span></span>'}
@@ -5785,7 +6051,7 @@ function qrMatrix(text){
   // ---- Update 126: small bounce on the two pull out tabs when they are clicked. It listens on the document because the tidy-up tab is written further down the page than this script ----
   (function () {
     document.addEventListener('click', function (e) {
-      var t = e.target.closest && e.target.closest('#gl-tab, #rf-tab, #tdr-tab, .td-tab');
+      var t = e.target.closest && e.target.closest('#gl-tab, #rf-tab, #pl-tab, #tdr-tab, .td-tab');
       if (!t) return;
       t.classList.remove('tab-bounce'); void t.offsetWidth; t.classList.add('tab-bounce');
     });
@@ -5919,20 +6185,37 @@ function qrMatrix(text){
     Object.keys(total).forEach(draw); status();
   })();
 </script>
+<aside class="gl pl" id="pl" aria-label="Color themes">
+  <button class="gl-tab" id="pl-tab" type="button" aria-expanded="false" aria-controls="pl-panel">the colors</button>
+  <div class="gl-panel" id="pl-panel">
+    <div class="gl-head"><h2 class="gl-title">pick a color theme</h2><button class="gl-x" id="pl-x" type="button" aria-label="Close the color themes">×</button></div>
+    <p class="gl-sub">Tap a swatch. It stays for your next visit.</p>
+    <div class="rl-ds-row" id="pl-grid" role="group" aria-label="Color themes"></div>
+  </div>
+</aside>
 <div class="gl tdr" id="tdr"><button class="gl-tab" id="tdr-tab" type="button" aria-expanded="false" aria-controls="tidy">tidy up</button></div>
 <script>
-  // The right edge tabs overlap: each one starts 18px above the bottom of the one before, so they sit on top of each other like stacked index tabs
+  // The right edge tabs sit one under the other with a small gap, so no tab covers another one's clickable area. On a short window the labels shrink until all of them fit
   (function () {
     try {
-      var g = document.getElementById('gl'), t = document.getElementById('gl-tab'), r = document.getElementById('rf'), t2 = document.getElementById('rf-tab');
-      var td = document.getElementById('tdr');
-      if (!g || !t || !r) return;
+      var root = document.documentElement;
+      var items = [['gl', 'gl-tab'], ['rf', 'rf-tab'], ['pl', 'pl-tab'], ['tdr', 'tdr-tab']].map(function (p) { return [document.getElementById(p[0]), document.getElementById(p[1])]; }).filter(function (p) { return p[0] && p[1]; });
+      function layout() {
+        var y = 96, gap = 6;
+        items.forEach(function (p) {
+          var h = p[1].offsetHeight;
+          if (!h) return;
+          p[0].style.top = y + 'px';
+          y += h + gap;
+        });
+        return y;
+      }
       function place() {
-        var h = t.offsetHeight;
-        if (!h) return;
-        var top2 = Math.min(g.getBoundingClientRect().top + h - 18, window.innerHeight - 230);
-        r.style.top = top2 + 'px';
-        if (td && t2 && t2.offsetHeight) td.style.top = Math.min(top2 + t2.offsetHeight - 18, window.innerHeight - 150) + 'px';
+        root.classList.remove('tabs-s', 'tabs-xs');
+        if (window.innerWidth <= 700) { items.forEach(function (p) { p[0].style.top = ''; }); return; }
+        var end = layout();
+        if (end > window.innerHeight - 16) { root.classList.add('tabs-s'); end = layout(); }
+        if (end > window.innerHeight - 16) { root.classList.add('tabs-xs'); layout(); }
       }
       window.addEventListener('resize', place);
       window.addEventListener('load', place);
@@ -5956,6 +6239,32 @@ function qrMatrix(text){
       new MutationObserver(sync).observe(tidy, { attributes: true, attributeFilter: ['class'] });
       sync();
     } catch (e) { /* the left tab still works */ }
+  })();
+</script>
+<script>
+  // ---- Update 160: color theme swatches and the pull out behavior ----
+  (function () {
+    var pl = document.getElementById('pl'), tab = document.getElementById('pl-tab'), x = document.getElementById('pl-x'), grid = document.getElementById('pl-grid');
+    if (!pl || !tab || !grid || !window.wtytPal) return;
+    function set(open) { pl.classList.toggle('open', open); tab.setAttribute('aria-expanded', open ? 'true' : 'false'); }
+    function mark() {
+      var cur = window.wtytPal.get();
+      Array.prototype.forEach.call(grid.children, function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-id') === cur ? 'true' : 'false'); });
+    }
+    window.wtytPal.list.forEach(function (t, i) {
+      var c = window.wtytPal.swatch(t), b = document.createElement('button');
+      b.type = 'button'; b.className = 'rl-ds'; b.setAttribute('data-id', t.id);
+      b.setAttribute('aria-label', 'Color theme ' + (i + 1));
+      b.innerHTML = '<i style="background:linear-gradient(135deg,' + c[0] + ' 0 50%,' + c[1] + ' 50%)"></i>';
+      b.addEventListener('click', function () { window.wtytPal.set(t.id); mark(); });
+      grid.appendChild(b);
+    });
+    window.wtytPal.init();
+    mark();
+    tab.addEventListener('click', function () { set(!pl.classList.contains('open')); });
+    x.addEventListener('click', function () { set(false); tab.focus(); });
+    document.addEventListener('click', function (e) { if (pl.classList.contains('open') && !pl.contains(e.target)) set(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && pl.classList.contains('open')) { set(false); tab.focus(); } });
   })();
 </script>
 </body>
