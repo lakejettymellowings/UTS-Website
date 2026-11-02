@@ -671,7 +671,6 @@
   .prompts button { font-family: "Caveat", cursive; font-size: 18px; padding: 2px 12px; }
   .chips button.on, .fchip.on { background: var(--highlight); border-style: solid; }
   .fchip i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
-  .fchip.rnd { border-color: var(--red); color: var(--red); margin-left: auto; }
   .composer #reframeInput { margin-top: 8px; }
   .care { font-size: 14px; color: var(--ink-soft); margin: 10px 0 12px; font-style: italic; }
   .reacts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
@@ -1111,7 +1110,6 @@
   .metoo:nth-of-type(1) { --stk: color-mix(in srgb, var(--tape) 45%, var(--card)); }
   .metoo:nth-of-type(2) { --stk: color-mix(in srgb, var(--good) 22%, var(--card)); }
   .metoo:nth-of-type(3) { --stk: color-mix(in srgb, var(--red) 16%, var(--card)); }
-  .fchip.rnd { --stk: color-mix(in srgb, var(--red) 10%, var(--card)); color: #5E1A0B; font-weight: 600; outline-color: color-mix(in srgb, var(--red) 55%, transparent); }
 
   /* chosen stickers are pressed down flat */
   .chips button.on, .fchip.on, .metoo.mine { background: var(--sheen), var(--highlight); border-style: solid; box-shadow: 0 1px 1px rgba(var(--shc), 0.25); }
@@ -3187,6 +3185,133 @@ body.flipping .hero h1 .iw span, body.flipping .wtyt .iw span, body.flipping .do
     .scrap.pclip, .scrap.bclip, .scrap.spin { filter: drop-shadow(1px 1px 1px rgba(var(--ao), 0.45)) drop-shadow(2px 4px 3px rgba(var(--shc), 0.24)); }
   }
 </style>
+<style>
+  /* ---------- Update 178. Pull out tabs are icon tabs at every width, and the slide is smoother. Delete this block to go back. ---------- */
+  /* the phone icon tabs (44px squares with a question mark, book and palette) now apply on desktop too, and "tidy up" gets a box icon. The words stay in each button for screen readers. The four tabs sit at an even 76px step (44px tab plus its ribbon), so the CSS places them and the script no longer measures label heights */
+  .gl { transform: translateX(calc(100% - 44px)); will-change: transform; }
+  .gl.open { transform: none; }
+  .gl .gl-tab { width: 44px; height: 44px; padding: 0; writing-mode: horizontal-tb; font-size: 0; line-height: 0; background-repeat: no-repeat; background-position: center; background-size: 24px 24px; }
+  #gl-tab { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9.5'/%3E%3Cpath d='M9.2 9.3a2.9 2.9 0 1 1 4.3 2.5c-.9.6-1.5 1.1-1.5 2.2'/%3E%3Cpath d='M12 17.3h.01'/%3E%3C/svg%3E"); }
+  #rf-tab { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 6.5C10 5 7 4.5 4 5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5zM12 6.5v13'/%3E%3C/svg%3E"); }
+  #pl-tab { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3a9 9 0 1 0 0 18c1.2 0 1.8-.9 1.4-1.9-.4-1 .3-2.1 1.4-2.1H17a4 4 0 0 0 4-4c0-5-4-10-9-10z'/%3E%3Ccircle cx='7.5' cy='11' r='1'/%3E%3Ccircle cx='10' cy='7' r='1'/%3E%3Ccircle cx='14.5' cy='7' r='1'/%3E%3C/svg%3E"); }
+  #tdr-tab { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='5' rx='1'/%3E%3Cpath d='M5 9v10h14V9'/%3E%3Cpath d='M10 13h4'/%3E%3C/svg%3E"); }
+  .gl-tab::after { top: calc(100% + 1px); width: 12px; height: 31px; margin-left: -6px; }
+  #gl.gl { top: 96px; --gl-top: 96px; }
+  #rf.gl { top: 172px !important; --gl-top: 172px; }
+  #pl.gl { top: 248px !important; --gl-top: 248px; }
+  #tdr.gl { top: 324px !important; }
+  /* a panel opening lower down must not run off the bottom of a short window */
+  .gl-panel { max-height: min(540px, calc(100vh - var(--gl-top, 96px) - 16px)); }
+  @supports (height: 100dvh) { .gl-panel { max-height: min(540px, calc(100dvh - var(--gl-top, 96px) - 16px)); } }
+</style>
+<style>
+  /* ---------- Update 180. Phones only: the title glow steps instead of fading every frame, and the stains on the section 3 sheet no longer blend. Delete this block to go back. ---------- */
+  @media (pointer: coarse), (max-width: 700px) {
+    /* 180a. The per letter glow (hero title, key terms, notebook label) animates a text shadow and a stroke color, which repaints text and cannot run on the graphics layer. Same keyframes, same 9 second loop, but each color change now happens in 12 small steps instead of 60 a second. Delete this rule to get the smooth fade back. */
+    .hero h1 .iw span, .wtyt .iw span { animation-timing-function: steps(12, end); }
+    /* 180b. The coffee rings and ink blots over the section 3 sheet were the last big blended layer on phones. Normal blending looks almost the same on this pale paper. Delete this rule to get multiply back. */
+    body > section:nth-of-type(3) > .wrap::before { mix-blend-mode: normal; }
+  }
+</style>
+<style>
+  /* ---------- Update 181. Dark mode: a soft gloss on the desk behind the sheets. Delete this block to go back. ---------- */
+  /* Two static layers added in front of the ruled lines on the fixed body::before: a faint glow in the top left corner and one wide diagonal band of light, like a lamp on a polished desk. It stays put while the page scrolls. No animation, no blend mode, no extra element. --gloss is the strength: 0 is off, 1 is as designed, 2 is twice as strong. */
+  :root { --gloss: 1; }
+  :root[data-theme="dark"] body::before {
+    background-image:
+      radial-gradient(130% 75% at 10% -8%, rgba(255, 255, 255, calc(0.085 * var(--gloss))), transparent 58%),
+      linear-gradient(115deg, transparent 28%, rgba(255, 255, 255, calc(0.035 * var(--gloss))) 40%, rgba(255, 255, 255, calc(0.065 * var(--gloss))) 47%, rgba(255, 255, 255, calc(0.03 * var(--gloss))) 54%, transparent 66%),
+      repeating-linear-gradient(to bottom, transparent 0, transparent 31px, var(--paper-line) 31px, var(--paper-line) 32px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) body::before {
+      background-image:
+      radial-gradient(130% 75% at 10% -8%, rgba(255, 255, 255, calc(0.085 * var(--gloss))), transparent 58%),
+      linear-gradient(115deg, transparent 28%, rgba(255, 255, 255, calc(0.035 * var(--gloss))) 40%, rgba(255, 255, 255, calc(0.065 * var(--gloss))) 47%, rgba(255, 255, 255, calc(0.03 * var(--gloss))) 54%, transparent 66%),
+      repeating-linear-gradient(to bottom, transparent 0, transparent 31px, var(--paper-line) 31px, var(--paper-line) 32px);
+    }
+  }
+</style>
+<style>
+  /* ---------- Update 182. The coffee ring on the Dear self letter is softer, so the text over it reads clearly. Delete this block to go back. ---------- */
+  /* Same ring, same place and size, with about 45% of the ink and a slightly softer edge. The rest of the paper (creases, sheen, edges) is copied unchanged from the rule above. */
+  .doc .lp::before {
+    background-image:
+      /* coffee ring: wobbly, uneven, with a dark rim and a gap, clipped by the paper edge */
+      url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3Cdefs%3E%3Cfilter id=%22f%22 x=%22-20%25%22 y=%22-20%25%22 width=%22140%25%22 height=%22140%25%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.035%22 numOctaves=%222%22 seed=%227%22 result=%22n%22/%3E%3CfeDisplacementMap in=%22SourceGraphic%22 in2=%22n%22 scale=%229%22/%3E%3CfeGaussianBlur stdDeviation=%221.3%22/%3E%3C/filter%3E%3C/defs%3E%3Cg filter=%22url(%23f)%22 fill=%22none%22 stroke-linecap=%22round%22%3E%3Cellipse cx=%22100%22 cy=%22102%22 rx=%2266%22 ry=%2261%22 fill=%22%238b5e34%22 fill-opacity=%220.035%22 stroke=%22none%22/%3E%3Cpath d=%22M100 38 C 140 36, 168 66, 166 104 C 164 142, 132 166, 98 164 C 62 162, 36 134, 36 100 C 36 70, 56 44, 84 39%22 stroke=%22%235e3513%22 stroke-opacity=%220.17%22 stroke-width=%225%22/%3E%3Cpath d=%22M104 46 C 138 48, 158 72, 156 104 C 154 136, 128 156, 100 154 C 70 152, 48 130, 48 100%22 stroke=%22%236b3f1c%22 stroke-opacity=%220.09%22 stroke-width=%223%22/%3E%3Cpath d=%22M52 66 C 60 52, 74 46, 88 44%22 stroke=%22%235e3513%22 stroke-opacity=%220.14%22 stroke-width=%222.5%22/%3E%3C/g%3E%3C/svg%3E"),
+      /* two fold creases at one third and two thirds: dark line, bright lip, soft shade either side */
+      linear-gradient(to bottom, transparent calc(33.33% - 16px), rgba(120, 90, 40, 0.07) calc(33.33% - 3px), rgba(70, 48, 16, 0.26) 33.33%, rgba(255, 255, 255, 0.6) calc(33.33% + 1.5px), rgba(255, 255, 255, 0.16) calc(33.33% + 6px), transparent calc(33.33% + 18px)),
+      linear-gradient(to bottom, transparent calc(66.66% - 16px), rgba(120, 90, 40, 0.07) calc(66.66% - 3px), rgba(70, 48, 16, 0.26) 66.66%, rgba(255, 255, 255, 0.6) calc(66.66% + 1.5px), rgba(255, 255, 255, 0.16) calc(66.66% + 6px), transparent calc(66.66% + 18px)),
+      /* soft sheen so the sheet reads slightly curved */
+      linear-gradient(160deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 45%, rgba(120, 80, 30, 0.1)),
+      /* yellowed, handled edges */
+      radial-gradient(130% 110% at 50% 50%, transparent 52%, rgba(176, 128, 56, 0.3) 100%);
+  }
+</style>
+<style>
+  /* ---------- Update 183. Wider sheets on big screens. Delete this block to go back. ---------- */
+  /* The sheets were capped at 760px at every screen size, so a big monitor showed them in the middle third. --sheet-w is the new cap: it stays 760px until the window is about 1320px wide, then grows with the window and stops at 980px. The 560px taken off the window width keeps 280px free on each side, because the pens, clips and tape that hang outside the sheets reach out about 260px. Change 980px to go wider or narrower. */
+  :root { --sheet-w: clamp(760px, calc(100vw - 560px), 980px); }
+  .wrap.brand, footer .wrap { max-width: calc(var(--sheet-w) - 60px); }
+  body > section > .wrap, .hero.wrap { max-width: var(--sheet-w); }
+</style>
+<style>
+  /* ---------- Update 184. More breathing room inside the wider sheets. Delete this block to go back. ---------- */
+  /* --sp is how far past 1320px the window is: 0 at 1320px, growing 1px for every 10px of window width, and stopping at 30px (a 1620px window). Every gap below is its old size plus a share of --sp, so the spacing opens up at the same pace as the sheets (Update 183) and below 1320px nothing changes. */
+  :root { --sp: clamp(0px, calc((100vw - 1320px) / 10), 30px); }
+  @media (min-width: 1320px) {
+    /* the gap between sheets, and the padding inside them (sections 4 and 5 keep their left padding, because their red margin line sits there) */
+    body > section { padding-top: calc(30px + var(--sp) * 1.2); padding-bottom: calc(30px + var(--sp) * 1.2); }
+    body > section > .wrap { padding-top: calc(46px + var(--sp) * 1.2); padding-bottom: calc(42px + var(--sp) * 1.2); padding-right: calc(34px + var(--sp) * 1.5); }
+    body > section:not(:nth-of-type(4)):not(:nth-of-type(5)) > .wrap { padding-left: calc(34px + var(--sp) * 1.5); }
+    .hero.wrap { padding-top: calc(52px + var(--sp) * 1.2); padding-bottom: calc(44px + var(--sp) * 1.2); padding-left: calc(34px + var(--sp) * 1.5); padding-right: calc(34px + var(--sp) * 1.5); }
+    /* text: a little more line height, more space around paragraphs, and a slightly longer line so the text does not hug the left side of a wide sheet */
+    p.body { line-height: 1.72; margin-top: calc(18px + var(--sp) * 0.4); margin-bottom: calc(18px + var(--sp) * 0.4); max-width: calc(62ch + var(--sp) * 3); }
+    p.body.pull { margin-top: calc(28px + var(--sp) * 0.8); }
+    section > .kicker { margin-bottom: calc(10px + var(--sp) * 0.3); }
+    body > section > .wrap h2 { margin-bottom: calc(18px + var(--sp) * 0.6); }
+    .margin-note { margin-top: calc(6px + var(--sp) * 0.3); margin-bottom: calc(22px + var(--sp) * 0.6); }
+    .wall-note { margin-bottom: calc(24px + var(--sp) * 0.5); }
+    /* blocks and grids */
+    .quiz { margin-top: calc(20px + var(--sp) * 0.6); padding: calc(24px + var(--sp) * 0.4) calc(26px + var(--sp) * 0.8); }
+    .composer { gap: calc(10px + var(--sp) * 0.3); margin-bottom: calc(32px + var(--sp) * 0.8); }
+    .cloud-block { padding: calc(24px + var(--sp) * 0.5) calc(22px + var(--sp) * 0.6) calc(26px + var(--sp) * 0.5); margin-bottom: calc(28px + var(--sp) * 0.8); }
+    .cloud-block .stats { margin-top: calc(22px + var(--sp) * 0.5); }
+    .cards { gap: calc(30px + var(--sp) * 0.8) calc(22px + var(--sp) * 0.8); }
+    .limits-notes { gap: calc(34px + var(--sp) * 0.8) calc(22px + var(--sp) * 0.8); margin-top: calc(14px + var(--sp) * 0.5); }
+    .rewrite-row { margin-top: calc(18px + var(--sp) * 0.5); margin-bottom: calc(18px + var(--sp) * 0.5); column-gap: calc(18px + var(--sp) * 0.6); }
+    .doc.yourturn { margin-top: calc(34px + var(--sp) * 0.8); }
+    .sharebar { margin-top: calc(32px + var(--sp) * 0.8); }
+    .sc-steps { max-width: calc(62ch + var(--sp) * 3); }
+    .sc-steps li { margin-bottom: calc(10px + var(--sp) * 0.3); }
+    .sc-grid { gap: calc(22px + var(--sp) * 0.8); margin-top: calc(28px + var(--sp) * 0.6); }
+  }
+</style>
+<style>
+  /* ---------- Update 185. Space between the hero title and the line under it. Delete this block to go back. ---------- */
+  /* The title is up to 88px tall with a glow that reaches about 28px past the letters, and only 16px separated it from the line below, so they touched. This opens that gap on every screen wider than a phone, and a little more as the window grows (--sp is from Update 184). */
+  @media (min-width: 701px) {
+    .hero h1 { margin-bottom: calc(32px + var(--sp) * 0.9); }
+  }
+  @media (min-width: 1320px) {
+    .hero h1 { margin-top: calc(34px + var(--sp) * 0.6); }
+    .hero .lede { line-height: 1.7; margin-bottom: calc(6px + var(--sp) * 0.4); }
+  }
+</style>
+<style>
+/* Update 187: stickers and pieces that drifted onto text after the sheets got wider */
+@media (min-width: 860px) {
+  .scrap.s-hmm { left: auto; right: 62px; top: auto; bottom: -6px; }
+  .scrap.s-star { left: auto; right: 90px; top: -34px; }
+  .scrap.s-noted { left: auto; right: 14px; top: -34px; }
+}
+@media (min-width: 700px) {
+  .scrap.dymo.d1 { left: 215px; }
+  .scrap.print { left: auto; top: auto; right: 6px; bottom: -34px; }
+  /* section 05: more room under the share button so the envelope does not sit on it */
+  .wrap:has(> .scrap.env) { padding-bottom: calc(98px + 1.2 * var(--sp, 0px)); }
+}
+</style>
 </head>
 <body class="splash-lock">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -4427,19 +4552,9 @@ body.flipping .hero h1 .iw span, body.flipping .wtyt .iw span, body.flipping .do
     });
     const fl = document.getElementById('filters');
     fl.innerHTML = '<span class="chip-label">filter</span><button type="button" class="fchip on" data-cat="">all</button>' +
-      Object.keys(CAT_DEFS).map(c => `<button type="button" class="fchip" data-cat="${c}"><i style="background:var(--c-${c})"></i>${CAT_DEFS[c].label}</button>`).join('') +
-      '<button type="button" class="fchip rnd" id="rnd">show me a random one</button>';
+      Object.keys(CAT_DEFS).map(c => `<button type="button" class="fchip" data-cat="${c}"><i style="background:var(--c-${c})"></i>${CAT_DEFS[c].label}</button>`).join('');
     fl.addEventListener('click', ev => {
       const b = ev.target.closest('button'); if (!b) return;
-      if (b.id === 'rnd') {
-        catFilter = null; pinnedWord = null; applyFilters();
-        fl.querySelectorAll('.fchip').forEach(x => x.classList.toggle('on', x.dataset.cat === ''));
-        const cards = [...document.querySelectorAll('#cards .card')]; if (!cards.length) return;
-        const c = cards[Math.floor(Math.random() * cards.length)];
-        c.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        c.classList.add('lit'); setTimeout(() => c.classList.remove('lit'), 2200);
-        return;
-      }
       catFilter = b.dataset.cat || null;
       fl.querySelectorAll('.fchip').forEach(x => x.classList.toggle('on', x === b));
       applyFilters();
@@ -6223,7 +6338,7 @@ function qrMatrix(text){
       }
       function place() {
         root.classList.remove('tabs-s', 'tabs-xs');
-        if (window.innerWidth <= 700) { items.forEach(function (p) { p[0].style.top = ''; }); return; }
+        if (true) { items.forEach(function (p) { p[0].style.top = ''; }); return; } /* Update 178: the icon tabs are placed by CSS at every width */
         var end = layout();
         if (end > window.innerHeight - 16) { root.classList.add('tabs-s'); end = layout(); }
         if (end > window.innerHeight - 16) { root.classList.add('tabs-xs'); layout(); }
@@ -6296,6 +6411,19 @@ function qrMatrix(text){
       var g = e.target.closest && e.target.closest('.gl');
       if (g) raise(g);
     }, true);
+  })();
+</script>
+<script>
+  // Update 178: while a pull out tab slides, the glowing letters and the doodle drift are paused (the same pause the notebook cover flip uses), so the slide gets the whole frame budget. Any open or close of a pull out sets it, so the tab, the x, Escape and a tap outside are all covered
+  (function () {
+    try {
+      var tm = 0, b = document.body;
+      var mo = new MutationObserver(function () {
+        b.classList.add('flipping'); clearTimeout(tm);
+        tm = setTimeout(function () { b.classList.remove('flipping'); }, 480);
+      });
+      document.querySelectorAll('.gl').forEach(function (g) { mo.observe(g, { attributes: true, attributeFilter: ['class'] }); });
+    } catch (e) { /* the slide just runs without the pause */ }
   })();
 </script>
 </body>
