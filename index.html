@@ -236,7 +236,7 @@
       linear-gradient(115deg, rgba(255, 255, 255, 0.1), transparent 38%, rgba(0, 0, 0, 0.3)),
       #11285A;
     background-size: 140px 140px, 140px 140px, 140px 140px, 140px 140px, 140px 140px, auto, auto;
-    box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.05), inset 0 -40px 70px rgba(0, 0, 0, 0.4), 0 16px 34px rgba(0, 0, 0, 0.5);
+    box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.05), inset 0 -40px 70px rgba(0, 0, 0, 0.4), 5px 16px 34px rgba(0, 0, 0, 0.5);
   }
   /* cloth binding strip down the left edge, like the spine of a composition book */
   .nb-cover::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 34px; background: linear-gradient(90deg, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.08) 70%, rgba(255, 255, 255, 0.06)); }
@@ -245,7 +245,7 @@
   .nb-label {
     position: relative; width: min(560px, 84vw); padding: 28px 26px 24px; text-align: center; color: #031D44; rotate: -1.2deg;
     background: linear-gradient(160deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 45%, rgba(120, 80, 30, 0.1)), #F6ECD3;
-    border-radius: 5px; box-shadow: 0 3px 9px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.4);
+    border-radius: 5px; box-shadow: 1px 3px 9px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.4);
     outline: 2px solid rgba(3, 29, 68, 0.55); outline-offset: -10px;
   }
   .nb-label::before { content: ""; position: absolute; top: -12px; left: 50%; width: 92px; height: 24px; margin-left: -46px; rotate: 3deg; background: color-mix(in srgb, #EBD27A 80%, transparent); border: 1px solid rgba(120, 90, 0, 0.2); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25); }
@@ -256,7 +256,7 @@
   .nb-rings {
     position: absolute; left: 0; right: 0; top: -6px; height: 46px; z-index: 3; pointer-events: none;
     background: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 28 46%22 width=%2228%22 height=%2246%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 x2=%221%22%3E%3Cstop offset=%220%22 stop-color=%22%23586170%22/%3E%3Cstop offset=%22.45%22 stop-color=%22%23f4f7fb%22/%3E%3Cstop offset=%221%22 stop-color=%22%236b7484%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Cellipse cx=%2215%22 cy=%2234%22 rx=%226.5%22 ry=%225%22 fill=%22%2304070d%22/%3E%3Cpath d=%22M7 1 C 9 14, 13 27, 18 35%22 fill=%22none%22 stroke=%22url(%23g)%22 stroke-width=%223.6%22 stroke-linecap=%22round%22/%3E%3C/svg%3E") 4px 0 / 28px 46px repeat-x;
-    filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.5));
+    filter: drop-shadow(1px 3px 2px rgba(0, 0, 0, 0.5));
   }
   /* the flip: a tiny press down first, then the cover swings up and over the spiral */
   #splash.open .nb-cover { animation: nbFlip 1.3s cubic-bezier(.5, 0, .3, 1) forwards; }
@@ -600,7 +600,7 @@
 
   /* ---------- Limits ---------- */
   .limits-notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 34px 22px; list-style: none; padding: 14px 0 0; margin: 14px 0 0; }
-  .sticky { position: relative; min-width: 0; padding: 28px 20px 20px; border: 1px solid var(--paper-line); border-radius: 3px; background: color-mix(in srgb, var(--sticky, var(--c-myself)) 22%, var(--card)); box-shadow: 0 6px 14px rgba(3,29,68,.18), 0 1px 2px rgba(3,29,68,.2); transform: rotate(var(--r, 0deg)); transition: transform .25s; }
+  .sticky { position: relative; min-width: 0; padding: 28px 20px 20px; border: 1px solid var(--paper-line); border-radius: 3px; background: color-mix(in srgb, var(--sticky, var(--c-myself)) 22%, var(--card)); box-shadow: 2px 6px 14px rgba(var(--shc),.18), 0 1px 2px rgba(var(--shc),.2); transform: rotate(var(--r, 0deg)); transition: transform .25s; }
   .sticky::before { content: ""; position: absolute; top: -11px; left: 50%; width: 72px; height: 22px; margin-left: -36px; transform: rotate(calc(var(--r, 0deg) * -1.5)); background: color-mix(in srgb, var(--tape) 75%, transparent); border: 1px solid var(--paper-line); }
   .sticky h3 { font-family: "Caveat", cursive; font-weight: 700; font-size: 26px; line-height: 1.05; color: var(--red); margin: 0 0 8px; }
   .sticky p { margin: 0; font-size: 15.5px; line-height: 1.55; }
@@ -635,9 +635,9 @@
   /* ---------- Pinboard, handwriting, motion ---------- */
   .note { font-family: "Caveat", cursive; font-size: 17px; padding: 0 10px; }
   .cards { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 30px 22px; padding-top: 10px; }
-  .card { position: relative; border: 1px solid var(--paper-line); border-left: 1px solid var(--paper-line); border-radius: 4px; padding: 26px 18px 14px; transform: rotate(var(--tilt, 0deg)); box-shadow: 0 6px 14px rgba(3,29,68,.18), 0 1px 2px rgba(3,29,68,.2); transition: transform .25s, box-shadow .25s, opacity .25s; }
-  .card::before { content: ""; position: absolute; top: -11px; left: 50%; width: 76px; height: 22px; margin-left: -38px; transform: rotate(calc(var(--tilt, 0deg) * -1.6)); background: color-mix(in srgb, var(--tape) 75%, transparent); border: 1px solid var(--paper-line); box-shadow: 0 1px 2px rgba(3,29,68,.15); }
-  .card:hover, .card.lit { transform: rotate(0deg) translateY(-4px) scale(1.02); box-shadow: 0 12px 22px rgba(3,29,68,.28); z-index: 2; }
+  .card { position: relative; border: 1px solid var(--paper-line); border-left: 1px solid var(--paper-line); border-radius: 4px; padding: 26px 18px 14px; transform: rotate(var(--tilt, 0deg)); box-shadow: 2px 6px 14px rgba(var(--shc),.18), 0 1px 2px rgba(var(--shc),.2); transition: transform .25s, box-shadow .25s, opacity .25s; }
+  .card::before { content: ""; position: absolute; top: -11px; left: 50%; width: 76px; height: 22px; margin-left: -38px; transform: rotate(calc(var(--tilt, 0deg) * -1.6)); background: color-mix(in srgb, var(--tape) 75%, transparent); border: 1px solid var(--paper-line); box-shadow: 0 1px 2px rgba(var(--shc),.15); }
+  .card:hover, .card.lit { transform: rotate(0deg) translateY(-4px) scale(1.02); box-shadow: 4px 12px 22px rgba(var(--shc),.28); z-index: 2; }
   .card.dim { opacity: .3; }
   .card .source { font-family: "Caveat", cursive; font-size: 18px; margin: 0; }
   .card-foot { display: flex; justify-content: space-between; align-items: flex-end; gap: 10px; margin-top: 6px; }
@@ -689,8 +689,8 @@
   .card.t1::before { background: repeating-linear-gradient(45deg, color-mix(in srgb, var(--c-family) 60%, transparent) 0 6px, color-mix(in srgb, var(--tape) 55%, transparent) 6px 12px); }
   .card.t2::before { background: radial-gradient(circle, color-mix(in srgb, var(--c-friends) 80%, transparent) 2.4px, transparent 3px) 0 0 / 11px 11px, color-mix(in srgb, var(--tape) 45%, transparent); }
   .card.t3::before { background: repeating-linear-gradient(0deg, color-mix(in srgb, var(--c-school) 40%, transparent) 0 5px, transparent 5px 10px), repeating-linear-gradient(90deg, color-mix(in srgb, var(--c-school) 40%, transparent) 0 5px, color-mix(in srgb, var(--card) 50%, transparent) 5px 10px); }
-  .card.t4::before { width: 18px; height: 18px; margin-left: -9px; top: -9px; border: 0; border-radius: 50%; transform: none; background: radial-gradient(circle at 35% 30%, #fff8 0 14%, var(--c-family) 40%, color-mix(in srgb, var(--c-family) 60%, #000) 100%); box-shadow: 2px 4px 5px rgba(3,29,68,.35); }
-  .card.t5::before, .card.t5::after { content: ""; position: absolute; top: -9px; width: 54px; height: 18px; background: color-mix(in srgb, var(--c-myself) 55%, transparent); border: 1px solid var(--paper-line); box-shadow: 0 1px 2px rgba(3,29,68,.15); }
+  .card.t4::before { width: 18px; height: 18px; margin-left: -9px; top: -9px; border: 0; border-radius: 50%; transform: none; background: radial-gradient(circle at 35% 30%, #fff8 0 14%, var(--c-family) 40%, color-mix(in srgb, var(--c-family) 60%, #000) 100%); box-shadow: 2px 4px 5px rgba(var(--shc),.35); }
+  .card.t5::before, .card.t5::after { content: ""; position: absolute; top: -9px; width: 54px; height: 18px; background: color-mix(in srgb, var(--c-myself) 55%, transparent); border: 1px solid var(--paper-line); box-shadow: 0 1px 2px rgba(var(--shc),.15); }
   .card.t5::before { left: -16px; margin-left: 0; width: 54px; transform: rotate(-38deg); }
   .card.t5::after { right: -16px; transform: rotate(38deg); }
   .card.p1 { background-image: repeating-linear-gradient(transparent 0 25px, var(--paper-line) 25px 26px); background-position: 0 14px; }
@@ -727,7 +727,7 @@
   /* the paper itself is its own layer so the edge can be torn without clipping the tape and scraps */
   .paper {
     position: absolute; inset: 0; z-index: -1; pointer-events: none;
-    filter: drop-shadow(0 12px 14px rgba(3, 29, 68, 0.17)) drop-shadow(0 2px 2px rgba(3, 29, 68, 0.26)) drop-shadow(0 0 0.6px rgba(3, 29, 68, 0.5));
+    filter: drop-shadow(4px 12px 14px rgba(var(--shc), 0.17)) drop-shadow(1px 2px 2px rgba(var(--shc), 0.26)) drop-shadow(0 0 0.6px rgba(var(--shc), 0.5));
   }
   .paper::before, .paper::after { content: ""; position: absolute; inset: 0; clip-path: polygon(var(--tear)); }
   .paper::before { background-color: var(--sheet, var(--s1)); }
@@ -742,7 +742,7 @@
   body > section > .wrap::after {
     content: ""; position: absolute; top: -13px; left: 50%; width: 96px; height: 26px; margin-left: -48px;
     background: color-mix(in srgb, var(--tape) 78%, transparent);
-    border: 1px solid var(--sheet-edge); box-shadow: 0 1px 2px rgba(3, 29, 68, 0.2);
+    border: 1px solid var(--sheet-edge); box-shadow: 0 1px 2px rgba(var(--shc), 0.2);
     transform: rotate(-3deg); pointer-events: none;
   }
 
@@ -822,7 +822,7 @@
   .hero > .tape {
     position: absolute; top: -13px; left: 50%; width: 96px; height: 26px; margin-left: -48px;
     background: color-mix(in srgb, var(--tape) 78%, transparent);
-    border: 1px solid var(--sheet-edge); box-shadow: 0 1px 2px rgba(3, 29, 68, 0.2);
+    border: 1px solid var(--sheet-edge); box-shadow: 0 1px 2px rgba(var(--shc), 0.2);
     transform: rotate(-3deg); pointer-events: none;
   }
   .hero h1 { font-size: clamp(46px, 10.5vw, 88px); line-height: 1.02; text-wrap: balance; margin: 34px 0 16px; }
@@ -863,7 +863,7 @@
   .scrap.news {
     --sr: 3deg; top: -26px; right: 22px; width: 158px; padding: 7px 9px 8px;
     background: color-mix(in srgb, var(--ink) 10%, var(--card));
-    border: 1px solid var(--sheet-edge); box-shadow: 0 3px 8px rgba(3, 29, 68, 0.22);
+    border: 1px solid var(--sheet-edge); box-shadow: 1px 3px 8px rgba(var(--shc), 0.22);
     font-family: Georgia, "Times New Roman", serif; color: var(--ink);
   }
   .news b { display: block; font-size: 12px; line-height: 1.1; letter-spacing: 0.04em; font-weight: 900; text-transform: uppercase; }
@@ -876,7 +876,7 @@
       linear-gradient(to bottom, transparent 13px, color-mix(in srgb, var(--red) 60%, transparent) 13px 14px, transparent 14px),
       repeating-linear-gradient(to bottom, transparent 0 17px, color-mix(in srgb, var(--c-school) 40%, transparent) 17px 18px);
     background-position: 0 0, 0 14px;
-    border: 1px solid var(--sheet-edge); box-shadow: 0 3px 8px rgba(3, 29, 68, 0.22);
+    border: 1px solid var(--sheet-edge); box-shadow: 1px 3px 8px rgba(var(--shc), 0.22);
     font-family: "Caveat", cursive; font-size: 19px; line-height: 18px; color: var(--ink);
   }
 
@@ -894,7 +894,7 @@
   .ticket em { font-style: normal; font-weight: 600; width: 70px; white-space: nowrap; line-height: 1.2; text-align: center; }
 
   .scrap.cutout { --sr: -3deg; bottom: -22px; right: 34px; display: flex; gap: 3px; }
-  .cutout u { text-decoration: none; display: grid; place-items: center; width: 26px; height: 32px; font-size: 21px; line-height: 1; box-shadow: 0 2px 5px rgba(3, 29, 68, 0.28); }
+  .cutout u { text-decoration: none; display: grid; place-items: center; width: 26px; height: 32px; font-size: 21px; line-height: 1; box-shadow: 1px 2px 5px rgba(var(--shc), 0.28); }
   .cutout u:nth-child(1) { background: var(--ink); color: var(--card); font: italic 700 23px Georgia, serif; transform: rotate(-5deg); }
   .cutout u:nth-child(2) { background: var(--card); color: var(--ink); font: 800 20px Verdana, sans-serif; text-transform: uppercase; transform: rotate(4deg) translateY(2px); }
   .cutout u:nth-child(3) { background: var(--red); color: var(--card); font: 700 22px "Courier New", monospace; transform: rotate(-3deg); }
@@ -938,12 +938,12 @@
     transition: translate .25s, rotate .25s, box-shadow .25s;
   }
   @media (hover: hover) {
-    .card:hover::before, .card.lit::before { translate: 0 -3px; rotate: -6deg; box-shadow: 0 5px 7px rgba(3, 29, 68, 0.22); }
+    .card:hover::before, .card.lit::before { translate: 0 -3px; rotate: -6deg; box-shadow: 2px 5px 7px rgba(var(--shc), 0.22); }
     .card.t5:hover::before, .card.t5.lit::before { translate: -2px -3px; rotate: -8deg; }
-    .card.t5:hover::after, .card.t5.lit::after { translate: 2px -3px; rotate: 8deg; box-shadow: 0 5px 7px rgba(3, 29, 68, 0.22); }
+    .card.t5:hover::after, .card.t5.lit::after { translate: 2px -3px; rotate: 8deg; box-shadow: 2px 5px 7px rgba(var(--shc), 0.22); }
     .card.t4:hover::before, .card.t4.lit::before { translate: 0 -4px; rotate: 0deg; }
-    .sticky:hover::before { translate: 0 -3px; rotate: -6deg; box-shadow: 0 5px 7px rgba(3, 29, 68, 0.22); }
-    body > section > .wrap:hover::after { translate: 0 -2px; rotate: -4deg; box-shadow: 0 4px 6px rgba(3, 29, 68, 0.2); }
+    .sticky:hover::before { translate: 0 -3px; rotate: -6deg; box-shadow: 2px 5px 7px rgba(var(--shc), 0.22); }
+    body > section > .wrap:hover::after { translate: 0 -2px; rotate: -4deg; box-shadow: 1px 4px 6px rgba(var(--shc), 0.2); }
   }
 
   /* each sheet drops onto the page and settles when it scrolls into view, and lifts away again on the way out */
@@ -980,10 +980,10 @@
   /* the bottom edge lifts off the board a little, so the shadow pools underneath */
   .card:not(.t5)::after {
     content: ""; position: absolute; left: 8%; right: 14%; bottom: -4px; height: 14px;
-    box-shadow: 0 14px 10px -6px rgba(3, 29, 68, 0.38);
+    box-shadow: 4px 14px 10px -6px rgba(var(--shc), 0.38);
     transform: rotate(-1.2deg); pointer-events: none; transition: box-shadow .25s;
   }
-  .card:not(.t5):hover::after, .card:not(.t5).lit::after { box-shadow: 0 20px 14px -6px rgba(3, 29, 68, 0.42); }
+  .card:not(.t5):hover::after, .card:not(.t5).lit::after { box-shadow: 6px 20px 14px -6px rgba(var(--shc), 0.42); }
 </style>
 <style>
   /* ---------- Limits notes. Depth, plus a different paper and fastening on each one ---------- */
@@ -1011,10 +1011,10 @@
   /* the bottom edge lifts off the page a little */
   .sticky:not(:nth-child(4))::after {
     content: ""; position: absolute; left: 8%; right: 14%; bottom: -4px; height: 14px;
-    box-shadow: 0 14px 10px -6px rgba(3, 29, 68, 0.38);
+    box-shadow: 4px 14px 10px -6px rgba(var(--shc), 0.38);
     transform: rotate(-1.2deg); pointer-events: none; transition: box-shadow .25s;
   }
-  .sticky:not(:nth-child(4)):hover::after { box-shadow: 0 20px 14px -6px rgba(3, 29, 68, 0.42); }
+  .sticky:not(:nth-child(4)):hover::after { box-shadow: 6px 20px 14px -6px rgba(var(--shc), 0.42); }
 
   /* 1. post-it. No tape, a sticky strip across the top and a curled bottom corner */
   .sticky:nth-child(1) {
@@ -1051,7 +1051,7 @@
   .sticky:nth-child(3)::before {
     width: 18px; height: 18px; margin-left: -9px; top: -9px; border: 0; border-radius: 50%; transform: none;
     background: radial-gradient(circle at 35% 30%, #fff8 0 14%, var(--c-online) 40%, color-mix(in srgb, var(--c-online) 60%, #000) 100%);
-    box-shadow: 2px 4px 5px rgba(3, 29, 68, 0.35);
+    box-shadow: 2px 4px 5px rgba(var(--shc), 0.35);
   }
   .sticky:nth-child(3):hover::before { translate: 0 -4px; rotate: 0deg; }
 
@@ -1064,14 +1064,14 @@
   .sticky:nth-child(4)::before, .sticky:nth-child(4)::after {
     content: ""; position: absolute; top: -9px; width: 54px; height: 18px;
     background: color-mix(in srgb, var(--tape) 70%, transparent);
-    border: 1px solid var(--paper-line); box-shadow: 0 1px 2px rgba(3, 29, 68, 0.15);
+    border: 1px solid var(--paper-line); box-shadow: 0 1px 2px rgba(var(--shc), 0.15);
     transition: translate .25s, rotate .25s, box-shadow .25s;
   }
   .sticky:nth-child(4)::before { left: -16px; margin-left: 0; transform: rotate(-38deg); }
   .sticky:nth-child(4)::after { right: -16px; transform: rotate(38deg); }
   @media (hover: hover) {
     .sticky:nth-child(4):hover::before { translate: -2px -3px; rotate: -8deg; }
-    .sticky:nth-child(4):hover::after { translate: 2px -3px; rotate: 8deg; box-shadow: 0 5px 7px rgba(3, 29, 68, 0.22); }
+    .sticky:nth-child(4):hover::after { translate: 2px -3px; rotate: 8deg; box-shadow: 2px 5px 7px rgba(var(--shc), 0.22); }
   }
 </style>
 <style>
@@ -1083,7 +1083,7 @@
     background: var(--sheen), var(--stk);
     border: 3px solid var(--sticker-edge);
     outline: 1px solid rgba(3, 29, 68, 0.3);
-    box-shadow: 0 1px 1px rgba(3, 29, 68, 0.25), 0 3px 5px rgba(3, 29, 68, 0.16);
+    box-shadow: 0 1px 1px rgba(var(--shc), 0.25), 1px 3px 5px rgba(var(--shc), 0.16);
     transition: translate .18s, rotate .18s, box-shadow .18s;
   }
   .prompts button { padding: 0 10px; }
@@ -1114,17 +1114,17 @@
   .fchip.rnd { --stk: color-mix(in srgb, var(--red) 10%, var(--card)); color: #5E1A0B; font-weight: 600; outline-color: color-mix(in srgb, var(--red) 55%, transparent); }
 
   /* chosen stickers are pressed down flat */
-  .chips button.on, .fchip.on, .metoo.mine { background: var(--sheen), var(--highlight); border-style: solid; box-shadow: 0 1px 1px rgba(3, 29, 68, 0.25); }
+  .chips button.on, .fchip.on, .metoo.mine { background: var(--sheen), var(--highlight); border-style: solid; box-shadow: 0 1px 1px rgba(var(--shc), 0.25); }
 
   /* peel up on hover */
   @media (hover: hover) {
     .prompts button:hover, .chips button:hover, .fchip:hover, .metoo:hover, .composer > button:hover {
       translate: 0 -2px; rotate: 0deg; opacity: 1;
-      box-shadow: 0 2px 2px rgba(3, 29, 68, 0.22), 0 8px 12px rgba(3, 29, 68, 0.2);
+      box-shadow: 1px 2px 2px rgba(var(--shc), 0.22), 2px 8px 12px rgba(var(--shc), 0.2);
     }
-    .chips button.on:hover, .fchip.on:hover, .metoo.mine:hover { translate: 0 -1px; box-shadow: 0 2px 3px rgba(3, 29, 68, 0.25); }
+    .chips button.on:hover, .fchip.on:hover, .metoo.mine:hover { translate: 0 -1px; box-shadow: 1px 2px 3px rgba(var(--shc), 0.25); }
   }
-  .prompts button:active, .chips button:active, .fchip:active, .metoo:active, .composer > button:active { translate: 0 0; box-shadow: 0 1px 1px rgba(3, 29, 68, 0.25); }
+  .prompts button:active, .chips button:active, .fchip:active, .metoo:active, .composer > button:active { translate: 0 0; box-shadow: 0 1px 1px rgba(var(--shc), 0.25); }
   @media (prefers-reduced-motion: reduce) { .prompts button, .chips button, .fchip, .metoo, .composer > button { transition: none; } }
 </style>
 <style>
@@ -1133,7 +1133,7 @@
   .hero > .tape {
     width: 22px; height: 22px; margin-left: -11px; top: -11px; border: 0; border-radius: 50%; transform: none;
     background: radial-gradient(circle at 35% 30%, #fff8 0 14%, var(--c-family) 40%, color-mix(in srgb, var(--c-family) 60%, #000) 100%);
-    box-shadow: 2px 4px 5px rgba(3, 29, 68, 0.35);
+    box-shadow: 2px 4px 5px rgba(var(--shc), 0.35);
   }
   /* 1. ivory claim sheet keeps plain masking tape */
   /* 2. sage graph paper. polka dot washi on the corner */
@@ -1153,7 +1153,7 @@
   body > section:nth-of-type(5) > .wrap::after {
     content: ""; position: absolute; top: -9px; width: 54px; height: 18px; margin-left: 0;
     background: color-mix(in srgb, var(--tape) 78%, transparent);
-    border: 1px solid var(--sheet-edge); box-shadow: 0 1px 2px rgba(3, 29, 68, 0.2);
+    border: 1px solid var(--sheet-edge); box-shadow: 0 1px 2px rgba(var(--shc), 0.2);
     pointer-events: none; transition: translate .25s, rotate .25s, box-shadow .25s;
   }
   body > section:nth-of-type(5) > .wrap::before { left: -16px; transform: rotate(-38deg); }
@@ -1169,12 +1169,12 @@
   .scrap.polaroid {
     --sr: -6deg; top: -36px; left: 26px; width: 92px; padding: 6px 6px 24px;
     background: #FBF7EC; border: 1px solid rgba(3, 29, 68, 0.14);
-    box-shadow: 0 5px 11px rgba(3, 29, 68, 0.28), 0 1px 2px rgba(3, 29, 68, 0.25);
+    box-shadow: 2px 5px 11px rgba(var(--shc), 0.28), 0 1px 2px rgba(var(--shc), 0.25);
   }
   .polaroid::before {
     content: ""; position: absolute; top: -9px; left: 50%; width: 46px; height: 15px; margin-left: -23px;
     background: color-mix(in srgb, var(--tape) 80%, transparent); border: 1px solid var(--sheet-edge);
-    box-shadow: 0 1px 2px rgba(3, 29, 68, 0.2); transform: rotate(4deg);
+    box-shadow: 0 1px 2px rgba(var(--shc), 0.2); transform: rotate(4deg);
   }
   .polaroid .ph {
     display: block; height: 54px;
@@ -1199,7 +1199,7 @@
       repeating-linear-gradient(90deg, var(--hl) 0 5px, transparent 5px 11px) 3px 4px / calc(100% - 6px) 4px no-repeat,
       repeating-linear-gradient(90deg, var(--hl) 0 5px, transparent 5px 11px) 3px calc(100% - 4px) / calc(100% - 6px) 4px no-repeat,
       #1B232E;
-    box-shadow: 0 3px 8px rgba(3, 29, 68, 0.3);
+    box-shadow: 1px 3px 8px rgba(var(--shc), 0.3);
   }
   .filmstrip b { flex: 1; display: block; border-radius: 1px; }
   .filmstrip b:nth-child(1) { background: radial-gradient(circle at 50% 72%, #8F2D18 0 5px, transparent 5.5px), linear-gradient(#E8C1B0, #F2E3A2); }
@@ -1219,18 +1219,18 @@
       radial-gradient(ellipse 60% 38% at 30% 100%, #5E8A6F 0 99%, transparent 100%),
       radial-gradient(ellipse 70% 30% at 82% 100%, #3F6B52 0 99%, transparent 100%),
       linear-gradient(#9CC4E4, #E9F1F6 75%);
-    border: 3px solid #FBF7EC; box-shadow: 0 4px 9px rgba(3, 29, 68, 0.28);
+    border: 3px solid #FBF7EC; box-shadow: 1px 4px 9px rgba(var(--shc), 0.28);
     background-origin: border-box;
   }
 
   /* paper clip and binder clip */
-  .scrap.pclip { width: 22px; height: 52px; filter: drop-shadow(0 2px 2px rgba(3, 29, 68, 0.35)); }
+  .scrap.pclip { width: 22px; height: 52px; filter: drop-shadow(1px 2px 2px rgba(var(--shc), 0.35)); }
   .scrap.pclip svg { display: block; width: 100%; height: 100%; fill: none; stroke-linecap: round; stroke-linejoin: round; }
   .pclip .pc-wire { stroke: #9AA5B1; stroke-width: 2.2; }
   .pclip .pc-shade { stroke: #E7EDF3; stroke-width: 0.8; transform: translate(-0.5px, -0.5px); }
   .scrap.pclip.c1 { --sr: 12deg; top: -38px; right: 86px; }
   .scrap.pclip.c3 { --sr: -14deg; top: -14px; left: 20%; }
-  .scrap.bclip { --sr: -8deg; top: -12px; right: 54px; width: 54px; height: 52px; filter: drop-shadow(0 3px 3px rgba(3, 29, 68, 0.35)); }
+  .scrap.bclip { --sr: -8deg; top: -12px; right: 54px; width: 54px; height: 52px; filter: drop-shadow(1px 3px 3px rgba(var(--shc), 0.35)); }
   .scrap.bclip svg { display: block; width: 100%; height: 100%; }
   .bclip .bc-wire { fill: none; stroke: #AAB3BD; stroke-width: 3; stroke-linecap: round; }
   .bclip .bc-body { fill: #1F2630; }
@@ -1260,7 +1260,7 @@
   .pmark text { fill: #4B3A7A; stroke: none; font: 700 8px "Courier New", monospace; }
 
   /* luggage tag hanging off the right edge of the hero (wide screens only) */
-  .scrap.tag { --sr: 8deg; right: -50px; top: 170px; width: 54px; height: 92px; filter: drop-shadow(0 3px 4px rgba(3, 29, 68, 0.3)); }
+  .scrap.tag { --sr: 8deg; right: -50px; top: 170px; width: 54px; height: 92px; filter: drop-shadow(1px 3px 4px rgba(var(--shc), 0.3)); }
   .tag::before { content: ""; position: absolute; left: 50%; top: -26px; width: 22px; height: 42px; margin-left: -11px; border: 2px solid #A33B22; border-radius: 50%; }
   .tag .tg {
     position: absolute; inset: 0; background: #E9D8A6;
@@ -1274,7 +1274,7 @@
   .scrap.receipt {
     --sr: -3deg; left: -76px; top: 38%; width: 104px; padding: 9px 8px 8px;
     background: #FBF9F0; color: #2A3340; font: 700 7.6px/1.6 "Courier New", monospace;
-    filter: drop-shadow(0 3px 4px rgba(3, 29, 68, 0.28)); margin-bottom: 6px;
+    filter: drop-shadow(1px 3px 4px rgba(var(--shc), 0.28)); margin-bottom: 6px;
   }
   .receipt::after { content: ""; position: absolute; left: 0; right: 0; bottom: -6px; height: 6px; background: conic-gradient(from -45deg at bottom, #0000, #FBF9F0 1deg 89deg, #0000 90deg) 0 0 / 10px 6px repeat-x; }
   .receipt b { display: block; text-align: center; border-bottom: 1px dashed rgba(42, 51, 64, 0.5); padding-bottom: 3px; margin-bottom: 3px; }
@@ -1296,7 +1296,7 @@
   .scrap.dogear {
     right: 0; bottom: 0; width: 34px; height: 34px;
     background: linear-gradient(135deg, color-mix(in srgb, var(--sheet, #F7F1E3) 52%, #fff) 0%, color-mix(in srgb, var(--sheet, #F7F1E3) 86%, #fff) 49%, transparent 50%);
-    filter: drop-shadow(-2px -2px 2px rgba(3, 29, 68, 0.3));
+    filter: drop-shadow(-2px -2px 2px rgba(var(--shc), 0.3));
   }
 
   /* library card pocket card on the right edge of the wall sheet (wide screens only) */
@@ -1305,7 +1305,7 @@
     background-color: #EFE2C0;
     background-image: linear-gradient(to bottom, transparent 13px, rgba(143, 45, 24, 0.6) 13px 14px, transparent 14px), repeating-linear-gradient(to bottom, transparent 0 11px, rgba(4, 57, 94, 0.28) 11px 12px);
     background-position: 0 0, 0 3px;
-    border: 1px solid var(--sheet-edge); box-shadow: 0 3px 8px rgba(3, 29, 68, 0.25);
+    border: 1px solid var(--sheet-edge); box-shadow: 1px 3px 8px rgba(var(--shc), 0.25);
     font: 700 7px/12px "Courier New", monospace; color: #2A3340;
   }
   .libcard b { display: block; letter-spacing: 0.1em; font-size: 7px; line-height: 13px; }
@@ -1314,7 +1314,7 @@
   .libcard i:nth-of-type(3) { margin-left: 3px; color: #8F2D18; }
 
   /* envelope with a letter peeking out of it, bottom left of the way out sheet */
-  .scrap.env { --sr: -5deg; bottom: -46px; left: 46px; width: 128px; height: 86px; scale: 0.88; transform-origin: bottom left; filter: drop-shadow(0 3px 5px rgba(3, 29, 68, 0.3)); }
+  .scrap.env { --sr: -5deg; bottom: -46px; left: 46px; width: 128px; height: 86px; scale: 0.88; transform-origin: bottom left; filter: drop-shadow(1px 3px 5px rgba(var(--shc), 0.3)); }
   .env .ltr { position: absolute; left: 12px; right: 12px; top: 0; height: 58px; transform: rotate(-2deg); background: #FDFBF4 repeating-linear-gradient(to bottom, transparent 0 7px, rgba(4, 57, 94, 0.22) 7px 8px); background-position: 0 4px; border: 1px solid rgba(3, 29, 68, 0.15); }
   .env .bd { position: absolute; left: 0; right: 0; bottom: 0; height: 64px; background: #EADDBC; border: 1px solid rgba(3, 29, 68, 0.2); font: 700 15px/1 "Caveat", cursive; color: #031D44; display: flex; align-items: flex-end; padding: 0 0 6px 10px; }
   .env .bd::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 62%;
@@ -1400,7 +1400,7 @@
   .scrap.pencil.p2 { --sr: 8deg; right: 34px; top: 30px; width: 48px; height: 44px; }
 
   /* staples */
-  .scrap.staple { width: 20px; height: 4px; border-radius: 1px; background: linear-gradient(#DCE2E8, #8E98A4); box-shadow: 0 1px 1.5px rgba(3, 29, 68, 0.45); }
+  .scrap.staple { width: 20px; height: 4px; border-radius: 1px; background: linear-gradient(#DCE2E8, #8E98A4); box-shadow: 0 1px 1.5px rgba(var(--shc), 0.45); }
   .staple::before, .staple::after { content: ""; position: absolute; top: -1px; width: 3px; height: 6px; background: #7C8794; border-radius: 1px; }
   .staple::before { left: -1px; } .staple::after { right: -1px; }
   .scrap.staple.st1 { --sr: -2deg; left: 40px; bottom: -8px; z-index: 3; }
@@ -1410,12 +1410,12 @@
   .scrap.band {
     --sr: 0.5deg; right: 16px; top: -5px; bottom: -5px; width: 7px; border-radius: 4px;
     background: linear-gradient(90deg, #B04A22, #E58A55 45%, #A8431F);
-    box-shadow: 1px 0 2px rgba(3, 29, 68, 0.35); opacity: 0.9;
+    box-shadow: 1px 0 2px rgba(var(--shc), 0.35); opacity: 0.9;
   }
-  .band::before { content: ""; position: absolute; top: 6px; bottom: 6px; left: 11px; width: 5px; border-radius: 3px; transform: rotate(-0.5deg); background: linear-gradient(90deg, #C9622F, #E58A55 50%, #A8431F); box-shadow: 1px 0 2px rgba(3, 29, 68, 0.3); opacity: 0.85; }
+  .band::before { content: ""; position: absolute; top: 6px; bottom: 6px; left: 11px; width: 5px; border-radius: 3px; transform: rotate(-0.5deg); background: linear-gradient(90deg, #C9622F, #E58A55 50%, #A8431F); box-shadow: 1px 0 2px rgba(var(--shc), 0.3); opacity: 0.85; }
 
   /* safety pin on the right edge of the way out sheet */
-  .scrap.spin { --sr: -10deg; left: 50%; top: 8px; width: 62px; height: 20px; filter: drop-shadow(0 2px 2px rgba(3, 29, 68, 0.35)); }
+  .scrap.spin { --sr: -10deg; left: 50%; top: 8px; width: 62px; height: 20px; filter: drop-shadow(1px 2px 2px rgba(var(--shc), 0.35)); }
   .spin svg { display: block; width: 100%; height: 100%; fill: none; stroke: #9AA5B1; stroke-width: 1.8; stroke-linecap: round; }
 
   @media (max-width: 560px) {
@@ -1474,7 +1474,7 @@
   .scrap.s-round {
     width: 80px; height: 80px; border-radius: 50%;
     border: 4px solid #FCF9F1; outline: 1px solid rgba(3, 29, 68, 0.3);
-    box-shadow: 0 4px 8px rgba(3, 29, 68, 0.3), 0 1px 2px rgba(3, 29, 68, 0.3);
+    box-shadow: 1px 4px 8px rgba(var(--shc), 0.3), 0 1px 2px rgba(var(--shc), 0.3);
   }
   .s-round::after { content: ""; position: absolute; inset: 0; border-radius: 50%; pointer-events: none;
     background: radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 46%), linear-gradient(135deg, rgba(255, 255, 255, 0) 55%, rgba(3, 29, 68, 0.14)); }
@@ -1483,7 +1483,7 @@
   .s-noted b::after { content: " \2713"; font-size: 0.8em; }
 
   .scrap.s-star { --sr: 8deg; left: 592px; top: 128px; width: 104px; height: 104px; }
-  .s-star svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 4px 5px rgba(3, 29, 68, 0.32)); }
+  .s-star svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(1px 4px 5px rgba(var(--shc), 0.32)); }
   .s-star path { stroke-linejoin: round; }
   .ss-cut { fill: #2a2f44; stroke: #2a2f44; stroke-width: 9; opacity: 0.55; }
   .ss-edge { fill: #FCF9F1; stroke: #FCF9F1; stroke-width: 7; }
@@ -1506,7 +1506,7 @@
   .scrap.dymo {
     display: flex; padding: 4px 13px 3px; border-radius: 2px; width: max-content; line-height: 1;
     background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.045) 0 1px, transparent 1px 3px), linear-gradient(#323744, #1d212b);
-    box-shadow: 0 2px 4px rgba(3, 29, 68, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(0, 0, 0, 0.5);
+    box-shadow: 1px 2px 4px rgba(var(--shc), 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(0, 0, 0, 0.5);
   }
   .dymo b { font: 700 12.5px/1.2 "Courier New", monospace; letter-spacing: 0.14em; text-transform: uppercase; color: #F4F0E4;
     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.7), 0 -1px 0 rgba(255, 255, 255, 0.12); }
@@ -1544,7 +1544,7 @@
 
   /* ransom-note headings (sections 04 and 05): every letter is its own paper cutting */
   .rw { display: inline-block; white-space: nowrap; }
-  .rl { display: inline-block; font-size: 0.74em; line-height: 1; padding: 0.12em 0.2em 0.1em; margin: 0 1px; vertical-align: 0.04em; font-weight: 700; text-decoration: none; box-shadow: 0 2px 4px rgba(3, 29, 68, 0.3); }
+  .rl { display: inline-block; font-size: 0.74em; line-height: 1; padding: 0.12em 0.2em 0.1em; margin: 0 1px; vertical-align: 0.04em; font-weight: 700; text-decoration: none; box-shadow: 1px 2px 4px rgba(var(--shc), 0.3); }
   .rl.l1 { background: #031D44; color: #F2E4C8; font-family: Georgia, serif; font-style: italic; transform: rotate(-4deg); }
   .rl.l2 { background: #FBF7EC; color: #031D44; font-family: Verdana, sans-serif; font-weight: 800; transform: rotate(3deg) translateY(2px); }
   .rl.l3 { background: #8F2D18; color: #FBF7EC; font-family: var(--tw); font-weight: 400; transform: rotate(-2deg); }
@@ -1579,7 +1579,7 @@
   }
   @media (hover: hover) {
     .prompts button:nth-of-type(n):hover { rotate: 0deg; translate: 0 -2px; }
-    .prompts button:nth-of-type(1):hover, .prompts button:nth-of-type(2):hover { box-shadow: 0 2px 2px rgba(3, 29, 68, 0.22), 0 8px 12px rgba(3, 29, 68, 0.2); }
+    .prompts button:nth-of-type(1):hover, .prompts button:nth-of-type(2):hover { box-shadow: 1px 2px 2px rgba(var(--shc), 0.22), 2px 8px 12px rgba(var(--shc), 0.2); }
   }
 
   /* "came from" stickers: own shape and a small glyph in the category color */
@@ -1602,7 +1602,7 @@
 </style>
 <style>
   /* ---------- Ransom note variety: mixed sizes, torn cuttings, uneven baseline ---------- */
-  .rw { filter: drop-shadow(0 2px 2px rgba(3, 29, 68, 0.32)); --k: 1; }
+  .rw { filter: drop-shadow(1px 2px 2px rgba(var(--shc), 0.32)); --k: 1; }
   .rl { --s: 0.74; --ty: 0em; --tr: 0deg; font-size: calc(var(--s) * var(--k) * 1em); box-shadow: none; translate: 0 var(--ty); rotate: var(--tr); margin: 0 2px; }
   /* word one: a big capital, then small and tall cuttings mixed */
   .rw .rl:nth-child(1) { --s: 1; --ty: -0.02em; --tr: -3deg; }
@@ -1693,7 +1693,7 @@
   /* paper layer: own span so the corner can be cut and the clip can still stick out */
   .doc .lp {
     position: absolute; inset: 0; z-index: -1; pointer-events: none;
-    filter: drop-shadow(0 10px 12px rgba(3, 29, 68, 0.2)) drop-shadow(0 2px 2px rgba(3, 29, 68, 0.28)) drop-shadow(0 0 0.5px rgba(3, 29, 68, 0.5));
+    filter: drop-shadow(3px 10px 12px rgba(var(--shc), 0.2)) drop-shadow(1px 2px 2px rgba(var(--shc), 0.28)) drop-shadow(0 0 0.5px rgba(var(--shc), 0.5));
   }
   .doc .lp::before {
     content: ""; position: absolute; inset: 0;
@@ -1725,7 +1725,7 @@
   .doc::after {
     content: ""; position: absolute; right: 0; bottom: 0; width: 36px; height: 36px; pointer-events: none;
     background: linear-gradient(135deg, #FFFCF0 0%, #EBDDB6 49%, transparent 50%);
-    filter: drop-shadow(-2px -2px 2px rgba(3, 29, 68, 0.3));
+    filter: drop-shadow(-2px -2px 2px rgba(var(--shc), 0.3));
   }
   /* paper clip across the top edge */
   .scrap.pclip.c-doc { --sr: 9deg; top: -32px; left: 30%; }
@@ -1756,11 +1756,11 @@
   .page-rings {
     position: absolute; left: 0; right: 0; top: -6px; height: 46px; z-index: 5; pointer-events: auto; cursor: pointer;
     background: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 28 46%22 width=%2228%22 height=%2246%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 x2=%221%22%3E%3Cstop offset=%220%22 stop-color=%22%23586170%22/%3E%3Cstop offset=%22.45%22 stop-color=%22%23f4f7fb%22/%3E%3Cstop offset=%221%22 stop-color=%22%236b7484%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Cellipse cx=%2215%22 cy=%2234%22 rx=%226.5%22 ry=%225%22 fill=%22%2304070d%22/%3E%3Cpath d=%22M7 1 C 9 14, 13 27, 18 35%22 fill=%22none%22 stroke=%22url(%23g)%22 stroke-width=%223.6%22 stroke-linecap=%22round%22/%3E%3C/svg%3E") 4px 0 / 28px 46px repeat-x;
-    filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.5));
+    filter: drop-shadow(1px 3px 2px rgba(0, 0, 0, 0.5));
   }
   /* soft shading in the binding margin so the holes look punched into the page */
   .page-rings:focus-visible { outline: 2px solid #8F2D18; outline-offset: -4px; }
-  @media (hover: hover) { .page-rings:hover { filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.5)) brightness(1.15); } }
+  @media (hover: hover) { .page-rings:hover { filter: drop-shadow(1px 3px 2px rgba(0, 0, 0, 0.5)) brightness(1.15); } }
   .page-rings::before { content: ""; pointer-events: none; position: absolute; left: 0; right: 0; top: 6px; height: 46px; background: linear-gradient(to bottom, rgba(3, 29, 68, 0.16), transparent); }
   /* make room under the spiral so the header text does not sit on the holes */
   header { padding-top: 56px; }
@@ -1772,10 +1772,10 @@
     display: inline-flex; align-items: center; justify-content: center; flex: none;
     width: 40px; height: 40px; padding: 0; border-radius: 50%;
     color: var(--ink); background: var(--card); border: 1px solid var(--paper-line);
-    box-shadow: 0 2px 6px rgba(3, 29, 68, 0.14); cursor: pointer;
+    box-shadow: 1px 2px 6px rgba(var(--shc), 0.14); cursor: pointer;
     transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease, opacity .25s ease, visibility .25s;
   }
-  #to-top:hover { border-color: var(--ink-soft); box-shadow: 0 4px 10px rgba(3, 29, 68, 0.22); }
+  #to-top:hover { border-color: var(--ink-soft); box-shadow: 1px 4px 10px rgba(var(--shc), 0.22); }
   #to-top:active { transform: scale(0.94); }
   #to-top:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
   #to-top {
@@ -1830,7 +1830,7 @@
   }
   .polaroid:focus-visible { outline: 2px solid #8F2D18; outline-offset: 3px; }
   @media (hover: hover) {
-    .scrap.polaroid:hover { translate: 0 -3px; rotate: 3deg; box-shadow: 0 10px 16px rgba(3, 29, 68, 0.3), 0 1px 2px rgba(3, 29, 68, 0.25); }
+    .scrap.polaroid:hover { translate: 0 -3px; rotate: 3deg; box-shadow: 3px 10px 16px rgba(var(--shc), 0.3), 0 1px 2px rgba(var(--shc), 0.25); }
   }
   .scrap.polaroid:active { translate: 0 0; rotate: -2deg; }
   /* tap: the photo develops, going from a washed out glow to full color */
@@ -1890,7 +1890,7 @@
     body::after { background-image: var(--grain); background-size: 128px 128px; }
     .paper::after, .doc .lp::after { background-size: 320px 320px, 240px 240px, 128px 128px; }
     body::after, .paper::after, .doc .lp::after { mix-blend-mode: normal; }
-    .paper, .doc .lp { filter: drop-shadow(0 3px 4px rgba(3, 29, 68, 0.28)); }
+    .paper, .doc .lp { filter: drop-shadow(1px 3px 4px rgba(var(--shc), 0.28)); }
     .margin-note, .scribble, .thanks, .stat-insight, .sticky h3, .reframe, .rewrite-row .new,
     .card .source, .scrap.index, .note,
     .scrap.hnote, .scrap.sticker, .scrap.rstamp,
@@ -1908,7 +1908,7 @@
 <style>
   /* ---------- More scrapbook clutter. Corner tape and edge dots at every width, margin pieces on wide screens ---------- */
   /* washi patterns, shared by corner tape and loose strips */
-  .cl-wt { box-shadow: 0 1px 2px rgba(3, 29, 68, 0.25); opacity: 0.9; z-index: 3;
+  .cl-wt { box-shadow: 0 1px 2px rgba(var(--shc), 0.25); opacity: 0.9; z-index: 3;
     clip-path: polygon(0 0, 4% 25%, 0 50%, 4% 75%, 0 100%, 100% 100%, 96% 75%, 100% 50%, 96% 25%, 100% 0); }
   .cl-wt.a { background: repeating-linear-gradient(90deg, rgba(185, 70, 50, 0.8) 0 6px, rgba(246, 236, 210, 0.8) 6px 12px); }
   .cl-wt.b { background: radial-gradient(circle, rgba(47, 94, 71, 0.85) 2px, transparent 2.7px) 0 0 / 9px 9px, rgba(214, 232, 204, 0.85); }
@@ -1924,15 +1924,15 @@
     .cl-wt.cl-c.br { right: -16px; }
   }
   /* round sticker dots straddling the sheet edge */
-  .cl-dot { width: 20px; height: 20px; border-radius: 50%; border: 3px solid rgba(255, 252, 240, 0.9); box-shadow: 0 1px 3px rgba(3, 29, 68, 0.35); z-index: 3; }
+  .cl-dot { width: 20px; height: 20px; border-radius: 50%; border: 3px solid rgba(255, 252, 240, 0.9); box-shadow: 0 1px 3px rgba(var(--shc), 0.35); z-index: 3; }
   .cl-dot.r { background: #C9462E; } .cl-dot.b { background: #3F6FB5; } .cl-dot.y { background: #E3B03B; } .cl-dot.g { background: #2F5E47; }
 
   /* margin pieces: wide screens only, so they never crowd a phone */
   .scrap.cl-side { display: none; }
   @media (min-width: 1180px) { .scrap.cl-side { display: block; } }
 
-  .cl-pol { width: 92px; padding: 7px 7px 24px; background: #FBF6E8; box-shadow: 0 6px 12px rgba(3, 29, 68, 0.28), 0 1px 2px rgba(3, 29, 68, 0.3); }
-  .cl-pol::before { content: ""; position: absolute; top: -9px; left: 50%; width: 42px; height: 15px; margin-left: -21px; rotate: -4deg; background: rgba(240, 223, 154, 0.85); box-shadow: 0 1px 2px rgba(3, 29, 68, 0.2); }
+  .cl-pol { width: 92px; padding: 7px 7px 24px; background: #FBF6E8; box-shadow: 2px 6px 12px rgba(var(--shc), 0.28), 0 1px 2px rgba(var(--shc), 0.3); }
+  .cl-pol::before { content: ""; position: absolute; top: -9px; left: 50%; width: 42px; height: 15px; margin-left: -21px; rotate: -4deg; background: rgba(240, 223, 154, 0.85); box-shadow: 0 1px 2px rgba(var(--shc), 0.2); }
   .cl-pol i { display: block; height: 72px; }
   .cl-pol em { position: absolute; left: 0; right: 0; bottom: 3px; text-align: center; font: 700 17px/1 "Caveat", cursive; font-style: normal; color: #1B2F66; }
   .cl-pol.pv0 i { background: radial-gradient(circle at 75% 24%, #FFE58A 0 9px, transparent 10px), radial-gradient(ellipse at 28% 105%, #6FA07B 0 42%, transparent 43%), radial-gradient(ellipse at 85% 110%, #4F8566 0 40%, transparent 41%), #9CCBEA; }
@@ -1945,13 +1945,13 @@
   .cl-note b { display: block; font: 700 21px/1.2 "Caveat", cursive; color: #1B2F66; }
 
   .cl-stamps { display: flex; gap: 6px; }
-  .cl-stamps u { display: block; width: 46px; height: 56px; padding: 5px; text-decoration: none; background: #F7EFD8; outline: 3px dotted var(--paper); outline-offset: -3px; box-shadow: 0 2px 4px rgba(3, 29, 68, 0.3); }
+  .cl-stamps u { display: block; width: 46px; height: 56px; padding: 5px; text-decoration: none; background: #F7EFD8; outline: 3px dotted var(--paper); outline-offset: -3px; box-shadow: 1px 2px 4px rgba(var(--shc), 0.3); }
   .cl-stamps u:nth-child(2) { margin-top: 10px; rotate: 5deg; }
   .cl-stamps svg { display: block; width: 100%; height: 100%; padding: 6px; background: var(--sc); fill: none; stroke: #FBF6E3; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
 
   .cl-wtp { width: 96px; height: 22px; }
 
-  .cl-badge { display: flex; align-items: center; justify-content: center; width: 62px; height: 62px; border-radius: 50%; background: var(--bc); border: 3px solid #FFFCF0; box-shadow: 0 0 0 2px var(--bc), 0 4px 8px rgba(3, 29, 68, 0.3); }
+  .cl-badge { display: flex; align-items: center; justify-content: center; width: 62px; height: 62px; border-radius: 50%; background: var(--bc); border: 3px solid #FFFCF0; box-shadow: 0 0 0 2px var(--bc), 1px 4px 8px rgba(var(--shc), 0.3); }
   .cl-badge b { font: 700 24px/1 "Caveat", cursive; color: #FFFCF0; }
 </style>
 <style>
@@ -1982,7 +1982,7 @@
       transform: translate3d(0, calc(var(--p, 0) * 12px), 0) scale(calc(1 - var(--p, 0) * 0.045)) rotate(var(--rot, var(--tilt, 0deg)));
       transition: transform .3s cubic-bezier(.3, 1.2, .5, 1), opacity .25s;
       /* two plain shadows instead of five layers plus the pooled shadow, so each note is cheap to draw */
-      box-shadow: 0 2px 3px rgba(3, 29, 68, 0.22), 0 8px 12px rgba(3, 29, 68, 0.16);
+      box-shadow: 1px 2px 3px rgba(var(--shc), 0.22), 2px 8px 12px rgba(var(--shc), 0.16);
       backface-visibility: hidden; -webkit-backface-visibility: hidden;
     }
     .cards .card:not(.t5)::after { display: none; }
@@ -2026,14 +2026,14 @@
   .doc.yourturn::after {
     left: 0; right: auto;
     background: linear-gradient(225deg, #F4FAEC 0%, #BDD3AE 49%, transparent 50%);
-    filter: drop-shadow(2px -2px 2px rgba(3, 29, 68, 0.3));
+    filter: drop-shadow(2px -2px 2px rgba(var(--shc), 0.3));
   }
   /* striped washi tape across the top edge instead of a paper clip */
   .doc.yourturn::before {
     content: ""; position: absolute; top: -13px; right: 14%; width: 104px; height: 26px; z-index: 1; pointer-events: none;
     rotate: -4deg;
     background: repeating-linear-gradient(45deg, rgba(47, 94, 71, 0.5) 0 7px, rgba(235, 210, 122, 0.65) 7px 14px);
-    border: 1px solid var(--paper-line); box-shadow: 0 1px 2px rgba(3, 29, 68, 0.2);
+    border: 1px solid var(--paper-line); box-shadow: 0 1px 2px rgba(var(--shc), 0.2);
   }
   /* green ink instead of blue */
   .doc.yourturn .dear { color: #20472F; }
@@ -2056,7 +2056,7 @@
   body > section.schools > .wrap { --tear: 0.0% 2.2px, 4.1% 3.1px, 8.3% 1.9px, 12.9% 3.6px, 17.2% 2.4px, 21.8% 4.8px, 26.5% 2.1px, 31.1% 1.4px, 35.9% 3.3px, 40.2% 2.6px, 45.6% 5.1px, 50.4% 2.2px, 55.3% 1.8px, 60.1% 3.9px, 64.8% 2.5px, 69.6% 4.4px, 74.2% 2.0px, 79.5% 3.2px, 84.1% 1.7px, 88.9% 3.6px, 93.7% 2.3px, calc(100% - 2.4px) 0%, calc(100% - 1.6px) 9%, calc(100% - 3.1px) 19%, calc(100% - 1.2px) 31%, calc(100% - 2.8px) 44%, calc(100% - 1.5px) 57%, calc(100% - 3.4px) 69%, calc(100% - 1.3px) 82%, calc(100% - 2.2px) 93%, 100% calc(100% - 2.6px), 94% calc(100% - 4.1px), 88% calc(100% - 2.3px), 81% calc(100% - 5.2px), 74% calc(100% - 3.0px), 66% calc(100% - 1.8px), 58% calc(100% - 4.4px), 50% calc(100% - 2.6px), 42% calc(100% - 3.9px), 34% calc(100% - 1.7px), 26% calc(100% - 4.8px), 18% calc(100% - 2.5px), 10% calc(100% - 3.7px), 3% calc(100% - 2.0px), 1.8px 100%, 2.6px 92%, 1.2px 80%, 3.0px 68%, 1.6px 55%, 2.9px 42%, 1.3px 30%, 2.7px 18%, 1.5px 7%; }
   .sharebar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; margin-top: 32px; }
   .share-btn, .sc-btn { font: 700 17px/1 "Outfit", sans-serif; display: inline-flex; align-items: center; gap: 10px; cursor: pointer; transition: rotate .2s, translate .2s; }
-  .share-btn { padding: 15px 24px; border: 0; border-radius: 14px 18px 15px 19px; background: var(--good); color: #F7F1E3; rotate: -1.2deg; box-shadow: 0 0 0 4px #fff, 0 0 0 5px rgba(3,29,68,.55), 0 6px 12px rgba(3,29,68,.28); }
+  .share-btn { padding: 15px 24px; border: 0; border-radius: 14px 18px 15px 19px; background: var(--good); color: #F7F1E3; rotate: -1.2deg; box-shadow: 0 0 0 4px #fff, 0 0 0 5px rgba(var(--shc),.55), 2px 6px 12px rgba(var(--shc),.28); }
   .share-btn svg { width: 20px; height: 20px; flex: none; }
   .sc-btn { padding: 11px 18px; border: 2px solid var(--ink); border-radius: 12px 15px 12px 16px; background: transparent; color: var(--ink); font-size: 15px; }
   @media (hover: hover) { .share-btn:hover { rotate: 0deg; translate: 0 -2px; } .sc-btn:hover { background: color-mix(in srgb, var(--ink) 8%, transparent); translate: 0 -1px; } }
@@ -2066,10 +2066,10 @@
   .sc-steps { margin: 22px 0 0; padding-left: 22px; max-width: 62ch; }
   .sc-steps li { margin-bottom: 10px; }
   .sc-grid { display: grid; grid-template-columns: minmax(0, 250px) minmax(0, 1fr); gap: 22px; margin-top: 28px; align-items: start; }
-  .sc-card { position: relative; padding: 20px; background: #FBF7EC; border: 1px solid rgba(3,29,68,.2); border-radius: 3px; box-shadow: 0 6px 14px rgba(3,29,68,.16), 0 1px 2px rgba(3,29,68,.2); }
+  .sc-card { position: relative; padding: 20px; background: #FBF7EC; border: 1px solid rgba(3,29,68,.2); border-radius: 3px; box-shadow: 2px 6px 14px rgba(var(--shc),.16), 0 1px 2px rgba(var(--shc),.2); }
   .sc-qrcard { text-align: center; rotate: -0.8deg; }
   .sc-card .dear { font-family: "Caveat", cursive; font-weight: 700; font-size: 30px; line-height: 1.1; margin: 0 0 6px; color: #20472F; }
-  .sc-qr { width: 100%; max-width: 210px; margin: 0 auto 10px; aspect-ratio: 1; background: transparent; border-radius: 6px; filter: drop-shadow(0 2px 3px rgba(3,29,68,.22)); display: grid; place-items: center; font: 400 14px/1.4 "Special Elite", "Courier New", monospace; color: #444; text-align: center; }
+  .sc-qr { width: 100%; max-width: 210px; margin: 0 auto 10px; aspect-ratio: 1; background: transparent; border-radius: 6px; filter: drop-shadow(1px 2px 3px rgba(var(--shc),.22)); display: grid; place-items: center; font: 400 14px/1.4 "Special Elite", "Courier New", monospace; color: #444; text-align: center; }
   .sc-qr svg { display: block; width: 100%; height: auto; }
   .sc-qr:empty::after, .sc-qr.sc-none { content: "The QR code appears once this page is online."; padding: 14px; border: 2px dashed rgba(3,29,68,.35); }
   .sc-url { margin: 0 0 12px; font: 400 12px/1.3 "Special Elite", "Courier New", monospace; overflow-wrap: anywhere; color: var(--ink-soft); }
@@ -2078,17 +2078,17 @@
   @media (max-width: 700px) { .sc-grid { grid-template-columns: 1fr; } .sc-qrcard { rotate: 0deg; } .share-btn { font-size: 16px; padding: 14px 20px; } }
   @media (prefers-reduced-motion: reduce) { .share-btn, .sc-btn { transition: none; } }
   /* tape and a pin holding the two cards to the sheet */
-  .sc-card::before { content: ""; position: absolute; top: -12px; left: 50%; width: 84px; height: 22px; margin-left: -42px; rotate: -3deg; background: color-mix(in srgb, var(--tape) 78%, transparent); border: 1px solid rgba(3,29,68,.18); box-shadow: 0 1px 2px rgba(3,29,68,.2); }
+  .sc-card::before { content: ""; position: absolute; top: -12px; left: 50%; width: 84px; height: 22px; margin-left: -42px; rotate: -3deg; background: color-mix(in srgb, var(--tape) 78%, transparent); border: 1px solid rgba(3,29,68,.18); box-shadow: 0 1px 2px rgba(var(--shc),.2); }
   .sc-card:not(.sc-qrcard)::before { rotate: 2deg; margin-left: -10px; background: repeating-linear-gradient(135deg, #CFE0C8 0 8px, #F4F0E4 8px 16px); }
   .sc-card:not(.sc-qrcard) { rotate: 0.5deg; background-image: repeating-linear-gradient(to bottom, transparent 0 27px, rgba(3,29,68,.1) 27px 28px); }
-  .sc-qrcard::after { content: ""; position: absolute; right: -9px; bottom: -9px; width: 34px; height: 34px; background: linear-gradient(225deg, transparent 50%, #E4D9BC 50%); filter: drop-shadow(-2px -2px 2px rgba(3,29,68,.2)); }
+  .sc-qrcard::after { content: ""; position: absolute; right: -9px; bottom: -9px; width: 34px; height: 34px; background: linear-gradient(225deg, transparent 50%, #E4D9BC 50%); filter: drop-shadow(-2px -2px 2px rgba(var(--shc),.2)); }
   .sc-steps li::marker { font-family: "Caveat", cursive; font-weight: 700; font-size: 1.3em; color: var(--red); }
   .sc-steps b { background: linear-gradient(transparent 62%, rgba(243,216,102,.7) 62%); }
   /* section 06 buttons use the same red sticker look as Add to the wall */
-  .sc-btn { --stk: var(--red); font: 600 13px/1.2 "Outfit", sans-serif; letter-spacing: 0.02em; padding: 8px 18px; color: #FFFDF6; text-shadow: 0 1px 1px rgba(60,10,0,.45); background: linear-gradient(160deg, rgba(255,255,255,.12), rgba(255,255,255,0) 48%), var(--red); border: 3px solid var(--sticker-edge); outline: 1px solid rgba(3,29,68,.3); border-radius: 8px 18px 8px 18px; box-shadow: 0 1px 1px rgba(3,29,68,.25), 0 3px 5px rgba(3,29,68,.16); rotate: -1deg; transition: translate .18s, rotate .18s, box-shadow .18s; }
+  .sc-btn { --stk: var(--red); font: 600 13px/1.2 "Outfit", sans-serif; letter-spacing: 0.02em; padding: 8px 18px; color: #FFFDF6; text-shadow: 0 1px 1px rgba(60,10,0,.45); background: linear-gradient(160deg, rgba(255,255,255,.12), rgba(255,255,255,0) 48%), var(--red); border: 3px solid var(--sticker-edge); outline: 1px solid rgba(3,29,68,.3); border-radius: 8px 18px 8px 18px; box-shadow: 0 1px 1px rgba(var(--shc),.25), 1px 3px 5px rgba(var(--shc),.16); rotate: -1deg; transition: translate .18s, rotate .18s, box-shadow .18s; }
   .sc-actions .sc-btn:nth-of-type(2) { rotate: 1deg; }
-  @media (hover: hover) { .sc-btn:hover { background: linear-gradient(160deg, rgba(255,255,255,.12), rgba(255,255,255,0) 48%), var(--red); translate: 0 -2px; rotate: 0deg; box-shadow: 0 2px 2px rgba(3,29,68,.22), 0 8px 12px rgba(3,29,68,.2); } }
-  .sc-btn:active { translate: 0 0; box-shadow: 0 1px 1px rgba(3,29,68,.25); }
+  @media (hover: hover) { .sc-btn:hover { background: linear-gradient(160deg, rgba(255,255,255,.12), rgba(255,255,255,0) 48%), var(--red); translate: 0 -2px; rotate: 0deg; box-shadow: 1px 2px 2px rgba(var(--shc),.22), 2px 8px 12px rgba(var(--shc),.2); } }
+  .sc-btn:active { translate: 0 0; box-shadow: 0 1px 1px rgba(var(--shc),.25); }
   #poster-print { display: none; }
   @media print {
     html.printing, html.printing body { height: auto !important; overflow: visible !important; margin: 0 !important; padding: 0 !important; background: #DAB785 !important; }
@@ -2181,7 +2181,7 @@
   .rw-note { font-family: "Caveat", cursive; font-size: 19px; line-height: 1.1; color: #20472F; margin: 4px 0 0; }
   .rw-status:empty { display: none; }
   .rw-out { margin-top: 30px; }
-  .rw-out img { display: block; width: min(100%, 380px); height: auto; border-radius: 4px; background: #fff; box-shadow: 0 10px 24px rgba(3, 29, 68, 0.3); rotate: -1deg; }
+  .rw-out img { display: block; width: min(100%, 380px); height: auto; border-radius: 4px; background: #fff; box-shadow: 3px 10px 24px rgba(var(--shc), 0.3); rotate: -1deg; }
   .rw-out .rw-row { margin-top: 20px; }
   .rw-sec { font: 700 16px/1 "Outfit", sans-serif; padding: 13px 20px; border: 2px solid #20472F; border-radius: 14px 18px 15px 19px; background: transparent; color: #20472F; cursor: pointer; }
   .rw-sec:focus-visible, .rw-ex:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
@@ -2225,15 +2225,15 @@
   .tk svg { display: block; width: 100%; height: 100%; overflow: visible; }
   .tk-pin { width: 22px; height: 22px; border-radius: 50%;
     background: radial-gradient(circle at 34% 30%, rgba(255, 255, 255, 0.8) 0 2.2px, transparent 3px), radial-gradient(circle at 50% 50%, var(--tc) 0 55%, color-mix(in srgb, var(--tc) 62%, #1A0A05) 100%);
-    box-shadow: 2px 3px 3px rgba(3, 29, 68, 0.32); }
-  .tk-btn { width: 30px; height: 30px; border-radius: 50%; box-shadow: 1px 2px 3px rgba(3, 29, 68, 0.32); }
+    box-shadow: 2px 3px 3px rgba(var(--shc), 0.32); }
+  .tk-btn { width: 30px; height: 30px; border-radius: 50%; box-shadow: 1px 2px 3px rgba(var(--shc), 0.32); }
   .tk-star, .tk-heart { width: 34px; height: 34px; }
   .tk-heart { width: 30px; height: 30px; }
   .tk-plane { width: 60px; height: 40px; }
   .tk-leaf { width: 46px; height: 58px; }
   .tk-pinsafe { width: 46px; height: 22px; }
-  .tk-eraser { width: 52px; height: 22px; border-radius: 5px; background: linear-gradient(90deg, transparent 0 36%, #2F5E8F 36% 64%, transparent 64%), #F0A9A3; box-shadow: 0 2px 3px rgba(3, 29, 68, 0.3), inset 0 -3px 0 rgba(0, 0, 0, 0.08); }
-  .tk-aid { width: 62px; height: 20px; border-radius: 10px; box-shadow: 0 2px 3px rgba(3, 29, 68, 0.28);
+  .tk-eraser { width: 52px; height: 22px; border-radius: 5px; background: linear-gradient(90deg, transparent 0 36%, #2F5E8F 36% 64%, transparent 64%), #F0A9A3; box-shadow: 1px 2px 3px rgba(var(--shc), 0.3), inset 0 -3px 0 rgba(0, 0, 0, 0.08); }
+  .tk-aid { width: 62px; height: 20px; border-radius: 10px; box-shadow: 1px 2px 3px rgba(var(--shc), 0.28);
     background: linear-gradient(90deg, transparent 0 34%, #F6E3C9 34% 66%, transparent 66%), radial-gradient(circle, rgba(120, 70, 30, 0.35) 1px, transparent 1.4px) 0 0 / 6px 6px, #E5B98C; }
   .tk-stub { width: 76px; height: 32px; display: flex; align-items: center; justify-content: center; background: #F2D8A2;
     -webkit-mask: radial-gradient(circle at 0 50%, transparent 5px, #000 5.5px) left / 50% 100% no-repeat, radial-gradient(circle at 100% 50%, transparent 5px, #000 5.5px) right / 50% 100% no-repeat;
@@ -2244,7 +2244,7 @@
 <style>
   /* ---------- Splash ephemera. A postage stamp, its postmark and a strip of tape on the bottom right corner of the label ---------- */
   .nb-label .nb-stamp { position: absolute; margin: 0; right: -18px; bottom: -22px; width: 50px; height: 62px; padding: 5px; rotate: 9deg; z-index: 2; pointer-events: none;
-    background: #FBF4E0; outline: 3px dotted #F6ECD3; outline-offset: -3px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.45); }
+    background: #FBF4E0; outline: 3px dotted #F6ECD3; outline-offset: -3px; box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.45); }
   .nb-label .nb-stamp i { display: block; margin: 0; letter-spacing: 0; height: 100%; background: radial-gradient(circle at 70% 28%, #F6E7A8 0 7px, transparent 7.5px), radial-gradient(ellipse 80% 34% at 30% 100%, #5E8A6F 0 99%, transparent 100%), linear-gradient(#8E7CB8, #D7C9EA); }
   .nb-label .nb-stamp b { position: absolute; letter-spacing: 0; left: 9px; bottom: 8px; font: 700 11px/1 Georgia, serif; color: #FBF7EC; }
   .nb-label .nb-stamp::before { content: ""; position: absolute; top: -9px; right: -12px; width: 34px; height: 13px; rotate: 38deg; background: color-mix(in srgb, #EBD27A 80%, transparent); border: 1px solid rgba(120, 90, 0, 0.2); }
@@ -2318,11 +2318,11 @@
   .sd-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
   .sd-toggle { display: inline-flex; align-items: center; gap: 7px; padding: 5px 14px 6px 10px; font: 700 21px/1.1 "Caveat", cursive; color: #1B2F66; background: #FBF6E3;
-    border: 2px dashed rgba(27, 47, 102, 0.55); border-radius: 6px; rotate: -2deg; cursor: pointer; box-shadow: 0 2px 6px rgba(3, 29, 68, 0.2); }
+    border: 2px dashed rgba(27, 47, 102, 0.55); border-radius: 6px; rotate: -2deg; cursor: pointer; box-shadow: 1px 2px 6px rgba(var(--shc), 0.2); }
   .sd-toggle[aria-pressed="true"] { background: #F3E3A8; border-style: solid; rotate: -1deg; }
   .sd-toggle:hover { rotate: -1deg; }
   .sd-toggle:focus-visible, .sd-pick:focus-visible, .sd-clear:focus-visible { outline: 2px solid #1B2F66; outline-offset: 2px; }
-  .sd-tray { display: none; flex-direction: column; align-items: stretch; gap: 7px; padding: 10px 10px 8px; background: #FBF6E3; border: 2px dashed rgba(27, 47, 102, 0.55); border-radius: 6px; box-shadow: 0 4px 12px rgba(3, 29, 68, 0.25); }
+  .sd-tray { display: none; flex-direction: column; align-items: stretch; gap: 7px; padding: 10px 10px 8px; background: #FBF6E3; border: 2px dashed rgba(27, 47, 102, 0.55); border-radius: 6px; box-shadow: 1px 4px 12px rgba(var(--shc), 0.25); }
   .sd-hint { margin: 0 0 2px; max-width: 168px; font: 700 17px/1.1 "Caveat", cursive; color: #1B2F66; }
   .sd-pick { --s: #A3301A; padding: 4px 10px; font: 800 12px/1.2 "Plus Jakarta Sans", "DM Sans", sans-serif; letter-spacing: 0.08em; text-transform: uppercase; text-align: center;
     color: var(--s); background: transparent; border: 2px solid var(--s); border-radius: 4px; cursor: pointer; }
@@ -2403,13 +2403,13 @@
   /* Update 93: pop-up card editor, sticker paper, size slider */
   .rwm-close { display: none; }
   .rw-out.rwm-open { position: fixed; inset: 0; z-index: 9000; margin: 0; overflow: auto; overscroll-behavior: contain; display: flex; align-items: flex-start; justify-content: center; padding: 14px 10px 24px; background: rgba(3, 29, 68, 0.8); }
-  .rw-out.rwm-open .rwm { position: relative; width: min(100%, 960px); margin: auto; padding: 44px 20px 22px; background: #F6EEDC; border-radius: 6px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45); display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px 28px; }
+  .rw-out.rwm-open .rwm { position: relative; width: min(100%, 960px); margin: auto; padding: 44px 20px 22px; background: #F6EEDC; border-radius: 6px; box-shadow: 6px 20px 50px rgba(0, 0, 0, 0.45); display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px 28px; }
   .rw-out.rwm-open .rwm-close { display: block; position: absolute; top: 10px; right: 12px; font: 700 15px "Outfit", sans-serif; min-height: 40px; padding: 6px 18px; border: 2px solid #20472F; border-radius: 10px 14px 11px 15px; background: #fff; color: #20472F; cursor: pointer; }
   .rw-out.rwm-open .rwm-close:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
   .rw-out.rwm-open .rl-tools { margin-top: 0; width: auto; }
   .rw-out.rwm-open .rw-row { margin-top: 0; }
   @media (min-width: 880px) { .rw-out.rwm-open .rwm { grid-template-columns: minmax(0, 380px) minmax(0, 1fr); } .rw-out.rwm-open .rw-row { grid-column: 1 / -1; } }
-  .rl-sheet { padding: 14px 12px 10px; background-color: #FFFDF6; background-image: repeating-linear-gradient(0deg, transparent 0 23px, rgba(4, 57, 94, 0.07) 23px 24px); border-radius: 3px; box-shadow: 0 6px 14px rgba(3, 29, 68, 0.22), inset 0 0 0 1px rgba(3, 29, 68, 0.1); rotate: -0.8deg; }
+  .rl-sheet { padding: 14px 12px 10px; background-color: #FFFDF6; background-image: repeating-linear-gradient(0deg, transparent 0 23px, rgba(4, 57, 94, 0.07) 23px 24px); border-radius: 3px; box-shadow: 2px 6px 14px rgba(var(--shc), 0.22), inset 0 0 0 1px rgba(var(--shc), 0.1); rotate: -0.8deg; }
   .rls-key { touch-action: none; cursor: grab; }
   @media print { .rw-out.rwm-open { position: static; background: none; } }
 </style>
@@ -2424,7 +2424,7 @@
   @media (hover: hover) { .rls:hover .rot { opacity: 1; pointer-events: auto; } }
   .rls .cut.ep { min-width: 0; padding: 0; line-height: 0; background: none; }
   .ep-drawer { margin: 8px 0 14px; }
-  .ep-pull { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; min-height: 46px; font: 700 23px/1 "Caveat", cursive; color: #FBF7EC; background: linear-gradient(#7A4E2D, #5E3A20); border: 0; border-radius: 6px; box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.18), 0 3px 0 #3F2613; cursor: pointer; }
+  .ep-pull { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; min-height: 46px; font: 700 23px/1 "Caveat", cursive; color: #FBF7EC; background: linear-gradient(#7A4E2D, #5E3A20); border: 0; border-radius: 6px; box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.18), 1px 3px 0 #3F2613; cursor: pointer; }
   .ep-pull i { width: 34px; height: 10px; border-radius: 6px; background: linear-gradient(#E6C979, #B08A33); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.45); }
   .ep-pull:focus-visible, .ep-key:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
   .ep-box { margin-top: 3px; padding: 10px; background: #3F2A18; border-radius: 4px 4px 8px 8px; box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.5); transform-origin: top; animation: epopen 0.25s ease-out; }
@@ -2473,7 +2473,7 @@
   .rl-designs { margin: 0 0 14px; }
   .rl-ds-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
   .rl-ds { display: flex; align-items: center; justify-content: center; padding: 4px; background: rgba(255, 255, 255, 0.6); border: 2px solid transparent; border-radius: 12px; cursor: pointer; }
-  .rl-ds i { display: block; width: 34px; height: 34px; border-radius: 8px; box-shadow: inset 0 0 0 1.5px rgba(3, 29, 68, 0.25); }
+  .rl-ds i { display: block; width: 34px; height: 34px; border-radius: 8px; box-shadow: inset 0 0 0 1.5px rgba(var(--shc), 0.25); }
   .rl-ds[aria-pressed="true"] { border-color: #20472F; background: #fff; }
   .rl-ds:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 </style>
@@ -2539,12 +2539,12 @@
   .gl { position: fixed; z-index: 120; right: 0; top: 96px; display: flex; align-items: flex-start; transform: translateX(calc(100% - 46px)); transition: transform .35s cubic-bezier(.2, .8, .2, 1); }
   .gl.open { transform: none; }
   body.splash-lock .gl { display: none; }
-  .gl-tab { position: relative; flex: none; width: 46px; padding: 18px 0 20px; writing-mode: vertical-rl; font-family: "Caveat", cursive; font-size: 24px; line-height: 1; color: var(--red); background: var(--card); border: 1px solid var(--paper-line); border-right: 0; border-radius: 10px 0 0 10px; cursor: pointer; box-shadow: -2px 3px 8px rgba(3, 29, 68, 0.22); }
+  .gl-tab { position: relative; flex: none; width: 46px; padding: 18px 0 20px; writing-mode: vertical-rl; font-family: "Caveat", cursive; font-size: 24px; line-height: 1; color: var(--red); background: var(--card); border: 1px solid var(--paper-line); border-right: 0; border-radius: 10px 0 0 10px; cursor: pointer; box-shadow: -2px 3px 8px rgba(var(--shc), 0.22); }
   /* ribbon marker dangling below the tab, tucked behind it, swallowtail end */
   .gl-tab::after { content: ""; position: absolute; z-index: -1; top: calc(100% - 8px); left: 50%; width: 16px; height: 58px; margin-left: -8px; background: linear-gradient(90deg, rgba(255, 255, 255, 0.2) 0 22%, transparent 22% 78%, rgba(0, 0, 0, 0.16) 78%), var(--red); clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%); transform-origin: 50% 0; transform: rotate(3deg); transition: transform .35s ease; pointer-events: none; }
   .gl-tab:hover::after, .gl.open .gl-tab::after { transform: rotate(-3deg); }
   .gl-tab:focus-visible, .gl-x:focus-visible, .gl-term summary:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
-  .gl-panel { width: min(330px, calc(100vw - 58px)); max-height: min(72vh, 540px); overflow-y: auto; overscroll-behavior: contain; padding: 16px 18px 12px; background: var(--card); color: var(--ink); border: 1px solid var(--paper-line); border-right: 0; border-radius: 0 0 0 6px; box-shadow: -4px 6px 16px rgba(3, 29, 68, 0.28); visibility: hidden; transition: visibility 0s .35s; }
+  .gl-panel { width: min(330px, calc(100vw - 58px)); max-height: min(72vh, 540px); overflow-y: auto; overscroll-behavior: contain; padding: 16px 18px 12px; background: var(--card); color: var(--ink); border: 1px solid var(--paper-line); border-right: 0; border-radius: 0 0 0 6px; box-shadow: -4px 6px 16px rgba(var(--shc), 0.28); visibility: hidden; transition: visibility 0s .35s; }
   .gl.open .gl-panel { visibility: visible; transition-delay: 0s; }
   .gl-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
   .gl-title { margin: 0; font-family: "Caveat", cursive; font-weight: 700; font-size: 28px; line-height: 1.05; color: var(--red); }
@@ -2599,7 +2599,7 @@ body.splash-lock .tidy{display:none}
 @media (min-width:1700px){.tidy{--k:1.8}}
 @media (min-width:1920px){.tidy{--k:2}}
 .td-cab,.td-mug,.td-ballc,.td-note{position:fixed;z-index:2}
-.td-note{left:8px;bottom:calc(var(--k) * 163px + 18px);width:176px;transform-origin:0 100%;scale:calc(.6 + .4 * var(--k));padding:12px 12px 8px;background:#fbf4dc;color:#3a2a1a;border-radius:2px;transform:rotate(-3deg);box-shadow:0 2px 6px rgba(0,0,0,.28);font-family:'Caveat',cursive}
+.td-note{left:8px;bottom:calc(var(--k) * 163px + 18px);width:176px;transform-origin:0 100%;scale:calc(.6 + .4 * var(--k));padding:12px 12px 8px;background:#fbf4dc;color:#3a2a1a;border-radius:2px;transform:rotate(-3deg);box-shadow:1px 2px 6px rgba(0,0,0,.28);font-family:'Caveat',cursive}
 .td-note::before{content:"";position:absolute;top:-8px;left:50%;width:56px;height:16px;margin-left:-28px;background:rgba(236,205,92,.8);transform:rotate(3deg)}
 .td-note b{display:block;font-size:21px;line-height:1.05;font-weight:700}
 .td-note small{display:block;margin-top:4px;font:11px var(--tw,'Courier New',monospace);opacity:.75}
@@ -2611,10 +2611,10 @@ body.splash-lock .tidy{display:none}
 /* the cabinet: mango wood, a rounded top slab, chevron inlay drawers with brass knobs */
 .td-cab{left:6px;bottom:calc(var(--k) * -20px);width:142px;transform-origin:0 100%;scale:var(--k)}
 .td-top,.td-base{display:block;background:var(--grain),linear-gradient(90deg,#c99a63,#e0b57d 50%,#c4925a)}
-.td-top{height:12px;margin:0 -4px;border-radius:8px 8px 3px 3px;box-shadow:0 2px 3px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.4)}
-.td-base{height:9px;margin:0 -6px;border-radius:2px 2px 4px 4px;box-shadow:0 3px 5px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.3)}
+.td-top{height:12px;margin:0 -4px;border-radius:8px 8px 3px 3px;box-shadow:1px 2px 3px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.4)}
+.td-base{height:9px;margin:0 -6px;border-radius:2px 2px 4px 4px;box-shadow:1px 3px 5px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.3)}
 .td-body{padding:5px 6px;display:flex;flex-direction:column;gap:4px;background:var(--grain),linear-gradient(90deg,#b98652,#cf9d66 50%,#b58250);box-shadow:inset 0 0 8px rgba(30,15,5,.7)}
-.td-dr{position:relative;height:32px;display:flex;align-items:center;justify-content:space-between;padding:0 4px;border-radius:2px;background:var(--grain),linear-gradient(90deg,#d6a672,#e6bd88 50%,#d2a06a);box-shadow:inset 0 0 0 1px rgba(60,35,15,.6),inset 0 1px 0 rgba(255,238,205,.5),inset 0 -3px 4px -2px rgba(70,38,12,.35),0 2px 3px rgba(20,10,2,.5),0 calc(var(--o,0)*5px) 0 #1b120c;transform:translateY(calc(var(--o,0)*4px));transition:transform .3s,box-shadow .3s}
+.td-dr{position:relative;height:32px;display:flex;align-items:center;justify-content:space-between;padding:0 4px;border-radius:2px;background:var(--grain),linear-gradient(90deg,#d6a672,#e6bd88 50%,#d2a06a);box-shadow:inset 0 0 0 1px rgba(60,35,15,.6),inset 0 1px 0 rgba(255,238,205,.5),inset 0 -3px 4px -2px rgba(70,38,12,.35),1px 2px 3px rgba(20,10,2,.5),0 calc(var(--o,0)*5px) 0 #1b120c;transform:translateY(calc(var(--o,0)*4px));transition:transform .3s,box-shadow .3s}
 .td-dr::before,.td-dr::after{content:"";flex:0 0 auto;width:10px;height:10px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff3b0,#d6a93a 55%,#8a6414);box-shadow:0 1px 2px rgba(0,0,0,.5),0 0 0 2px rgba(60,30,8,.25)}
 .td-dr span{flex:1;min-width:0;margin:0 5px;justify-content:center;white-space:nowrap;display:flex;gap:3px;align-items:baseline;padding:0 3px;background:#f7f0dc;border:1px solid #b08d4a;border-radius:2px;color:#3a2a1a;font:700 13px/1.15 'Caveat',cursive;box-shadow:0 1px 1px rgba(0,0,0,.35)}
 .td-dr.full span{background:#d9ebd3}
@@ -2632,7 +2632,7 @@ body.splash-lock .tidy{display:none}
 .td-ballc{--d:calc(34px + 50px * var(--s,0))}
 .td-ball{position:absolute;left:50%;bottom:calc(var(--d) * -.32);translate:-50% 0;width:var(--d);height:var(--d);border-radius:50%;transition:width .35s,height .35s;
   background:radial-gradient(circle at 34% 26%,rgba(255,255,255,.95),rgba(255,255,255,0) 36%),radial-gradient(circle at 64% 16%,rgba(150,100,30,.35),transparent 22%),repeating-linear-gradient(32deg,rgba(120,90,40,.14) 0 1px,transparent 1px 6px),repeating-linear-gradient(-58deg,rgba(255,255,255,.6) 0 1px,transparent 1px 9px),repeating-linear-gradient(110deg,rgba(150,120,60,.16) 0 1px,transparent 1px 11px),radial-gradient(circle,rgba(250,240,215,.94) 0 52%,rgba(212,186,134,.94));
-  box-shadow:inset -6px -8px 12px rgba(120,90,40,.35),inset 4px 4px 8px rgba(255,255,255,.55),0 4px 8px rgba(0,0,0,.3),inset 0 -14px 14px -6px rgba(80,55,15,.28)}
+  box-shadow:inset -6px -8px 12px rgba(120,90,40,.35),inset 4px 4px 8px rgba(255,255,255,.55),1px 4px 8px rgba(0,0,0,.3),inset 0 -14px 14px -6px rgba(80,55,15,.28)}
 .td-ball i{position:absolute;left:50%;top:50%;width:15px;height:10px;margin:-5px 0 0 -7px;background:linear-gradient(135deg,rgba(255,255,255,.9),rgba(225,205,150,.55));clip-path:polygon(0 20%,60% 0,100% 45%,80% 100%,10% 85%);transform:rotate(var(--a)) translateY(calc(var(--d) * -.5 + 1px));transition:transform .35s;animation:tdFl .3s}
 .tidy [data-k].hot{outline:3px dashed #3f8a5a;outline-offset:3px}
 .tidy [data-k].nope{animation:tdNope .4s}
@@ -2659,7 +2659,7 @@ body.splash-lock .tidy{display:none}
 @media (prefers-reduced-motion:reduce){.td-ballc::before{transition:none}}
 /* Update 120: the tidy-up game now lives behind a pull out tab on the left edge, like the definitions tab. Closed, the containers and the note sit below the screen and cannot take drops */
 .td-tabw{position:fixed;z-index:120;left:0;top:96px}
-.tidy .td-tab{position:relative;display:block;width:46px;padding:18px 0 20px;writing-mode:vertical-rl;font-family:"Caveat",cursive;font-size:24px;line-height:1;color:var(--red);background:var(--card);border:1px solid var(--paper-line);border-left:0;border-radius:0 10px 10px 0;cursor:pointer;pointer-events:auto;box-shadow:2px 3px 8px rgba(3,29,68,.22)}
+.tidy .td-tab{position:relative;display:block;width:46px;padding:18px 0 20px;writing-mode:vertical-rl;font-family:"Caveat",cursive;font-size:24px;line-height:1;color:var(--red);background:var(--card);border:1px solid var(--paper-line);border-left:0;border-radius:0 10px 10px 0;cursor:pointer;pointer-events:auto;box-shadow:2px 3px 8px rgba(var(--shc),.22)}
 .td-tab::after{content:"";position:absolute;z-index:-1;top:calc(100% - 8px);left:50%;width:16px;height:58px;margin-left:-8px;background:linear-gradient(90deg,rgba(255,255,255,.2) 0 22%,transparent 22% 78%,rgba(0,0,0,.16) 78%),var(--red);clip-path:polygon(0 0,100% 0,100% 100%,50% 80%,0 100%);transform-origin:50% 0;transform:rotate(-3deg);transition:transform .35s ease;pointer-events:none}
 .td-tab:hover::after,.tidy.open .td-tab::after{transform:rotate(3deg)}
 .td-tab:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
@@ -2787,7 +2787,7 @@ body.flipping .hero h1 .iw span, body.flipping .wtyt .iw span, body.flipping .do
   /* ---------- Update 134. Desktop scroll performance. The phone pass from Update 50 did most of this on phones only ---------- */
   /* no blend modes on the grain layers, and one shadow per sheet instead of three */
   body::after, .paper::after, .doc .lp::after { mix-blend-mode: normal; }
-  .paper, .doc .lp { filter: drop-shadow(0 6px 8px rgba(3, 29, 68, 0.24)); }
+  .paper, .doc .lp { filter: drop-shadow(2px 6px 8px rgba(var(--shc), 0.24)); }
   /* the endless animations stand still while the page is moving (the class is set by a small script and removed 160ms after the last scroll) */
   html.is-scrolling .doodles, html.is-scrolling .hero h1 .iw span, html.is-scrolling .wtyt .iw span { animation-play-state: paused; }
 </style>
@@ -2813,8 +2813,8 @@ body.flipping .hero h1 .iw span, body.flipping .wtyt .iw span, body.flipping .do
       0 8px 12px rgba(var(--nsh), 0.19),
       0 18px 26px rgba(var(--nsh), 0.2);
   }
-  .card:not(.t5)::after, .sticky:not(:nth-child(4))::after { box-shadow: 0 14px 10px -6px rgba(var(--nsh), 0.32); }
-  .card:not(.t5):hover::after, .card:not(.t5).lit::after, .sticky:not(:nth-child(4)):hover::after { box-shadow: 0 20px 14px -6px rgba(var(--nsh), 0.36); }
+  .card:not(.t5)::after, .sticky:not(:nth-child(4))::after { box-shadow: 4px 14px 10px -6px rgba(var(--nsh), 0.32); }
+  .card:not(.t5):hover::after, .card:not(.t5).lit::after, .sticky:not(:nth-child(4)):hover::after { box-shadow: 6px 20px 14px -6px rgba(var(--nsh), 0.36); }
   .sticky:nth-child(1) {
     background-image:
       linear-gradient(to bottom, rgba(var(--nsh), 0.07) 0 20px, transparent 20px),
@@ -2822,7 +2822,7 @@ body.flipping .hero h1 .iw span, body.flipping .wtyt .iw span, body.flipping .do
       var(--shade);
   }
   @media (max-width: 700px) {
-    .cards .card, .cards .card:hover, .cards .card.lit { box-shadow: 0 2px 3px rgba(var(--nsh), 0.22), 0 8px 12px rgba(var(--nsh), 0.16); }
+    .cards .card, .cards .card:hover, .cards .card.lit { box-shadow: 1px 2px 3px rgba(var(--nsh), 0.22), 2px 8px 12px rgba(var(--nsh), 0.16); }
   }
 </style>
 <style>
@@ -2907,11 +2907,11 @@ body.flipping .hero h1 .iw span, body.flipping .wtyt .iw span, body.flipping .do
   .gl-tab { transition: box-shadow .18s ease-out; }
   @media (hover: hover) {
     .gl:not(.open):has(.gl-tab:hover), .gl:not(.open):has(.gl-tab:focus-visible) { z-index: 125; translate: -5px 0; }
-    .gl:not(.open) .gl-tab:hover, .gl:not(.open) .gl-tab:focus-visible { box-shadow: -5px 6px 14px rgba(3, 29, 68, 0.32); }
+    .gl:not(.open) .gl-tab:hover, .gl:not(.open) .gl-tab:focus-visible { box-shadow: -5px 6px 14px rgba(var(--shc), 0.32); }
     .gl:not(.open) .gl-tab:hover::before, .gl:not(.open) .gl-tab:focus-visible::before { opacity: 1; }
   }
   /* the edge of the paper the tab pulls out. The real paper stays hidden until the tab is opened, so on hover this strip fills the gap beside the tab and the page behind no longer shows through */
-  .gl-tab::before { content: ""; position: absolute; top: -1px; bottom: -1px; left: 100%; width: 10px; background: var(--card); border: 1px solid var(--paper-line); border-left: 0; box-shadow: 0 6px 10px -4px rgba(3, 29, 68, 0.22); opacity: 0; transition: opacity .18s ease-out; }
+  .gl-tab::before { content: ""; position: absolute; top: -1px; bottom: -1px; left: 100%; width: 10px; background: var(--card); border: 1px solid var(--paper-line); border-left: 0; box-shadow: 2px 6px 10px -4px rgba(var(--shc), 0.22); opacity: 0; transition: opacity .18s ease-out; }
   @media (prefers-reduced-motion: reduce) { .gl-tab::before { transition: none; } }
   @media (prefers-reduced-motion: reduce) { .gl, .gl-tab { transition: none; } }
 </style>
@@ -2978,27 +2978,27 @@ body.flipping .hero h1 .iw span, body.flipping .wtyt .iw span, body.flipping .do
       #8A5A2C;
     background-origin: border-box;
     background-clip: padding-box, padding-box, padding-box, padding-box, border-box, border-box, border-box;
-    box-shadow: inset 0 0 0 1px rgba(40, 22, 6, 0.5), inset 0 4px 12px rgba(40, 22, 6, 0.5), inset 0 -2px 6px rgba(255, 236, 196, 0.18), 0 0 0 1px rgba(50, 28, 8, 0.7), 0 8px 18px rgba(3, 29, 68, 0.3);
+    box-shadow: inset 0 0 0 1px rgba(40, 22, 6, 0.5), inset 0 4px 12px rgba(40, 22, 6, 0.5), inset 0 -2px 6px rgba(255, 236, 196, 0.18), 0 0 0 1px rgba(50, 28, 8, 0.7), 2px 8px 18px rgba(var(--shc), 0.3);
   }
   /* the label is a paper slip with a pin */
-  .cloud-block .cloud-label { position: relative; display: inline-block; max-width: 100%; margin: 4px 0 16px; padding: 8px 14px; background: var(--card); border: 1px solid var(--paper-line); border-radius: 3px; rotate: -0.8deg; box-shadow: 0 2px 3px rgba(58, 36, 18, 0.28), 0 6px 10px rgba(58, 36, 18, 0.18); }
-  .cloud-block .cloud-label::before, .cloud-block .stats::before { content: ""; position: absolute; top: -7px; left: 50%; width: 13px; height: 13px; margin-left: -6px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ffb3a1, #C9462E 55%, #7E2814); box-shadow: 0 2px 2px rgba(40, 22, 6, 0.45); }
+  .cloud-block .cloud-label { position: relative; display: inline-block; max-width: 100%; margin: 4px 0 16px; padding: 8px 14px; background: var(--card); border: 1px solid var(--paper-line); border-radius: 3px; rotate: -0.8deg; box-shadow: 1px 2px 3px rgba(58, 36, 18, 0.28), 2px 6px 10px rgba(58, 36, 18, 0.18); }
+  .cloud-block .cloud-label::before, .cloud-block .stats::before { content: ""; position: absolute; top: -7px; left: 50%; width: 13px; height: 13px; margin-left: -6px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ffb3a1, #C9462E 55%, #7E2814); box-shadow: 1px 2px 2px rgba(40, 22, 6, 0.45); }
   /* words sit straight on the cork, with a paper colored halo so they stay readable in light and dark mode */
   .cloud-block .cloud-word { text-shadow: 0 0 2px var(--card), 0 0 5px var(--card), 0 0 9px var(--card), 0 1px 0 var(--card); }
-  .cloud-block .cloud-empty { padding: 10px 16px; background: var(--card); border: 1px solid var(--paper-line); border-radius: 3px; rotate: 0.8deg; box-shadow: 0 2px 3px rgba(58, 36, 18, 0.28); }
+  .cloud-block .cloud-empty { padding: 10px 16px; background: var(--card); border: 1px solid var(--paper-line); border-radius: 3px; rotate: 0.8deg; box-shadow: 1px 2px 3px rgba(58, 36, 18, 0.28); }
   /* the counts and bar chart are a paper card pinned below the cloud */
-  .cloud-block .stats { position: relative; margin-top: 22px; padding: 18px 18px 10px; background: var(--card); border: 1px solid var(--paper-line); border-radius: 3px; rotate: 0.4deg; box-shadow: 0 2px 3px rgba(58, 36, 18, 0.28), 0 8px 12px rgba(58, 36, 18, 0.18); }
+  .cloud-block .stats { position: relative; margin-top: 22px; padding: 18px 18px 10px; background: var(--card); border: 1px solid var(--paper-line); border-radius: 3px; rotate: 0.4deg; box-shadow: 1px 2px 3px rgba(58, 36, 18, 0.28), 2px 8px 12px rgba(58, 36, 18, 0.18); }
   @media (max-width: 700px) {
     .cloud-block { border-width: 10px; padding: 18px 12px 20px; }
   }
 </style>
 <style>
   /* ---------- Update 153. Word cloud words are paper cut-outs pinned to the cork, so they are easy to read. Delete this block to go back. ---------- */
-  .cloud-block .cloud-word { padding: 0.1em 0.32em 0.14em; background: var(--card); border-radius: 2px; text-shadow: none; box-shadow: 0 1px 2px rgba(58, 36, 18, 0.4), 0 3px 6px rgba(58, 36, 18, 0.22); rotate: 0deg; }
+  .cloud-block .cloud-word { padding: 0.1em 0.32em 0.14em; background: var(--card); border-radius: 2px; text-shadow: none; box-shadow: 0 1px 2px rgba(58, 36, 18, 0.4), 1px 3px 6px rgba(58, 36, 18, 0.22); rotate: 0deg; }
   .cloud-block .cloud-word:nth-child(3n+1) { rotate: -1.8deg; }
   .cloud-block .cloud-word:nth-child(3n+2) { rotate: 1.4deg; }
   .cloud-block .cloud-word:nth-child(3n) { rotate: -0.6deg; }
-  @media (hover: hover) { .cloud-block .cloud-word { transition: translate .15s ease-out, box-shadow .15s ease-out; } .cloud-block .cloud-word:hover { translate: 0 -2px; box-shadow: 0 2px 3px rgba(58, 36, 18, 0.4), 0 7px 10px rgba(58, 36, 18, 0.25); } }
+  @media (hover: hover) { .cloud-block .cloud-word { transition: translate .15s ease-out, box-shadow .15s ease-out; } .cloud-block .cloud-word:hover { translate: 0 -2px; box-shadow: 1px 2px 3px rgba(58, 36, 18, 0.4), 2px 7px 10px rgba(58, 36, 18, 0.25); } }
   @media (prefers-reduced-motion: reduce) { .cloud-block .cloud-word { transition: none; } }
 </style>
 <style>
@@ -3064,23 +3064,23 @@ body.flipping .hero h1 .iw span, body.flipping .wtyt .iw span, body.flipping .do
   /* --shade was a white glow in the top left corner and a dark one in the bottom right. It is now only a fine paper grain, so the light is even across the whole note */
   .card, .sticky { --shade: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='f' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' seed='5' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .23 0 0 0 0 .14 0 0 0 0 .06 .7 0 0 0 -.26'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23f)'/%3E%3C/svg%3E"); }
   /* no white edge along the top of each note, only the soft drop shadows */
-  .card, .sticky { box-shadow: 0 1px 1px rgba(var(--nsh), 0.22), 0 3px 5px rgba(var(--nsh), 0.15), 0 9px 14px rgba(var(--nsh), 0.13); }
-  .card:hover, .card.lit, .sticky:hover { box-shadow: 0 2px 2px rgba(var(--nsh), 0.22), 0 8px 12px rgba(var(--nsh), 0.19), 0 18px 26px rgba(var(--nsh), 0.2); }
+  .card, .sticky { box-shadow: 0 1px 1px rgba(var(--nsh), 0.22), 1px 3px 5px rgba(var(--nsh), 0.15), 3px 9px 14px rgba(var(--nsh), 0.13); }
+  .card:hover, .card.lit, .sticky:hover { box-shadow: 1px 2px 2px rgba(var(--nsh), 0.22), 2px 8px 12px rgba(var(--nsh), 0.19), 5px 18px 26px rgba(var(--nsh), 0.2); }
 </style>
 <style>
   /* ---------- Update 158. Fake ambient occlusion on the papers: a thin dark line right where each paper meets what is under it, then the soft shadow further out. Delete this block to go back. ---------- */
   :root { --ao: 40, 22, 8; }
   /* the big sheets: a hairline and a tight shadow hugging the torn edge, under the existing soft shadow. Phones get one tight layer to keep scrolling light */
-  .paper, .doc .lp { filter: drop-shadow(0 0 1px rgba(var(--ao), 0.6)) drop-shadow(0 1px 2px rgba(var(--ao), 0.34)) drop-shadow(0 6px 8px rgba(3, 29, 68, 0.24)); }
-  @media (max-width: 700px) { .paper, .doc .lp { filter: drop-shadow(0 1px 1.5px rgba(var(--ao), 0.5)) drop-shadow(0 5px 7px rgba(3, 29, 68, 0.26)); } }
+  .paper, .doc .lp { filter: drop-shadow(0 0 1px rgba(var(--ao), 0.6)) drop-shadow(0 1px 2px rgba(var(--ao), 0.34)) drop-shadow(2px 6px 8px rgba(var(--shc), 0.24)); }
+  @media (max-width: 700px) { .paper, .doc .lp { filter: drop-shadow(0 1px 1.5px rgba(var(--ao), 0.5)) drop-shadow(2px 5px 7px rgba(var(--shc), 0.26)); } }
   /* notes lying flat: the darkest part is the thin gap right under the edge */
-  .card, .sticky { box-shadow: 0 0 0 0.5px rgba(var(--ao), 0.3), 0 1px 1.5px rgba(var(--ao), 0.4), 0 3px 5px rgba(var(--nsh), 0.15), 0 9px 14px rgba(var(--nsh), 0.13); }
+  .card, .sticky { box-shadow: 0 0 0 0.5px rgba(var(--ao), 0.3), 0 1px 1.5px rgba(var(--ao), 0.4), 1px 3px 5px rgba(var(--nsh), 0.15), 3px 9px 14px rgba(var(--nsh), 0.13); }
   /* when a note lifts on hover the gap opens up, so the tight dark line fades and the soft shadow grows */
-  .card:hover, .card.lit, .sticky:hover { box-shadow: 0 0 0 0.5px rgba(var(--ao), 0.18), 0 2px 2px rgba(var(--nsh), 0.22), 0 8px 12px rgba(var(--nsh), 0.19), 0 18px 26px rgba(var(--nsh), 0.2); }
-  @media (max-width: 700px) { .cards .card, .cards .card:hover, .cards .card.lit { box-shadow: 0 0 0 0.5px rgba(var(--ao), 0.3), 0 1px 1.5px rgba(var(--ao), 0.35), 0 2px 3px rgba(var(--nsh), 0.22), 0 8px 12px rgba(var(--nsh), 0.16); } }
+  .card:hover, .card.lit, .sticky:hover { box-shadow: 0 0 0 0.5px rgba(var(--ao), 0.18), 1px 2px 2px rgba(var(--nsh), 0.22), 2px 8px 12px rgba(var(--nsh), 0.19), 5px 18px 26px rgba(var(--nsh), 0.2); }
+  @media (max-width: 700px) { .cards .card, .cards .card:hover, .cards .card.lit { box-shadow: 0 0 0 0.5px rgba(var(--ao), 0.3), 0 1px 1.5px rgba(var(--ao), 0.35), 1px 2px 3px rgba(var(--nsh), 0.22), 2px 8px 12px rgba(var(--nsh), 0.16); } }
   /* the small papers pinned to the cork */
-  .cloud-block .stats, .cloud-block .cloud-label, .cloud-block .cloud-empty { box-shadow: 0 0 0 0.5px rgba(var(--ao), 0.3), 0 1px 1.5px rgba(var(--ao), 0.4), 0 3px 4px rgba(58, 36, 18, 0.22), 0 8px 12px rgba(58, 36, 18, 0.16); }
-  .cloud-block .cloud-word { box-shadow: 0 0 0 0.5px rgba(var(--ao), 0.3), 0 1px 1.5px rgba(var(--ao), 0.4), 0 3px 6px rgba(58, 36, 18, 0.2); }
+  .cloud-block .stats, .cloud-block .cloud-label, .cloud-block .cloud-empty { box-shadow: 0 0 0 0.5px rgba(var(--ao), 0.3), 0 1px 1.5px rgba(var(--ao), 0.4), 1px 3px 4px rgba(58, 36, 18, 0.22), 2px 8px 12px rgba(58, 36, 18, 0.16); }
+  .cloud-block .cloud-word { box-shadow: 0 0 0 0.5px rgba(var(--ao), 0.3), 0 1px 1.5px rgba(var(--ao), 0.4), 1px 3px 6px rgba(58, 36, 18, 0.2); }
 </style>
 <style>
   /* ---------- Update 159. Color themes pull out tab. Reuses the .gl classes ---------- */
@@ -3159,6 +3159,33 @@ body.flipping .hero h1 .iw span, body.flipping .wtyt .iw span, body.flipping .do
     .cards:empty::after { display: none; }
   }
   @media (max-width: 380px) { .cards::after { width: 46px; height: 44px; right: 12%; } }
+</style>
+<style>
+  /* ---------- Update 176. One light direction and one shadow color. The older shadow rules now point at --shc, so this variable has to stay defined. To undo fully, put 3, 29, 68 back in place of var(--shc) in the shadow rules. ---------- */
+  /* Light comes from the top left, so every shadow falls down and a little to the right. Shadow color is one warm brown, the same as the notes already used (--nsh), instead of a mix of navy and brown */
+  :root { --shc: 58, 36, 18; }
+</style>
+<style>
+  /* ---------- Update 177. Depth step 2: shadow size follows height. Delete this block to go back. ---------- */
+  /* Each piece gets the shadow of its own thickness, all in the one light direction and brown from Update 176. Thin paper lying on a sheet (clipping, index card, receipt, library card) gets a hairline contact line and a faint short shadow. Thicker pieces (polaroid, snapshot, film strip, luggage tag, envelope) get a short crisp shadow plus a wider soft one. Raised objects (paper clips, binder clip, staple, safety pin, stickers, label strips) are tall for their size, so they get a short dark shadow right beside them and a clear one a little further out. A piece that lifts on hover moves up a level. Sheets and the wall notes already have a contact layer plus a soft layer, so they are not touched here. --ao is the dark contact color from Update 158. */
+  :root {
+    --el-thin: 0 0 0 0.5px rgba(var(--ao), 0.22), 0 1px 1.5px rgba(var(--ao), 0.32), 1px 3px 5px rgba(var(--shc), 0.16);
+    --el-thick: 0 1px 1.5px rgba(var(--ao), 0.38), 2px 4px 5px rgba(var(--shc), 0.2), 3px 9px 13px rgba(var(--shc), 0.14);
+    --el-thick-lift: 0 1px 1.5px rgba(var(--ao), 0.3), 3px 8px 9px rgba(var(--shc), 0.22), 5px 14px 20px rgba(var(--shc), 0.16);
+    --el-raised: 1px 1px 1px rgba(var(--ao), 0.45), 2px 4px 4px rgba(var(--shc), 0.24);
+  }
+  .scrap.news, .scrap.index, .scrap.libcard { box-shadow: var(--el-thin); }
+  .scrap.polaroid, .scrap.filmstrip, .scrap.snap { box-shadow: var(--el-thick); }
+  .scrap.s-round { box-shadow: var(--el-raised); }
+  .scrap.dymo { box-shadow: var(--el-raised), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(0, 0, 0, 0.5); }
+  .scrap.staple { box-shadow: 0 1px 1px rgba(var(--ao), 0.5), 1px 2px 2px rgba(var(--shc), 0.2); }
+  @media (hover: hover) { .scrap.polaroid:hover { box-shadow: var(--el-thick-lift); } }
+  /* pieces drawn with a filter shadow get two chained shadows (a contact one and a soft one) on desktop only. Phones keep their single light shadow from the performance passes */
+  @media (min-width: 701px) and (pointer: fine) {
+    .scrap.receipt { filter: drop-shadow(0 1px 1px rgba(var(--ao), 0.35)) drop-shadow(1px 3px 4px rgba(var(--shc), 0.16)); }
+    .scrap.tag, .scrap.env { filter: drop-shadow(0 1px 1px rgba(var(--ao), 0.38)) drop-shadow(2px 5px 6px rgba(var(--shc), 0.22)); }
+    .scrap.pclip, .scrap.bclip, .scrap.spin { filter: drop-shadow(1px 1px 1px rgba(var(--ao), 0.45)) drop-shadow(2px 4px 3px rgba(var(--shc), 0.24)); }
+  }
 </style>
 </head>
 <body class="splash-lock">
