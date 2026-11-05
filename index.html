@@ -3563,7 +3563,9 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
   .reacts .flagbtn { display: inline-flex; align-items: center; gap: 4px; margin-left: auto; min-width: 28px; height: 28px; padding: 0 7px; justify-content: center; font-family: "Outfit", sans-serif; font-size: 11px; line-height: 1; color: var(--ink-soft); background: transparent; border: 1px solid var(--paper-line); border-radius: 999px; cursor: pointer; rotate: 0deg; transition: color .25s ease, background-color .25s ease, border-color .25s ease, transform .2s cubic-bezier(.3, 1.5, .5, 1); }
   .reacts .flagbtn:hover { color: var(--red); border-color: var(--red); transform: translateY(-1px); }
   .reacts .flagbtn:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
-  .reacts .flagbtn.on { color: #FFF3E8; background: var(--red); border-color: var(--red); cursor: default; transform: none; }
+  .reacts .flagbtn.on { color: #FFF3E8; background: var(--red); border-color: var(--red); transform: none; }
+  .reacts .flagbtn.on:hover { color: #FFF3E8; background: color-mix(in srgb, var(--red) 82%, #fff); }
+  .reacts .flagbtn.err { color: var(--red); background: transparent; border-color: var(--red); }
   .reacts .flagbtn.on .cloth { fill: currentColor; }
   .reacts .flagbtn .flagtxt:empty { display: none; }
   .reacts .flagbtn.wave .cloth { transform-box: fill-box; transform-origin: left center; animation: flagWave .8s ease-in-out; }
@@ -4595,26 +4597,44 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
       body: JSON.stringify({ action: 'react', id, key: k, delta })
     }).catch(err => console.error('Could not save reaction.', err));
   }
-  // Update 204: flag a note. One press sends an anonymous removal request (only the note's id and its words, nothing about the person).
-  function sendFlag(id, note) {
-    if (!API_URL || API_URL.includes('PASTE_YOUR')) return;
-    // the words go in "note", not "text", so an Apps Script that does not know flags yet cannot mistake it for a new entry
-    fetch(API_URL, {
-      method: 'POST', mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ action: 'flag', id, note })
-    }).catch(err => console.error('Could not send the flag.', err));
+  // Update 206: flag a note, and take the flag back with a second press. The request goes the same way the notes and the reactions
+  // are loaded (a script tag), so the page can read the Apps Script's answer. Only the start of the note's words is sent
+  // (to find its row), nothing about the person. If the answer is missing or says no, the flag goes back off and the button says so.
+  function saveFlags() { try { localStorage.setItem(FLAGKEY, JSON.stringify(FLAGS)); } catch (x) {} }
+  function flagCall(action, note, done) {
+    if (!API_URL || API_URL.includes('PASTE_YOUR')) { done({ ok: true, status: 'local' }); return; }
+    const cb = 'wttFlag_' + Date.now() + '_' + Math.floor(Math.random() * 1e6);
+    const tag = document.createElement('script');
+    let over = false;
+    const finish = r => { if (over) return; over = true; clearTimeout(timer); window[cb] = function () {}; tag.remove(); done(r); };
+    const timer = setTimeout(() => finish(null), 8000);
+    window[cb] = data => finish(data && typeof data === 'object' && !Array.isArray(data) ? data : null);
+    tag.onerror = () => finish(null);
+    tag.src = API_URL + (API_URL.includes('?') ? '&' : '?') + 'action=' + action + '&note=' + encodeURIComponent(String(note).slice(0, 200)) + '&callback=' + cb;
+    document.body.appendChild(tag);
   }
   document.getElementById('cards').addEventListener('click', ev => {
-    const b = ev.target.closest('.flagbtn'); if (!b || b.classList.contains('on')) return;
+    const b = ev.target.closest('.flagbtn'); if (!b || b.dataset.busy) return;
     const e = entries[+b.dataset.i]; if (!e) return;
-    const id = rid(e.text);
-    FLAGS[id] = 1;
-    try { localStorage.setItem(FLAGKEY, JSON.stringify(FLAGS)); } catch (x) {}
-    b.classList.add('on', 'wave'); b.setAttribute('aria-pressed', 'true'); b.setAttribute('aria-label', 'Flagged for removal'); b.title = 'Flagged for removal';
-    b.querySelector('.flagtxt').textContent = 'flagged';
-    setTimeout(() => b.classList.remove('wave'), 900);
-    sendFlag(id, e.text);
+    const id = rid(e.text), turnOn = !FLAGS[id], label = b.querySelector('.flagtxt');
+    const paint = on => {
+      b.classList.toggle('on', on); b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      const t = on ? 'Flagged for removal. Press again to take the flag back.' : 'Flag this note for removal (anonymous)';
+      b.setAttribute('aria-label', t); b.title = t; label.textContent = on ? 'flagged' : '';
+    };
+    if (turnOn) FLAGS[id] = 1; else delete FLAGS[id];
+    saveFlags(); paint(turnOn); b.classList.remove('err');
+    if (turnOn) { b.classList.add('wave'); setTimeout(() => b.classList.remove('wave'), 900); }
+    b.dataset.busy = '1';
+    flagCall(turnOn ? 'flag' : 'unflag', e.text, r => {
+      delete b.dataset.busy;
+      if (r && r.ok) return;
+      if (turnOn) delete FLAGS[id]; else FLAGS[id] = 1;
+      saveFlags(); paint(!turnOn);
+      label.textContent = r && r.status === 'notfound' ? 'not found' : 'not saved'; b.classList.add('err');
+      console.warn('The flag was not saved. ' + (r ? 'The Apps Script answered: ' + r.status : 'No usable answer from the Apps Script (not updated yet, blocked, or offline).'));
+      setTimeout(() => { b.classList.remove('err'); label.textContent = FLAGS[id] ? 'flagged' : ''; }, 3500);
+    });
   });
   // ---- Bar chart animation. The bars grow from empty the first time the chart scrolls into view (one after another), and after that
   // they slide from their old length to the new one when a reaction or a new note changes the counts. Reduced motion skips it ----
@@ -4682,7 +4702,7 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
           ${e.source ? `<p class="source">source: ${escapeHtml(showSource(e.source))}</p>` : '<span></span>'}
         </div>
         ${e.reframe ? `<p class="reframe">to a friend. ${escapeHtml(e.reframe)}</p>` : ''}
-        <div class="reacts">${RX.map(([k, l]) => `<button class="metoo${rxMine(e, k) ? ' mine' : ''}" data-i="${i}" data-k="${k}" type="button">${rxText(e, k)}</button>`).join('')}<button class="flagbtn${isFlagged(e) ? ' on' : ''}" type="button" data-i="${i}" aria-pressed="${isFlagged(e)}" aria-label="${isFlagged(e) ? 'Flagged for removal' : 'Flag this note for removal'}" title="${isFlagged(e) ? 'Flagged for removal' : 'Flag this note for removal (anonymous)'}">${FLAG_SVG}<span class="flagtxt">${isFlagged(e) ? 'flagged' : ''}</span></button></div>
+        <div class="reacts">${RX.map(([k, l]) => `<button class="metoo${rxMine(e, k) ? ' mine' : ''}" data-i="${i}" data-k="${k}" type="button">${rxText(e, k)}</button>`).join('')}<button class="flagbtn${isFlagged(e) ? ' on' : ''}" type="button" data-i="${i}" aria-pressed="${isFlagged(e)}" aria-label="${isFlagged(e) ? 'Flagged for removal. Press again to take the flag back.' : 'Flag this note for removal'}" title="${isFlagged(e) ? 'Flagged for removal. Press again to take the flag back.' : 'Flag this note for removal (anonymous)'}">${FLAG_SVG}<span class="flagtxt">${isFlagged(e) ? 'flagged' : ''}</span></button></div>
       </div>
     `).join('');
     if (justAdded) el.dataset.reset = '1';
