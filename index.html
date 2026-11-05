@@ -3514,16 +3514,17 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
   .cloud-block .cloud-fallback2 {
     background-color: #F3EBCB;
     background-image:
-      linear-gradient(to right, rgba(201, 70, 46, 0) 0 38px, rgba(201, 70, 46, 0.55) 38px 39.5px, rgba(201, 70, 46, 0) 39.5px),
-      linear-gradient(to bottom, rgba(201, 70, 46, 0) 0 21px, rgba(201, 70, 46, 0.5) 21px 23px, rgba(201, 70, 46, 0) 23px),
       repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0) 0 27px, rgba(66, 108, 170, 0.30) 27px 28px),
       radial-gradient(130% 120% at 50% 50%, rgba(150, 110, 40, 0) 55%, rgba(150, 110, 40, 0.20) 100%),
       url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='f' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' seed='6' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .30  0 0 0 0 .20  0 0 0 0 .08  .75 0 0 0 -.27'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23f)'/%3E%3C/svg%3E");
-    background-size: auto, auto, auto, auto, 180px 180px;
-    background-position: 0 0, 0 0, 0 33px, 0 0, 0 0;
+    background-size: auto, auto, 180px 180px;
+    background-position: 0 33px, 0 0, 0 0;
     box-shadow: inset 0 -10px 12px -12px rgba(80, 52, 10, 0.4), inset 0 1px 0 rgba(255, 252, 235, 0.7), 0 0 0 0.5px rgba(var(--ao), 0.3), 0 1px 1.5px rgba(var(--ao), 0.35), 1px 2px 3px rgba(58, 36, 18, 0.34), 3px 8px 12px rgba(58, 36, 18, 0.24);
     text-align: left; line-height: 28px; padding: 30px 22px 14px 52px;
   }
+  /* Update 220: the red margin and header line are real 2px boxes. As hard stop gradients on a tilted note they stair-stepped and alternated between bold and thin. */
+  .cloud-block .cloud-fallback2::after { content: ""; position: absolute; top: 0; bottom: 0; left: 38px; width: 2px; background: rgba(201, 70, 46, 0.55); pointer-events: none; }
+  .cloud-block .cloud-fallback2 .cf2-h { position: absolute; left: 0; right: 0; top: 21px; height: 2px; background: rgba(201, 70, 46, 0.5); pointer-events: none; }
   @media (max-width: 700px) {
     .cloud-block .cloud-fallback { padding-top: 32px; }
     .cloud-block .cloud-fallback2 { padding: 30px 14px 12px 48px; line-height: 27px; }
@@ -3676,6 +3677,89 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
   .rs-warn { margin: 0 0 10px; font-family: "Caveat", cursive; font-size: 21px; line-height: 1.15; color: #8F2D18; }
   @media (max-width: 560px) { .rs { rotate: 0deg; padding: 32px 16px 20px; } .rs-pct { font-size: 62px; } .rs-row { grid-template-columns: 78px 1fr 30px; } }
   @media (prefers-reduced-motion: reduce) { .rs-fill { transition: none; } }
+</style>
+<style>
+  /* ---------- Update 214. Success indicators inside the results panel. Same blue graph paper, same fixed colors. Delete this block, the .rs-ind markup and the Update 214 script lines to go back. ---------- */
+  .rs-ind { margin: 0 0 22px; padding: 0 0 18px; border-bottom: 2px dashed rgba(27, 47, 102, 0.3); }
+  .ind-intro { margin: 0 0 14px; font-size: 16px; line-height: 1.5; max-width: 62ch; color: #2C3E75; }
+  .ind-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+  @media (min-width: 701px) { .ind-list { grid-template-columns: 1fr 1fr; gap: 16px 34px; } }
+  .ind { margin: 0; padding: 10px 12px 11px; background: rgba(255, 255, 255, 0.55); }
+  .ind p { margin: 0; }
+  .ind-n { display: inline-block; font-family: "Caveat", cursive; font-weight: 700; font-size: 28px; line-height: 1; color: #8F2D18; text-decoration: underline; text-decoration-color: #8F2D18; text-decoration-thickness: 2px; text-underline-offset: 5px; text-decoration-skip-ink: none; }
+  .ind-q { margin-top: 2px; font-size: 16px; line-height: 1.35; font-weight: 700; }
+  .ind-m { margin: 3px 0 8px; font-size: 15px; line-height: 1.4; color: #2C3E75; }
+  .ind .rs-track { height: 12px; }
+  .ind-s { margin-top: 7px; font-size: 15px; line-height: 1.35; font-weight: 700; color: var(--ic, #5A5F6B); }
+  .ind.met { --ic: #27503C; }
+  .ind.part { --ic: #8A5600; }
+  .ind.none, .ind.wait { --ic: #4A4F5C; }
+  @media (max-width: 560px) { .ind { padding: 9px 10px 10px; } }
+</style>
+<style>
+  /* ---------- Update 215. "What we learned, and what's next" at the end of section 05: yellow legal pad with a red double margin, fixed colors. Delete this block and the #learned markup to go back. ---------- */
+  .wl { position: relative; margin: 38px 0 8px; padding: 36px 28px 24px 62px; rotate: -0.3deg; color: #1B2F66; border-radius: 2px;
+    background-color: #F8EDB0;
+    background-image:
+      repeating-linear-gradient(180deg, transparent 0, transparent 31px, rgba(60, 100, 160, 0.22) 31px, rgba(60, 100, 160, 0.22) 32px),
+      linear-gradient(165deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0) 45%, rgba(110, 80, 10, 0.1));
+    box-shadow: 0 0 1px rgba(var(--shc), 0.6), 1px 2px 3px rgba(var(--shc), 0.3), 3px 9px 14px rgba(var(--shc), 0.22); }
+  /* The double margin is two real 2px boxes, not gradient stops. Hard stop gradients on a tilted element get stair-stepped, which made the lines alternate between bold and thin. */
+  .wl::before, .wl::after { content: ""; position: absolute; top: 0; bottom: 0; width: 2px; background: rgba(168, 28, 12, 0.55); pointer-events: none; }
+  .wl::before { left: 40px; }
+  .wl::after { left: 45px; }
+  .wl-tape { position: absolute; top: -13px; right: 52px; width: 100px; height: 26px; rotate: 3deg; pointer-events: none;
+    background: rgba(190, 215, 190, 0.8); border: 1px solid rgba(40, 90, 60, 0.25); box-shadow: 0 1px 2px rgba(var(--shc), 0.2); }
+  .wl p, .wl ul { margin: 0; }
+  .wl-h { margin: 0 0 4px; font-family: "Caveat", cursive; font-weight: 700; font-size: 38px; line-height: 1.05; color: #1B2F66; }
+  .wl-intro { font-size: 16px; line-height: 1.5; max-width: 62ch; color: #2C3E75; }
+  .wl-k { margin-top: 22px; margin-bottom: 8px; font-family: "Caveat", cursive; font-weight: 700; font-size: 27px; line-height: 1.1; color: #8F2D18; }
+  .wl-list, .wl-next { list-style: none; padding: 0; display: grid; gap: 16px; }
+  .wl-list li { padding: 0 0 14px; border-bottom: 1px dashed rgba(27, 47, 102, 0.35); font-size: 16px; line-height: 1.5; }
+  .wl-list li:last-child { border-bottom: 0; padding-bottom: 0; }
+  .wl-list li p + p { margin-top: 6px; }
+  .wl-l { color: #2C3E75; }
+  .wl-t { font-family: "Caveat", cursive; font-weight: 700; font-size: 21px; line-height: 1.15; color: #27503C; }
+  .wl-next { gap: 12px; }
+  .wl-next li { position: relative; padding-left: 30px; font-size: 16px; line-height: 1.5; }
+  .wl-next li::before { content: ""; position: absolute; left: 0; top: 4px; width: 16px; height: 16px; border: 2px solid #1B2F66; border-radius: 2px; background: rgba(255, 255, 255, 0.5); rotate: -3deg; }
+  .wl-grow li::before { border-style: dashed; }
+  .wl-foot { margin-top: 18px; font-family: "Caveat", cursive; font-size: 21px; line-height: 1.15; color: #8F2D18; }
+  @media (max-width: 560px) { .wl { rotate: 0deg; padding: 32px 16px 20px 40px; background-image: repeating-linear-gradient(180deg, transparent 0, transparent 31px, rgba(60, 100, 160, 0.22) 31px, rgba(60, 100, 160, 0.22) 32px), linear-gradient(165deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0) 45%, rgba(110, 80, 10, 0.1)); } .wl-h { font-size: 33px; } .wl::before { left: 24px; } .wl::after { left: 28px; } }
+</style>
+<style>
+  /* ---------- Update 216. "What the numbers can't tell you" at the end of section 04: a taped cream index card, typewriter lead words, fixed colors. Delete this block and the #limits-results markup to go back. ---------- */
+  .lm { position: relative; margin: 34px 0 6px; padding: 30px 26px 22px; rotate: 0.4deg; color: #2A2418; border-radius: 1px;
+    background-color: #FBF3D9;
+    background-image:
+      repeating-linear-gradient(180deg, transparent 0, transparent 27px, rgba(60, 100, 160, 0.16) 27px, rgba(60, 100, 160, 0.16) 28px),
+      linear-gradient(165deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0) 45%, rgba(110, 80, 10, 0.09));
+    box-shadow: 0 0 1px rgba(var(--shc), 0.6), 1px 2px 3px rgba(var(--shc), 0.3), 3px 9px 14px rgba(var(--shc), 0.2); }
+  .lm-tape { position: absolute; top: -13px; left: 38px; width: 96px; height: 26px; rotate: -4deg; pointer-events: none;
+    background: rgba(235, 210, 122, 0.8); border: 1px solid rgba(120, 90, 30, 0.25); box-shadow: 0 1px 2px rgba(var(--shc), 0.2); }
+  .lm p, .lm ul { margin: 0; }
+  .lm-h { margin: 0 0 14px; padding-bottom: 6px; border-bottom: 2px solid rgba(168, 28, 12, 0.55); font-family: "Caveat", cursive; font-weight: 700; font-size: 36px; line-height: 1.05; color: #8F2D18; }
+  .lm-intro { margin-bottom: 16px; font-size: 16px; line-height: 1.5; max-width: 62ch; color: #3A3020; }
+  .lm-list { list-style: none; padding: 0; display: grid; gap: 14px 30px; }
+  @media (min-width: 701px) { .lm-list { grid-template-columns: 1fr 1fr; } }
+  .lm-list li { font-size: 16px; line-height: 1.5; }
+  .lm-list b { font-family: var(--tw, "Special Elite", "Courier New", monospace); font-weight: 400; font-size: 17px; color: #1B2F66; text-decoration: underline; text-decoration-color: #8F2D18; text-decoration-thickness: 2px; text-underline-offset: 4px; text-decoration-skip-ink: none; }
+  @media (max-width: 560px) { .lm { rotate: 0deg; padding: 28px 14px 18px; } .lm-h { font-size: 32px; } }
+</style>
+<style>
+  /* ---------- Update 223. Brighter sticky notes. The eight note colors are lifted so they read as bright paper, not dim. The wall notes take their color from NOTE_COLORS and noteColor in the wall script, which changed too. Delete this block and restore those two to go back. ---------- */
+  .card.n0, .sticky:nth-child(1) { --nc: #F6E27A; } /* lemon */
+  .card.n1, .sticky:nth-child(2) { --nc: #F2A8A0; } /* rose */
+  .card.n2, .sticky:nth-child(3) { --nc: #C6B6EC; } /* lilac */
+  .card.n3, .sticky:nth-child(4) { --nc: #B4DB9E; } /* sage */
+  .card.n4 { --nc: #9FCBEA; } /* sky blue */
+  .card.n5 { --nc: #8CDACB; } /* teal */
+  .card.n6 { --nc: #F0A07F; } /* clay */
+  .card.n7 { --nc: #E3AED2; } /* mauve */
+  /* the dark edge takes less brown, so it no longer greys the note's rim */
+  .card, .sticky { border-color: color-mix(in srgb, var(--nc) 75%, #3A2412); }
+  /* the paper grain is a little lighter, so it no longer dulls the color */
+  .card, .sticky { --shade: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='f' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' seed='5' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .23 0 0 0 0 .14 0 0 0 0 .06 .5 0 0 0 -.2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23f)'/%3E%3C/svg%3E"); }
 </style>
 </head>
 <body class="splash-lock">
@@ -4048,7 +4132,7 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
     <div class="cloud-block">
       <p class="cloud-label mono">where it's coming from, sized by how often it's mentioned and colored by type</p>
       <p class="cloud-fallback" id="cloudFallback" role="status" hidden>Can't reach the live wall. Try opening this link in a private window or another browser.</p>
-      <p class="cloud-fallback2" id="cloudFallback2">You can still add your own note above. It will still be sent to the backend, it just can't be shown here until the wall can be reached.</p>
+      <p class="cloud-fallback2" id="cloudFallback2"><span class="cf2-h" aria-hidden="true"></span>You can still add your own note above. It will still be sent to the backend, it just can't be shown here until the wall can be reached.</p>
       <div class="cloud" id="cloud"></div>
       <div class="stats" id="stats"></div>
     </div>
@@ -4174,6 +4258,17 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
       <li class="sticky"><h3>Easy to forget</h3><p>Without a school link, a counselor mention or a friend sharing it, a single visit is gone once the tab closes.</p></li>
     </ul>
     <p class="body" style="margin-top:20px;">Research on peer acceptance suggests it can directly ease perfectionistic tendencies in teens (Blackburn et al., 2025). That is part of why routing this through schools or counselors, rather than leaving it to be found cold, matters more than the site itself.</p>
+    <!-- Update 216: honest limits of the results. Static text. Pairs with the results panel and the success indicators at the end of section 05. -->
+    <div class="lm" id="limits-results" aria-labelledby="lmH">
+      <span class="lm-tape" aria-hidden="true"></span>
+      <h3 class="lm-h" id="lmH">what the numbers can't tell you</h3>
+      <p class="lm-intro">The results at the end of section 05 are real, but they are small and they are our visitors' own words. Here is how far they go.</p>
+      <ul class="lm-list">
+        <li><p><b>Self-reported.</b> Visitors told us what changed for them. Nobody checked it, and some may answer the way they think we hope.</p></li>
+        <li><p><b>Only some visitors.</b> The numbers come from people who found the page, got to the end and chose to answer. Anyone a school network blocked, or who stopped early, is not in them.</p></li>
+        <li><p><b>Views, not wellbeing.</b> Looking at a rule differently is not the same as feeling less pressure. The page measures the first, not the second, and it is not a screening tool.</p></li>
+      </ul>
+    </div>
   </div>
 </section>
 
@@ -4319,9 +4414,71 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
     <!-- Update 213: public results panel. Filled in by a script from the Apps Script (reflection answers, activity counts, moderated takeaways). -->
     <div class="rs" id="results" aria-labelledby="rsH">
       <span class="rs-tape" aria-hidden="true"></span>
-      <h3 class="rs-h" id="rsH">what readers did with it</h3>
+      <h3 class="rs-h" id="rsH">what visitors did with it</h3>
       <p class="rs-sub" id="rsSub" role="status" aria-live="polite">Counting...</p>
+      <!-- Update 214: success indicators. Stated up front, each with a target. The script reads the numbers inside the <b data-t> and <b data-min> tags, so change a target here and nowhere else. -->
+      <div class="rs-ind" id="rsInd">
+        <p class="rs-k">what would count as working</p>
+        <p class="ind-intro">We picked four things to watch and a target for each. The targets are sized for a class pilot, not a survey, so a small number of real answers can still meet them.</p>
+        <ul class="ind-list">
+          <li class="ind wait" data-ind="reach">
+            <p class="ind-n">reach</p>
+            <p class="ind-q">Did people get all the way through it?</p>
+            <p class="ind-m">Finished self-checks. Target: <b data-t>40</b>. Each one is a result, not a person.</p>
+            <span class="rs-track" aria-hidden="true"><span class="rs-fill"></span></span>
+            <p class="ind-s">waiting for the tally</p>
+          </li>
+          <li class="ind wait" data-ind="reflect">
+            <p class="ind-n">reflection</p>
+            <p class="ind-q">Did it make anyone look at a standard again?</p>
+            <p class="ind-m">Share who said yes or a little. Target: <b data-t>60</b>%, once <b data-min>15</b> or more have answered.</p>
+            <span class="rs-track" aria-hidden="true"><span class="rs-fill"></span></span>
+            <p class="ind-s">waiting for the tally</p>
+          </li>
+          <li class="ind wait" data-ind="reframe">
+            <p class="ind-n">reframing</p>
+            <p class="ind-q">Did they try a kinder version of the rule?</p>
+            <p class="ind-m">Rewrite cards made. Target: <b data-t>20</b>. Only the count is kept, never the words.</p>
+            <span class="rs-track" aria-hidden="true"><span class="rs-fill"></span></span>
+            <p class="ind-s">waiting for the tally</p>
+          </li>
+          <li class="ind wait" data-ind="share">
+            <p class="ind-n">sharing</p>
+            <p class="ind-q">Did it travel past the first visitor?</p>
+            <p class="ind-m">Times the link or a card was shared, or the school message copied. Target: <b data-t>15</b>.</p>
+            <span class="rs-track" aria-hidden="true"><span class="rs-fill"></span></span>
+            <p class="ind-s">waiting for the tally</p>
+          </li>
+        </ul>
+      </div>
       <div class="rs-body" id="rsBody" hidden></div>
+    </div>
+    <!-- Update 215: what we learned and what's next. Static text. Challenges, recommendations and the longer view. -->
+    <div class="wl" id="learned" aria-labelledby="wlH">
+      <span class="wl-tape" aria-hidden="true"></span>
+      <h3 class="wl-h" id="wlH">what we learned, and what's next</h3>
+
+      <p class="wl-k">what got in the way</p>
+      <ul class="wl-list">
+        <li>
+          <p><b>Phones struggled with the decoration.</b> The scrapbook look is heavy: paper textures, glowing titles and hundreds of small pieces. Phones lagged, and one froze while making a card. We cut effects on phones, lightened the card drawing, and added an "easy on the mess!" switch in the colors tab that drops the extras.</p>
+          <p class="wl-l"><i>What it taught us:</i> the look should never cost the reading.</p>
+          <p class="wl-t">eased. we could not reproduce the freeze, so we can't say it is gone.</p>
+        </li>
+      </ul>
+
+      <p class="wl-k">what we would do next</p>
+      <ul class="wl-next">
+        <li><b>Pair it with a person.</b> The page is a starting point, not counseling. A short guide for counselors, with follow-up questions and a clear way for a student to ask for a conversation, would give a visitor somewhere to go next.</li>
+      </ul>
+
+      <p class="wl-k">if it grew</p>
+      <ul class="wl-next wl-grow">
+        <li><b>One copy per school.</b> Each school would get its own wall and its own tally, so its results stay with that school and its notes are moderated by people who know the place.</li>
+        <li><b>A Filipino version.</b> So the question can be asked in the language the rule was first heard in.</li>
+        <li><b>Permission first.</b> Anything beyond a class pilot needs the school's approval, consent for students who are minors, and a plan for notes that name real people.</li>
+      </ul>
+      <p class="wl-foot">these are plans and recommendations. none of the next steps is built yet.</p>
     </div>
     <div class="sharebar">
       <button class="share-btn" type="button" data-share><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.6l6.8-4M8.6 13.4l6.8 4"/></svg>Send this to a friend</button>
@@ -4825,11 +4982,11 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
   // Update 198: every note on the wall gets its own paper color. The first eight are the muted colors used before,
   // in an order that keeps neighbors different. After that the hue steps around the color wheel by the golden angle,
   // so no two notes share a color, and a new note never changes the color of an older one (counting is from the oldest).
-  const NOTE_COLORS = ['#E6D488', '#B2A3D0', '#D68C72', '#A5C294', '#DB9A94', '#93B5D0', '#C99BBB', '#82BDB2'];
+  const NOTE_COLORS = ['#F6E27A', '#C6B6EC', '#F0A07F', '#B4DB9E', '#F2A8A0', '#9FCBEA', '#E3AED2', '#8CDACB'];
   function noteColor(k) {
     if (k < NOTE_COLORS.length) return NOTE_COLORS[k];
     const j = k - NOTE_COLORS.length;
-    return 'hsl(' + Math.round((j * 137.508 + 28) % 360) + ' ' + (30 + (j % 3) * 5) + '% ' + (68 + (j % 2) * 4) + '%)';
+    return 'hsl(' + Math.round((j * 137.508 + 28) % 360) + ' ' + (58 + (j % 3) * 5) + '% ' + (76 + (j % 2) * 3) + '%)';
   }
   function renderCards() {
     const el = document.getElementById('cards');
@@ -7109,13 +7266,49 @@ function qrMatrix(text){
       setTimeout(function () { fill.style.width = w + '%'; }, 80);
       return row;
     }
-    function fail(t) { sub.textContent = t; body.hidden = true; body.textContent = ''; }
+    /* Update 214: success indicators. Targets are read from the page (<b data-t>, <b data-min>), so they live in one place. */
+    var inds = {};
+    Array.prototype.forEach.call(root.querySelectorAll('.ind'), function (li) {
+      var t = li.querySelector('[data-t]'), m = li.querySelector('[data-min]');
+      inds[li.getAttribute('data-ind')] = { li: li, fill: li.querySelector('.rs-fill'), st: li.querySelector('.ind-s'), target: t ? Number(t.textContent) || 0 : 0, min: m ? Number(m.textContent) || 0 : 0 };
+    });
+    function setInd(key, value, state, text) {
+      var o = inds[key]; if (!o) return;
+      o.li.className = 'ind ' + state; o.st.textContent = text;
+      var w = o.target ? Math.min(100, Math.round(value / o.target * 100)) : 0;
+      setTimeout(function () { o.fill.style.width = w + '%'; }, 80);
+    }
+    function countInd(key, v, noun) {
+      var o = inds[key]; if (!o) return;
+      if (v >= o.target) setInd(key, v, 'met', 'target met. ' + v + ' of ' + o.target + ' ' + noun + '.');
+      else if (v > 0) setInd(key, v, 'part', v + ' of ' + o.target + ' ' + noun + '. on the way.');
+      else setInd(key, 0, 'none', '0 of ' + o.target + ' ' + noun + '. not yet.');
+    }
+    function score(v) {
+      countInd('reach', v.reach, 'finished self-checks');
+      countInd('reframe', v.reframe, 'cards made');
+      countInd('share', v.share, 'shares');
+      var r = inds.reflect; if (!r) return;
+      if (v.n >= r.min) {
+        var pct = Math.round((v.yes + v.little) / v.n * 100);
+        if (pct >= r.target) setInd('reflect', pct, 'met', 'target met. ' + pct + '% said yes or a little, out of ' + v.n + ' answers.');
+        else setInd('reflect', pct, 'part', pct + '% said yes or a little, out of ' + v.n + ' answers. Below the target of ' + r.target + '%.');
+      } else if (v.n > 0) {
+        setInd('reflect', 0, 'wait', 'too early to say. ' + v.n + ' of the ' + r.min + ' answers needed before a percentage means anything.');
+      } else setInd('reflect', 0, 'none', 'no answers yet. ' + r.min + ' are needed before a percentage means anything.');
+    }
+    function fail(t, keep) {
+      sub.textContent = t; body.hidden = true; body.textContent = '';
+      if (keep) return;
+      Object.keys(inds).forEach(function (k) { var o = inds[k]; o.li.className = 'ind wait'; o.fill.style.width = '0%'; o.st.textContent = 'no results to compare yet'; });
+    }
     function render(d) {
       var n = num(d.n), yes = num(d.yes), little = num(d.little), no = num(d.no), c = d.counts || {};
       var bounce = num(c.quiz_bounce), notE = num(c.quiz_notenough), quizN = bounce + notE;
       var made = num(c.card_made), saved = num(c.card_saved), posters = num(c.poster_printed);
       var shared = num(c.link_shared) + num(c.card_shared) + num(c.msg_copied);
-      if (!n && !quizN && !made && !saved && !shared && !posters) { fail('Nothing in the tally yet. Answer the note above and yours will be the first.'); return; }
+      score({ n: n, yes: yes, little: little, reach: quizN, reframe: made, share: shared });   // Update 214
+      if (!n && !quizN && !made && !saved && !shared && !posters) { fail('Nothing in the tally yet. Answer the note above and yours will be the first.', true); return; }
       sub.textContent = 'A running tally. It is anonymous and it updates each time the page loads.';
       body.textContent = '';
       var cols = el('div', 'rs-cols'), a = el('div'), b = el('div');
@@ -7145,7 +7338,7 @@ function qrMatrix(text){
         tk.forEach(function (t) { ul.appendChild(el('li', null, '\u201C' + t.trim().slice(0, 140) + '\u201D')); });
         body.appendChild(ul);
       }
-      body.appendChild(el('p', 'rs-foot', 'self-reported and anonymous. counts are actions, not people. small numbers can move a lot, and there is no before-and-after baseline.'));
+      body.appendChild(el('p', 'rs-foot', 'self-reported and anonymous. counts are actions, not people. small numbers can move a lot, and there is no before-and-after baseline. more in 04, the limits.'));
       body.hidden = false;
     }
     var seq = 0;
