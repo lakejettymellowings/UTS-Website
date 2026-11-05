@@ -1,6 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!--
+  FILE MAP. Who Told You That? (one self-contained page)
+  Search for the words in quotes to jump to a part.
+
+  1. HEAD. Page title, link preview tags (og and twitter), fonts, then three small early scripts
+     ("EARLY SCRIPT") that apply the saved light or dark choice, calm mode and color theme before the first paint.
+  2. MAIN STYLESHEET ("MAIN STYLESHEET"). Theme colors, page base, splash cover, header, hero, self-check, wall, limits.
+  3. PATCH STYLESHEETS ("PATCH STYLESHEETS"). Many small style blocks, one per change, in the order the changes were made.
+     Later blocks win over earlier ones, so do not reorder them. Each block starts with a comment that names its update number
+     (the numbers match changelog.md).
+  4. BODY ("SPLASH", "HEADER", "HERO", "SECTION 01" to "SECTION 06", "FOOTER", "PULL OUT TAB").
+  5. SCRIPTS ("SCRIPTS"). Behavior for the quiz, wall, word cloud, share and QR, rewrite card, draggable clutter, tabs and calm mode.
+
+  Comments in this file only explain. Removing them does not change how the page works.
+-->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="Most of the standards you're failing to meet were never yours to begin with. A short look at self-imposed pressure and maladaptive perfectionism, and where they come from.">
@@ -23,6 +38,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=DM+Sans:ital,wght@0,400;0,500;1,400&family=Outfit:wght@300;400;500;600;700;800&family=Caveat:wght@500;700&family=Special+Elite&display=swap" rel="stylesheet">
+<!-- EARLY SCRIPT 1 of 3. Applies the saved light or dark choice before the page paints, so there is no flash. -->
 <script>
   // Apply saved theme choice before first paint
   try {
@@ -32,10 +48,12 @@
     }
   } catch (e) {}
 </script>
+<!-- EARLY SCRIPT 2 of 3. Applies the saved calm mode choice before the page paints. -->
 <script>
   // Calm mode: apply the saved choice before first paint
   try { if (localStorage.getItem('wtyt-calm') === '1') document.documentElement.classList.add('calm'); } catch (e) {}
 </script>
+<!-- EARLY SCRIPT 3 of 3. Color theme palettes (the same 14 as the card papers). Applies the saved theme and gives the color themes tab its swatches. -->
 <script>
   // Update 165: site color themes use the same 14 palettes as the card papers (desk, paper, ink, soft ink, red pen, green pen). They change only some elements: the desk, the six paper sheets, and the card, ink, red, green and tape colors. Theme 1 is the original and adds nothing
   (function () {
@@ -126,7 +144,9 @@
     try { var saved = localStorage.getItem('wtyt-palette'); if (saved) apply(saved, false); } catch (e) {}
   })();
 </script>
+<!-- MAIN STYLESHEET. Theme colors, page base, splash cover, header, hero, self-check, wall, red pen marks, limits and the theme toggle. The sections inside are labeled. -->
 <style>
+  /* ---------- Theme colors and fonts. Light colors first, then dark ---------- */
   :root {
     box-sizing: border-box;
     padding-top: env(safe-area-inset-top, 0px);
@@ -177,6 +197,7 @@
   }
 
   html { scroll-padding-top: env(safe-area-inset-top, 0px); scrollbar-gutter: stable; }
+  /* ---------- Page base. Box sizing, body and the paper texture layers ---------- */
   * { box-sizing: border-box; }
   html, body { height: 100%; }
   body {
@@ -295,6 +316,7 @@
     #splash.closing .nb-cover, #splash.closing .nb-shade, #splash.closing .nb-rings { animation: none; }
   }
 
+  /* ---------- Drifting doodle background ---------- */
   .doodles {
     position: fixed;
     inset: 0;
@@ -309,6 +331,7 @@
     -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='480'%3E%3Cg fill='black'%3E%3Ctext x='15' y='50' font-family='Georgia, serif' font-size='36' font-style='italic' font-weight='bold' transform='rotate(-6 15 50)'%3Erelax%3C/text%3E%3Ctext x='190' y='30' font-family='Verdana, sans-serif' font-size='18' font-weight='bold' letter-spacing='2' transform='rotate(5 190 30)'%3EPAUSE%3C/text%3E%3Ctext x='330' y='55' font-family='Georgia, serif' font-size='15' font-style='italic' transform='rotate(-8 330 55)'%3Edoubt it%3C/text%3E%3Ctext x='30' y='120' font-family='Georgia, serif' font-size='16' font-style='italic' transform='rotate(-3 30 120)'%3Eit's okay%3C/text%3E%3Ctext x='220' y='110' font-family='Verdana, sans-serif' font-size='22' font-weight='bold' transform='rotate(6 220 110)'%3EENOUGH%3C/text%3E%3Ctext x='370' y='140' font-family='Georgia, serif' font-size='17' font-style='italic' transform='rotate(4 370 140)'%3Egentle%3C/text%3E%3Ctext x='55' y='205' font-family='Georgia, serif' font-size='18' font-style='italic' transform='rotate(-8 55 205)'%3Etrace it%3C/text%3E%3Ctext x='240' y='195' font-family='Verdana, sans-serif' font-size='20' font-weight='bold' letter-spacing='1' transform='rotate(3 240 195)'%3EBREATHE%3C/text%3E%3Ctext x='8' y='270' font-family='Georgia, serif' font-size='14' transform='rotate(5 8 270)'%3Equestion it%3C/text%3E%3Ctext x='165' y='265' font-family='Georgia, serif' font-size='28' font-style='italic' font-weight='bold' transform='rotate(-5 165 265)'%3Erest%3C/text%3E%3Ctext x='320' y='285' font-family='Verdana, sans-serif' font-size='19' font-weight='bold' transform='rotate(6 320 285)'%3ELET GO%3C/text%3E%3Ctext x='40' y='345' font-family='Georgia, serif' font-size='16' font-style='italic' transform='rotate(-4 40 345)'%3Esoften%3C/text%3E%3Ctext x='200' y='350' font-family='Verdana, sans-serif' font-size='12' font-weight='bold' letter-spacing='1' transform='rotate(2 200 350)'%3ENOT A VERDICT%3C/text%3E%3Ctext x='370' y='365' font-family='Georgia, serif' font-size='17' font-style='italic' transform='rotate(-6 370 365)'%3Ebe kind%3C/text%3E%3Ctext x='20' y='425' font-family='Verdana, sans-serif' font-size='16' font-weight='bold' letter-spacing='1' transform='rotate(4 20 425)'%3ESLOW DOWN%3C/text%3E%3Ctext x='250' y='435' font-family='Georgia, serif' font-size='21' font-style='italic' transform='rotate(-3 250 435)'%3Eundone%3C/text%3E%3C/g%3E%3Cg fill='none' stroke='black' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M445 95 l5 12 13 1 -10 9 3 13 -11 -7 -11 7 3 -13 -10 -9 13 -1 z' transform='rotate(8 445 101)'/%3E%3Cpath d='M120 165 C120 155 105 155 105 165 C105 175 120 181 120 191 C120 181 135 175 135 165 C135 155 120 155 120 165 Z'/%3E%3Cpath d='M300 405 q8 -14 20 -6 q4 -10 16 -6 q6 -12 20 -2 q10 4 4 14 q-4 6 -14 4 q-6 6 -16 0 q-8 6 -20 0 q-8 2 -10 -4 z'/%3E%3Cpath d='M60 460 q10 -16 22 -8 q8 6 -2 14 q-8 6 2 12'/%3E%3C/g%3E%3C/svg%3E");
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='480'%3E%3Cg fill='black'%3E%3Ctext x='15' y='50' font-family='Georgia, serif' font-size='36' font-style='italic' font-weight='bold' transform='rotate(-6 15 50)'%3Erelax%3C/text%3E%3Ctext x='190' y='30' font-family='Verdana, sans-serif' font-size='18' font-weight='bold' letter-spacing='2' transform='rotate(5 190 30)'%3EPAUSE%3C/text%3E%3Ctext x='330' y='55' font-family='Georgia, serif' font-size='15' font-style='italic' transform='rotate(-8 330 55)'%3Edoubt it%3C/text%3E%3Ctext x='30' y='120' font-family='Georgia, serif' font-size='16' font-style='italic' transform='rotate(-3 30 120)'%3Eit's okay%3C/text%3E%3Ctext x='220' y='110' font-family='Verdana, sans-serif' font-size='22' font-weight='bold' transform='rotate(6 220 110)'%3EENOUGH%3C/text%3E%3Ctext x='370' y='140' font-family='Georgia, serif' font-size='17' font-style='italic' transform='rotate(4 370 140)'%3Egentle%3C/text%3E%3Ctext x='55' y='205' font-family='Georgia, serif' font-size='18' font-style='italic' transform='rotate(-8 55 205)'%3Etrace it%3C/text%3E%3Ctext x='240' y='195' font-family='Verdana, sans-serif' font-size='20' font-weight='bold' letter-spacing='1' transform='rotate(3 240 195)'%3EBREATHE%3C/text%3E%3Ctext x='8' y='270' font-family='Georgia, serif' font-size='14' transform='rotate(5 8 270)'%3Equestion it%3C/text%3E%3Ctext x='165' y='265' font-family='Georgia, serif' font-size='28' font-style='italic' font-weight='bold' transform='rotate(-5 165 265)'%3Erest%3C/text%3E%3Ctext x='320' y='285' font-family='Verdana, sans-serif' font-size='19' font-weight='bold' transform='rotate(6 320 285)'%3ELET GO%3C/text%3E%3Ctext x='40' y='345' font-family='Georgia, serif' font-size='16' font-style='italic' transform='rotate(-4 40 345)'%3Esoften%3C/text%3E%3Ctext x='200' y='350' font-family='Verdana, sans-serif' font-size='12' font-weight='bold' letter-spacing='1' transform='rotate(2 200 350)'%3ENOT A VERDICT%3C/text%3E%3Ctext x='370' y='365' font-family='Georgia, serif' font-size='17' font-style='italic' transform='rotate(-6 370 365)'%3Ebe kind%3C/text%3E%3Ctext x='20' y='425' font-family='Verdana, sans-serif' font-size='16' font-weight='bold' letter-spacing='1' transform='rotate(4 20 425)'%3ESLOW DOWN%3C/text%3E%3Ctext x='250' y='435' font-family='Georgia, serif' font-size='21' font-style='italic' transform='rotate(-3 250 435)'%3Eundone%3C/text%3E%3C/g%3E%3Cg fill='none' stroke='black' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M445 95 l5 12 13 1 -10 9 3 13 -11 -7 -11 7 3 -13 -10 -9 13 -1 z' transform='rotate(8 445 101)'/%3E%3Cpath d='M120 165 C120 155 105 155 105 165 C105 175 120 181 120 191 C120 181 135 175 135 165 C135 155 120 155 120 165 Z'/%3E%3Cpath d='M300 405 q8 -14 20 -6 q4 -10 16 -6 q6 -12 20 -2 q10 4 4 14 q-4 6 -14 4 q-6 6 -16 0 q-8 6 -20 0 q-8 2 -10 -4 z'/%3E%3Cpath d='M60 460 q10 -16 22 -8 q8 6 -2 14 q-8 6 2 12'/%3E%3C/g%3E%3C/svg%3E");
   }
+  /* ---------- Shared helpers. Mono text, page width wrapper and the dividing rule ---------- */
   .mono {
     font-family: "Outfit", ui-monospace, Consolas, monospace;
     letter-spacing: 0.01em;
@@ -635,6 +658,7 @@
 
   /* ---------- Theme toggle ---------- */
 </style>
+<!-- PATCH STYLESHEETS start here. Each block below is one change from changelog.md, in order. Later blocks override earlier ones, so keep the order. -->
 <style>
   /* ---------- Pinboard, handwriting, motion ---------- */
   .note { font-family: "Caveat", cursive; font-size: 17px; padding: 0 10px; }
@@ -3441,8 +3465,19 @@ html.calm .td-tab { display: none !important; }
 html.calm .doodles { animation: none !important; }
 html.calm .iw > span { animation: none !important; text-shadow: none !important; -webkit-text-stroke: 0 !important; }
 </style>
+<style>
+  /* ---------- Update 193. A note on the corkboard when the live wall cannot be reached and the sample notes are showing. Delete this block, the cloudFallback paragraph and the Update 193 lines in loadEntries to go back. ---------- */
+  /* a butter yellow sticky note pinned to the cork, in the same handwriting as the other notes. Fixed colors, like the section 4 sticky notes, so it reads the same in light and dark mode */
+  .cloud-block .cloud-fallback { position: relative; display: block; width: fit-content; max-width: min(340px, 100%); margin: 6px 4px 20px auto; padding: 16px 18px 14px; background-color: #E6D488; color: #2B1A0C; border: 0; border-radius: 1px; rotate: 1.6deg; font-family: 'Caveat', 'Segoe Print', cursive; font-size: 21px; font-weight: 700; line-height: 1.15; letter-spacing: 0.01em; box-shadow: 0 0 0 0.5px rgba(var(--ao), 0.3), 1px 2px 3px rgba(58, 36, 18, 0.34), 3px 8px 12px rgba(58, 36, 18, 0.24); }
+  .cloud-block .cloud-fallback[hidden] { display: none; }
+  .cloud-block .cloud-fallback::before { content: ""; position: absolute; top: -7px; left: 50%; width: 13px; height: 13px; margin-left: -6px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ffb3a1, #C9462E 55%, #7E2814); box-shadow: 1px 2px 2px rgba(40, 22, 6, 0.45); }
+  @media (max-width: 700px) {
+    .cloud-block .cloud-fallback { max-width: 100%; margin: 4px 2px 14px; padding: 14px 14px 12px; font-size: 19px; }
+  }
+</style>
 </head>
 <body class="splash-lock">
+<!-- HIDDEN SVG DEFINITIONS. Reusable shapes and filters used by the decoration. Nothing here is visible on its own. -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <filter id="ink-bleed" x="-3%" y="-8%" width="106%" height="116%" color-interpolation-filters="sRGB">
     <feTurbulence type="fractalNoise" baseFrequency="0.07" numOctaves="2" seed="5" result="n"/>
@@ -3490,8 +3525,10 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
   <symbol id="tk-corr" viewBox="0 0 80 40"><path d="M20 16C28 9 48 7 64 9C76 11 80 19 79 27C78 36 68 40 54 40C40 40 26 36 20 31Z" fill="rgba(3,29,68,.2)"/><path d="M18 13C26 6 46 4 62 6C74 8 78 16 77 24C76 33 66 37 52 37C38 37 24 33 18 28Z" fill="rgba(247,249,253,.88)" stroke="#AEB6C2" stroke-width="1.2"/><circle cx="53" cy="21" r="14.5" fill="none" stroke="#3A5CB0" stroke-width="2.2" stroke-dasharray="1.7 1.5"/><circle cx="53" cy="21" r="12.5" fill="#C9CDD4" stroke="#9AA0AA" stroke-width=".8"/><circle cx="53" cy="21" r="7.5" fill="#2B4C9B"/><circle cx="53" cy="21" r="3" fill="#E9ECF1"/><path d="M53 21L60 14M53 21L47 15M53 21L58 28" stroke="#9AA0AA" stroke-width="1"/><circle cx="32" cy="24" r="10" fill="#2B4C9B"/><circle cx="32" cy="24" r="6.5" fill="none" stroke="#5E7FD0" stroke-width=".8"/><circle cx="32" cy="24" r="3.6" fill="#E3E8F3" stroke="#9AA0AA" stroke-width=".8"/><path d="M32 24L32 14M32 24L40 29M32 24L24 29" stroke="#6F8CD6" stroke-width=".9"/><path d="M2 10L15 6L24 14L20 28L6 25L1 15Z" fill="#2B4C9B"/><rect x="5" y="13" width="12" height="6.5" rx="3.2" fill="#E6EAF2" transform="rotate(-14 11 16)"/><path d="M3 11L14 8" stroke="rgba(255,255,255,.35)" stroke-width="1.2" stroke-linecap="round"/></symbol>
   <symbol id="tk-scotch" viewBox="0 0 64 52"><path d="M44 36L63 41L59 51L36 44Z" fill="rgba(244,236,200,.82)" stroke="#C4B880" stroke-width="1"/><path d="M47 38L61 42" stroke="rgba(255,255,255,.7)" stroke-width="1.2"/><circle cx="28" cy="27" r="25" fill="rgba(3,29,68,.2)" transform="translate(2 2.5)"/><circle cx="26" cy="25" r="24" fill="rgba(246,240,206,.86)" stroke="#C4B880" stroke-width="1.2"/><circle cx="26" cy="25" r="19" fill="none" stroke="rgba(190,176,112,.55)" stroke-width="1"/><circle cx="26" cy="25" r="15.5" fill="#B8321F"/><circle cx="26" cy="25" r="14" fill="none" stroke="#17181F" stroke-width="1.3"/><circle cx="26" cy="25" r="11.4" fill="none" stroke="#E9C23B" stroke-width="1" stroke-dasharray="2.2 2.2"/><circle cx="26" cy="25" r="9" fill="none" stroke="#17181F" stroke-width="1.1"/><circle cx="26" cy="25" r="8" fill="rgba(255,252,240,.55)" stroke="#8A7A4A" stroke-width=".8"/><path d="M10 14A20 20 0 0 1 22 6" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="2" stroke-linecap="round"/></symbol>
 </svg>
+<!-- DOODLE BACKGROUND. Decoration only. Filled in by the page. -->
 <div class="doodles" aria-hidden="true"></div>
 
+<!-- SPLASH. The notebook cover. Click, tap or press Enter to open the site. -->
 <div id="splash" role="button" tabindex="0" aria-label="Enter the site">
   <div class="nb-shade" aria-hidden="true"></div>
   <div class="nb-cover" aria-hidden="true">
@@ -3502,8 +3539,10 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
 </div>
 <noscript><style>#splash{display:none !important;}</style></noscript>
 
+<!-- PAGE SPIRAL. The spiral rings on the page. Press them to close the notebook and go back to the cover. -->
 <div class="page-rings" role="button" tabindex="0" aria-label="Close the notebook and go back to the cover" title="Back to the cover"></div>
 
+<!-- HEADER -->
 <header>
   <div class="wrap brand">
     <div class="mark">who told<br>you <b>that?</b></div>
@@ -3511,6 +3550,7 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
   </div>
 </header>
 
+<!-- HERO. The title, the "Dear self" letter and the polaroid that switches between day and night. -->
 <div class="hero wrap">
   <span class="paper" aria-hidden="true"></span>
     <span class="scrap tk tk-corr" style="left:-148px;top:13%;--sr:-24deg;--tc:#2A7F8A" aria-hidden="true"><svg viewBox="0 0 80 40"><use href="#tk-corr"/></svg></span>
@@ -3557,6 +3597,7 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
   <p class="lede">Most of the standards you're failing to meet were never yours to begin with. This traces a few of them back to where they came from, and looks at the pressure and perfectionism that grow out of them.</p>
 </div>
 
+<!-- SECTION 01. THE CLAIM -->
 <section>
   <div class="wrap">
     <span class="paper" aria-hidden="true"></span>
@@ -3609,6 +3650,7 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
   </div>
 </section>
 
+<!-- SECTION 02. THE SELF-CHECK. The five question quiz and its result. -->
 <section>
   <div class="wrap">
     <span class="paper" aria-hidden="true"></span>
@@ -3732,6 +3774,7 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
   </div>
 </section>
 
+<!-- SECTION 03. THE WALL. The story form, the word cloud, the filters and the story cards. -->
 <section>
   <div class="wrap">
     <span class="paper" aria-hidden="true"></span>
@@ -3802,6 +3845,7 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
 
     <div class="cloud-block">
       <p class="cloud-label mono">where it's coming from, sized by how often it's mentioned and colored by type</p>
+      <p class="cloud-fallback" id="cloudFallback" role="status" hidden>Can't reach the live wall. These are sample notes. Try opening this link in a private window or another browser.</p>
       <div class="cloud" id="cloud"></div>
       <div class="stats" id="stats"></div>
     </div>
@@ -3813,6 +3857,7 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
   </div>
 </section>
 
+<!-- SECTION 04. THE LIMITS -->
 <section>
   <div class="wrap">
     <span class="paper" aria-hidden="true"></span>
@@ -3864,6 +3909,7 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
   </div>
 </section>
 
+<!-- SECTION 05. A WAY OUT. The rewrite form and the "Make your card" pop-up. -->
 <section>
   <div class="wrap">
     <span class="paper" aria-hidden="true"></span>
@@ -3987,6 +4033,7 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
   </div>
 </section>
 
+<!-- SECTION 06. FOR SCHOOLS AND COUNSELORS. Share button and QR code. -->
 <section class="schools" id="schools">
   <div class="wrap">
     <span class="paper" aria-hidden="true"></span>
@@ -4054,12 +4101,14 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
   </div>
 </section>
 
+<!-- FOOTER -->
 <footer>
   <div class="wrap">
     <p class="mono">Terminal Assessment Submission for MO-SS031 | Understanding The Self. Prepared by Melindo, LJD.</p>
   </div>
 </footer>
 
+<!-- PULL OUT TAB 1. "what it means". Definitions of words that can be misread. -->
 <aside class="gl" id="gl" aria-label="Some important terms">
   <button class="gl-tab" id="gl-tab" type="button" aria-expanded="false" aria-controls="gl-panel">what it means</button>
   <div class="gl-panel" id="gl-panel">
@@ -4132,6 +4181,7 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
   </div>
 </aside>
 
+<!-- PULL OUT TAB 2. "the sources". Where the ideas come from. -->
 <aside class="gl rf" id="rf" aria-label="Sources used on this site">
   <button class="gl-tab" id="rf-tab" type="button" aria-expanded="false" aria-controls="rf-panel">the sources</button>
   <div class="gl-panel" id="rf-panel">
@@ -4175,11 +4225,13 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
     </details>
   </div>
 </aside>
+<!-- FLOATING BUTTONS. Back to top, and the calm mode switch that hides the extra decoration. -->
 <button id="to-top" type="button" aria-label="Scroll back to the top" title="Back to top"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 <button id="calm-toggle" type="button" aria-pressed="false" title="Hide the extra decoration"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9c3-3 6 3 9 0s6 3 9 0M3 15c3-3 6 3 9 0s6 3 9 0"/></svg><span>calm</span></button>
 
 
 
+<!-- SCRIPTS. In order. Dark and light toggle and back to top, then the quiz, wall, word cloud and splash, then wall yarn and the phone note pile, share and QR, the rewrite card, draggable clutter, polaroid backs and stamps, the pull out tabs and the tidy-up game, color themes, and calm mode. -->
 <script>
   // ---- Dark / light toggle ----
   (function () {
@@ -4317,15 +4369,22 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
     // often blocks fetch() from reading the response cross-origin, but a
     // script tag isn't subject to that restriction.
     const callbackName = 'wttLoad_' + Date.now();
+    // Update 193: if the live entries never arrive (blocked, error page, no answer in 8 seconds), a note on the
+    // corkboard says the wall shows sample notes. A live wall that answers with an empty list is not a failure.
+    const fbNote = document.getElementById('cloudFallback');
+    const showFb = (on) => { if (fbNote) fbNote.hidden = !on; };
+    let answered = false;
+    const fbTimer = setTimeout(() => { if (!answered) { showFb(true); renderCards(); } }, 8000); // renderCards shows the sample notes, which stay empty when the request never answers
     window[callbackName] = function (data) {
-      if (Array.isArray(data) && data.length) entries = data;
+      answered = true; clearTimeout(fbTimer);
+      if (Array.isArray(data)) { if (data.length) entries = data; showFb(false); } else showFb(true);
       renderCards();
       delete window[callbackName];
       tag.remove();
     };
     const tag = document.createElement('script');
     tag.src = API_URL + (API_URL.includes('?') ? '&' : '?') + 'callback=' + callbackName;
-    tag.onerror = () => renderCards();
+    tag.onerror = () => { answered = true; clearTimeout(fbTimer); showFb(true); renderCards(); };
     document.body.appendChild(tag);
   }
 
@@ -4810,6 +4869,7 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
   });
 </script>
 
+<!-- SCRIPT. Wall yarn. Draws the red yarn between wall cards that sit in the same row. -->
 <script>
 /* red yarn between a few wall cards that sit in the same row. Pins sit on the tape at the top of each card. */
 (function () {
@@ -4877,6 +4937,7 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
   } catch (e) { /* decoration only */ }
 })();
 </script>
+<!-- SCRIPT. Wall on phones. The notes are a layered pile. Flick right for the next note and left for the one before. -->
 <script>
 /* Phones: the wall notes are a layered pile. Flick right for the next note, left for the previous one. */
 (function () {
@@ -6226,6 +6287,7 @@ function qrMatrix(text){
 
   })();
 </script>
+<!-- SCRIPT. Wraps the key terms and the notebook cover title in letters so they can glow. -->
 <script>
   // Update 101: wrap "self-imposed pressure", "maladaptive perfectionism" and the notebook cover title in the per-letter glow the hero title uses
   (function () {
@@ -6329,6 +6391,7 @@ function qrMatrix(text){
     });
   })();
 </script>
+<!-- TIDY-UP GAME markup. Shown through the tidy up tab on the right edge. The script after it makes the game work. -->
 <div class="tidy" id="tidy" aria-hidden="true">
     <div class="td-tabw"><button type="button" class="td-tab" tabindex="-1" aria-expanded="false">tidy up</button></div>
     <div class="td-note"><b>tidy as much or as little as you like</b><small class="td-ct">nothing tucked away yet</small><button type="button" class="td-undo" tabindex="-1">mess it up again</button></div>
@@ -6454,6 +6517,7 @@ function qrMatrix(text){
     Object.keys(total).forEach(draw); status();
   })();
 </script>
+<!-- PULL OUT TAB 3. "the colors". Pick a color theme. The swatches are added by the script that follows. -->
 <aside class="gl pl" id="pl" aria-label="Color themes">
   <button class="gl-tab" id="pl-tab" type="button" aria-expanded="false" aria-controls="pl-panel">the colors</button>
   <div class="gl-panel" id="pl-panel">
@@ -6462,7 +6526,9 @@ function qrMatrix(text){
     <div class="rl-ds-row" id="pl-grid" role="group" aria-label="Color themes"></div>
   </div>
 </aside>
+<!-- PULL OUT TAB 4. "tidy up". The tab that opens the tidy-up game. -->
 <div class="gl tdr" id="tdr"><button class="gl-tab" id="tdr-tab" type="button" aria-expanded="false" aria-controls="tidy">tidy up</button></div>
+<!-- SCRIPT. Right edge tab layout. The tabs sit one under the other with a small gap so none covers another. -->
 <script>
   // The right edge tabs sit one under the other with a small gap, so no tab covers another one's clickable area. On a short window the labels shrink until all of them fit
   (function () {
@@ -6536,6 +6602,7 @@ function qrMatrix(text){
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && pl.classList.contains('open')) { set(false); tab.focus(); } });
   })();
 </script>
+<!-- SCRIPT. The tab or panel pressed last comes to the front. -->
 <script>
   // Update 172: the tab or panel pressed last comes to the front. The four right edge panels share one z-index in CSS (!important), so the order is set here.
   (function () {
@@ -6556,6 +6623,7 @@ function qrMatrix(text){
     }, true);
   })();
 </script>
+<!-- SCRIPT. Pauses the glowing letters and the doodle drift while a pull out tab slides. -->
 <script>
   // Update 178: while a pull out tab slides, the glowing letters and the doodle drift are paused (the same pause the notebook cover flip uses), so the slide gets the whole frame budget. Any open or close of a pull out sets it, so the tab, the x, Escape and a tap outside are all covered
   (function () {
@@ -6569,6 +6637,7 @@ function qrMatrix(text){
     } catch (e) { /* the slide just runs without the pause */ }
   })();
 </script>
+<!-- SCRIPT. Calm mode button. Hides the extra decoration and remembers the choice. -->
 <script>
   // Calm mode button. The class on <html> is set in the head so a saved choice shows before first paint.
   (function () {
