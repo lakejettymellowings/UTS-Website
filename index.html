@@ -3573,6 +3573,26 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
   @media (max-width: 700px) { .reacts .flagbtn { min-width: 34px; height: 34px; } }
   @media (prefers-reduced-motion: reduce) { .reacts .flagbtn, .reacts .flagbtn.wave .cloth { transition: none; animation: none; } }
 </style>
+<style>
+  /* ---------- Update 207. The flag is a rubber stamp. Pressing it stamps "removal requested" across the note. Delete this block, and restore the Update 206 flag icon and label in the wall script, to go back. ---------- */
+  .card .rr-stamp { position: absolute; left: 50%; top: 50%; z-index: 6; display: none; box-sizing: border-box; width: 104%; padding: 12px 8px 10px; text-align: center; white-space: nowrap; pointer-events: none; font-family: "Special Elite", "Courier New", monospace; font-size: 40px; font-weight: 700; line-height: 1.02; letter-spacing: .05em; text-transform: uppercase; color: #A81C0C; -webkit-text-stroke: 1.2px #A81C0C; border: 8px double #A81C0C; border-radius: 8px; background: rgba(168, 28, 12, .2); opacity: .97; transform: translate(-50%, -50%) rotate(-11deg); }
+  .card .rr-stamp span { display: block; }
+  .card.flagged .rr-stamp { display: block; }
+  .card.thump .rr-stamp { animation: rrThump .45s cubic-bezier(.2, .8, .3, 1); }
+  @keyframes rrThump {
+    0% { opacity: 0; transform: translate(-50%, -50%) rotate(-11deg) scale(1.7); }
+    55% { opacity: 1; transform: translate(-50%, -50%) rotate(-11deg) scale(.94); }
+    100% { opacity: .97; transform: translate(-50%, -50%) rotate(-11deg) scale(1); }
+  }
+  /* the stamp icon on the button: the stamp presses down when it is used */
+  .reacts .flagbtn.on .stp { fill: currentColor; }
+  .reacts .flagbtn.wave .stp { animation: stampPress .5s ease-in-out; }
+  @keyframes stampPress { 0% { transform: translateY(0); } 40% { transform: translateY(5px); } 100% { transform: translateY(0); } }
+  /* uneven ink edges on desktop with a mouse. Phones skip the filter, like the other stamps */
+  @media (hover: hover) and (min-width: 701px) { .card .rr-stamp { filter: url(#stamp-ink); } }
+  @media (max-width: 700px) { .card .rr-stamp { font-size: 32px; border-width: 6px; padding: 10px 6px 8px; } }
+  @media (prefers-reduced-motion: reduce) { .card.thump .rr-stamp, .reacts .flagbtn.wave .stp { animation: none; } }
+</style>
 </head>
 <body class="splash-lock">
 <!-- HIDDEN SVG DEFINITIONS. Reusable shapes and filters used by the decoration. Nothing here is visible on its own. -->
@@ -4564,7 +4584,7 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
   let FLAGS = {};
   try { FLAGS = JSON.parse(localStorage.getItem(FLAGKEY)) || {}; } catch (e) { FLAGS = {}; }
   const isFlagged = e => !!FLAGS[rid(e.text)];
-  const FLAG_SVG = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 21V4"/><path class="cloth" d="M5 4c4-2 7 2 11 0 1.2-.6 2.2-.7 3-.5v9c-.8-.2-1.8-.1-3 .5-4 2-7-2-11 0"/></svg>';
+  const FLAG_SVG = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g class="stp"><path d="M12 3a2.5 2.5 0 0 1 2.5 2.5V10h3a2 2 0 0 1 2 2v2h-15v-2a2 2 0 0 1 2-2h3V5.5A2.5 2.5 0 0 1 12 3z"/></g><path d="M4.5 18h15"/><path d="M6 21h12"/></svg>';
   const rxMine = (e, k) => !!(MINE[rid(e.text)] && MINE[rid(e.text)][k]);
   const rxN = (e, k) => Math.max((RXS[rid(e.text)] && RXS[rid(e.text)][k]) || 0, rxMine(e, k) ? 1 : 0);
   const rxText = (e, k) => rxLabel(k) + (rxN(e, k) ? ' \u00b7 ' + rxN(e, k) : '');
@@ -4616,15 +4636,20 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
   document.getElementById('cards').addEventListener('click', ev => {
     const b = ev.target.closest('.flagbtn'); if (!b || b.dataset.busy) return;
     const e = entries[+b.dataset.i]; if (!e) return;
-    const id = rid(e.text), turnOn = !FLAGS[id], label = b.querySelector('.flagtxt');
+    const id = rid(e.text), turnOn = !FLAGS[id], label = b.querySelector('.flagtxt'), card = b.closest('.card');
+    // Update 207: the flag is a rubber stamp. The stamp on the note shows "removal requested". The sheet still gets the same hidden "flagged" marker.
     const paint = on => {
       b.classList.toggle('on', on); b.setAttribute('aria-pressed', on ? 'true' : 'false');
-      const t = on ? 'Flagged for removal. Press again to take the flag back.' : 'Flag this note for removal (anonymous)';
-      b.setAttribute('aria-label', t); b.title = t; label.textContent = on ? 'flagged' : '';
+      if (card) card.classList.toggle('flagged', on);
+      const t = on ? 'Removal requested. Press again to take the request back.' : 'Request removal of this note (anonymous)';
+      b.setAttribute('aria-label', t); b.title = t; label.textContent = '';
     };
     if (turnOn) FLAGS[id] = 1; else delete FLAGS[id];
     saveFlags(); paint(turnOn); b.classList.remove('err');
-    if (turnOn) { b.classList.add('wave'); setTimeout(() => b.classList.remove('wave'), 900); }
+    if (turnOn) {
+      b.classList.add('wave'); setTimeout(() => b.classList.remove('wave'), 900);
+      if (card) { card.classList.remove('thump'); void card.offsetWidth; card.classList.add('thump'); setTimeout(() => card.classList.remove('thump'), 600); }
+    }
     b.dataset.busy = '1';
     flagCall(turnOn ? 'flag' : 'unflag', e.text, r => {
       delete b.dataset.busy;
@@ -4632,8 +4657,8 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
       if (turnOn) delete FLAGS[id]; else FLAGS[id] = 1;
       saveFlags(); paint(!turnOn);
       label.textContent = r && r.status === 'notfound' ? 'not found' : 'not saved'; b.classList.add('err');
-      console.warn('The flag was not saved. ' + (r ? 'The Apps Script answered: ' + r.status : 'No usable answer from the Apps Script (not updated yet, blocked, or offline).'));
-      setTimeout(() => { b.classList.remove('err'); label.textContent = FLAGS[id] ? 'flagged' : ''; }, 3500);
+      console.warn('The removal request was not saved. ' + (r ? 'The Apps Script answered: ' + r.status : 'No usable answer from the Apps Script (not updated yet, blocked, or offline).'));
+      setTimeout(() => { b.classList.remove('err'); label.textContent = ''; }, 3500);
     });
   });
   // ---- Bar chart animation. The bars grow from empty the first time the chart scrolls into view (one after another), and after that
@@ -4696,13 +4721,14 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
     const el = document.getElementById('cards');
     if (!entries.length) { el.innerHTML = '<p class="cards-empty">No notes yet. Be the first to pin one.</p>'; renderStats(); applyFilters(); renderCloud(); return; }
     el.innerHTML = entries.map((e, i) => `
-      <div class="card${justAdded && i === 0 ? ' drop' : ''} t${hsh(e.text, 1) % 6} p${hsh(e.text, 2) % 3} n${hsh(e.text, 5) % 8}" style="--tilt:${tilt(e.text)}deg;--tx:${(hsh(e.text, 3) % 41) - 20}px;--tw:${64 + (hsh(e.text, 4) % 34)}px;--nc:${noteColor(entries.length - 1 - i)}" data-cat="${entryCat(e)}" data-words="${canonWords(e.source).join(' ')}">
+      <div class="card${justAdded && i === 0 ? ' drop' : ''}${isFlagged(e) ? ' flagged' : ''} t${hsh(e.text, 1) % 6} p${hsh(e.text, 2) % 3} n${hsh(e.text, 5) % 8}" style="--tilt:${tilt(e.text)}deg;--tx:${(hsh(e.text, 3) % 41) - 20}px;--tw:${64 + (hsh(e.text, 4) % 34)}px;--nc:${noteColor(entries.length - 1 - i)}" data-cat="${entryCat(e)}" data-words="${canonWords(e.source).join(' ')}">
+        <span class="rr-stamp" aria-hidden="true"><span>removal</span><span>requested</span></span>
         <p class="quote">"${escapeHtml(shown(e))}"</p>
         <div class="card-foot">
           ${e.source ? `<p class="source">source: ${escapeHtml(showSource(e.source))}</p>` : '<span></span>'}
         </div>
         ${e.reframe ? `<p class="reframe">to a friend. ${escapeHtml(e.reframe)}</p>` : ''}
-        <div class="reacts">${RX.map(([k, l]) => `<button class="metoo${rxMine(e, k) ? ' mine' : ''}" data-i="${i}" data-k="${k}" type="button">${rxText(e, k)}</button>`).join('')}<button class="flagbtn${isFlagged(e) ? ' on' : ''}" type="button" data-i="${i}" aria-pressed="${isFlagged(e)}" aria-label="${isFlagged(e) ? 'Flagged for removal. Press again to take the flag back.' : 'Flag this note for removal'}" title="${isFlagged(e) ? 'Flagged for removal. Press again to take the flag back.' : 'Flag this note for removal (anonymous)'}">${FLAG_SVG}<span class="flagtxt">${isFlagged(e) ? 'flagged' : ''}</span></button></div>
+        <div class="reacts">${RX.map(([k, l]) => `<button class="metoo${rxMine(e, k) ? ' mine' : ''}" data-i="${i}" data-k="${k}" type="button">${rxText(e, k)}</button>`).join('')}<button class="flagbtn${isFlagged(e) ? ' on' : ''}" type="button" data-i="${i}" aria-pressed="${isFlagged(e)}" aria-label="${isFlagged(e) ? 'Removal requested. Press again to take the request back.' : 'Request removal of this note'}" title="${isFlagged(e) ? 'Removal requested. Press again to take the request back.' : 'Request removal of this note (anonymous)'}">${FLAG_SVG}<span class="flagtxt"></span></button></div>
       </div>
     `).join('');
     if (justAdded) el.dataset.reset = '1';
