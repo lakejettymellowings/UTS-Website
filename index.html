@@ -3593,6 +3593,90 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
   @media (max-width: 700px) { .card .rr-stamp { font-size: 32px; border-width: 6px; padding: 10px 6px 8px; } }
   @media (prefers-reduced-motion: reduce) { .card.thump .rr-stamp, .reacts .flagbtn.wave .stp { animation: none; } }
 </style>
+<style>
+  /* ---------- Update 209. The one tap reflection check at the end of section 05. It reuses the "Your turn" note, the .rw-form labels, the .rw-sec sticker buttons and the .share-btn sticker, so only the pressed look and the layout are new. Delete this block, the #reflect note and the Update 209 script to go back. ---------- */
+  .doc.yourturn.reflect { margin-top: 30px; rotate: -0.5deg; }
+  .reflect .rf-opts { display: grid; gap: 10px; margin: 6px 0 8px; }
+  .reflect .rf-opts .rw-sec { text-align: center; line-height: 1.25; font-weight: 600; }
+  .reflect .rf-opts .rw-sec[aria-pressed="true"] { background: var(--good); border-color: var(--good); color: #F7F1E3; }
+  .reflect .rf-opts .rw-sec:focus-visible, .reflect .share-btn:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
+  .reflect .share-btn[disabled] { opacity: 0.55; cursor: default; }
+  .reflect .rf-done { position: relative; z-index: 1; font-family: "Caveat", cursive; font-weight: 700; font-size: 26px; line-height: 1.1; color: #20472F; margin: 14px 0 0; }
+  .reflect .rf-done[hidden], .reflect .rw-form[hidden] { display: none; }
+  .reflect .rw-status.err { color: #8F2D18; }
+  @media (min-width: 701px) { .reflect .rf-opts { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 560px) { .doc.yourturn.reflect { rotate: 0deg; } }
+  /* own paper: lavender dot grid, purple ink, polka dot tape and a dog-ear at the bottom right, so it no longer copies the sage Your turn note above it */
+  .doc.yourturn.reflect .lp::before, .doc.yourturn.reflect .lp::after {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 36px), calc(100% - 36px) 100%, 0 100%);
+  }
+  .doc.yourturn.reflect .lp::before {
+    background-color: #E6DEF3;
+    background-image:
+      radial-gradient(circle, rgba(88, 62, 140, 0.34) 1.3px, transparent 1.8px),
+      linear-gradient(160deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 45%, rgba(70, 40, 120, 0.1)),
+      radial-gradient(130% 110% at 50% 50%, transparent 52%, rgba(120, 90, 170, 0.28) 100%);
+    background-size: 20px 20px, auto, auto;
+    background-repeat: repeat, no-repeat, no-repeat;
+    background-position: 10px 10px, 0 0, 0 0;
+  }
+  .doc.yourturn.reflect::after {
+    left: auto; right: 0;
+    background: linear-gradient(135deg, #FAF7FF 0%, #C9BBE3 49%, transparent 50%);
+    filter: drop-shadow(-2px -2px 2px rgba(var(--shc), 0.3));
+  }
+  .doc.yourturn.reflect::before {
+    right: auto; left: 12%; width: 96px; rotate: 3deg;
+    background:
+      radial-gradient(circle, rgba(255, 255, 255, 0.85) 2.2px, transparent 2.8px) 0 0 / 12px 12px,
+      rgba(104, 150, 200, 0.62);
+  }
+  @media (max-width: 560px) { .doc.yourturn.reflect::before { left: 8%; right: auto; width: 80px; } }
+  .doc.yourturn.reflect .dear, .doc.yourturn.reflect b, .reflect .rw-l.g, .reflect .rw-note { color: #3F2A63; }
+  .doc.yourturn.reflect .dear::after {
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 8' preserveAspectRatio='none'%3E%3Cpath d='M2 5 C 20 1, 40 7, 62 4 S 100 2, 118 5' fill='none' stroke='%233F2A63' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+  }
+  .reflect .rf-done { color: #3F2A63; }
+  .reflect .rw-form input[type=text] { border-color: rgba(88, 62, 140, 0.5); }
+  .reflect .rf-opts .rw-sec[aria-pressed="true"] { background: #5B3F8C; border-color: #5B3F8C; color: #F7F1E3; }
+</style>
+<style>
+  /* ---------- Update 213. Public results panel at the end of section 05: pale blue graph paper card, fixed colors like the other papers. Delete this block, the #results panel and the Update 213 script to go back. ---------- */
+  .rs { position: relative; margin: 36px 0 6px; padding: 34px 28px 24px; rotate: 0.4deg; color: #1B2F66; border-radius: 2px;
+    background-color: #DCE9F2;
+    background-image:
+      linear-gradient(rgba(60, 100, 150, 0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(60, 100, 150, 0.2) 1px, transparent 1px),
+      linear-gradient(rgba(60, 100, 150, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(60, 100, 150, 0.08) 1px, transparent 1px),
+      linear-gradient(160deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 45%, rgba(30, 60, 110, 0.1));
+    background-size: 90px 90px, 90px 90px, 18px 18px, 18px 18px, auto;
+    box-shadow: 0 0 1px rgba(var(--shc), 0.6), 1px 2px 3px rgba(var(--shc), 0.3), 3px 9px 14px rgba(var(--shc), 0.22); }
+  .rs-tape { position: absolute; top: -13px; left: 50%; width: 110px; height: 26px; margin-left: -55px; rotate: -2deg; z-index: 1; pointer-events: none;
+    background: rgba(235, 210, 122, 0.78); border: 1px solid rgba(120, 90, 30, 0.25); box-shadow: 0 1px 2px rgba(var(--shc), 0.2); }
+  .rs-h { margin: 0 0 2px; font-family: "Caveat", cursive; font-weight: 700; font-size: 38px; line-height: 1.05; color: #1B2F66; }
+  .rs-sub { margin: 0 0 14px; font-size: 16px; line-height: 1.5; color: #2C3E75; }
+  .rs-cols { display: grid; gap: 22px; }
+  @media (min-width: 701px) { .rs-cols { grid-template-columns: 1fr 1fr; gap: 34px; } }
+  .rs-k { margin: 0 0 6px; font-family: "Caveat", cursive; font-weight: 700; font-size: 25px; line-height: 1.1; color: #8F2D18; }
+  .rs-pct { font-family: "Caveat", cursive; font-weight: 700; font-size: 74px; line-height: 0.95; color: #27503C; }
+  .rs-pt { margin: 2px 0 10px; font-size: 16px; line-height: 1.45; }
+  .rs-row { display: grid; grid-template-columns: 84px 1fr 34px; align-items: center; gap: 10px; margin: 7px 0; font-size: 16px; }
+  .rs-l { line-height: 1.2; }
+  .rs-track { display: block; height: 16px; border-radius: 3px; background: rgba(27, 47, 102, 0.12); overflow: hidden; }
+  .rs-fill { display: block; height: 100%; width: 0; background: var(--c, #27503C); border-radius: 3px; transition: width 0.9s ease-out; }
+  .rs-v { text-align: right; font-weight: 700; }
+  .rs-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 22px 0 4px; }
+  @media (min-width: 701px) { .rs-stats { grid-template-columns: repeat(4, 1fr); } }
+  .rs-st { background: rgba(255, 255, 255, 0.55); border: 1px dashed rgba(27, 47, 102, 0.35); padding: 8px 10px 9px; text-align: center; }
+  .rs-st b { display: block; font-family: "Caveat", cursive; font-weight: 700; font-size: 40px; line-height: 1; color: #1B2F66; }
+  .rs-st span { display: block; font-size: 15px; line-height: 1.25; margin-top: 3px; }
+  .rs-q { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 10px; }
+  .rs-q li { background: #FFF6CF; padding: 10px 14px 11px; font-family: "Caveat", cursive; font-weight: 600; font-size: 23px; line-height: 1.2; color: #2A2418; box-shadow: 0 1px 1px rgba(var(--shc), 0.25), 2px 4px 7px rgba(var(--shc), 0.16); rotate: -0.6deg; }
+  .rs-q li:nth-child(even) { rotate: 0.7deg; }
+  .rs-foot { margin: 16px 0 0; font-family: "Caveat", cursive; font-size: 20px; line-height: 1.15; color: #2C3E75; }
+  .rs-warn { margin: 0 0 10px; font-family: "Caveat", cursive; font-size: 21px; line-height: 1.15; color: #8F2D18; }
+  @media (max-width: 560px) { .rs { rotate: 0deg; padding: 32px 16px 20px; } .rs-pct { font-size: 62px; } .rs-row { grid-template-columns: 78px 1fr 30px; } }
+  @media (prefers-reduced-motion: reduce) { .rs-fill { transition: none; } }
+</style>
 </head>
 <body class="splash-lock">
 <!-- HIDDEN SVG DEFINITIONS. Reusable shapes and filters used by the decoration. Nothing here is visible on its own. -->
@@ -3815,7 +3899,7 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
     <p class="kicker"><span class="cn">02</span>. the self-check</p>
     <h2>Notice <span class="circled">which one</span> it feels like.</h2>
     <p class="margin-note">no wrong answers, promise <svg viewBox="0 0 36 34" aria-hidden="true"><path d="M4 6 C 14 3, 27 10, 28 28 M28 28 l-6 -7 M28 28 l7 -8"/></svg></p>
-    <p class="body">Nothing clinical, nothing scored. Just five moments. Answer for how you actually react, not how you think you should.</p>
+    <p class="body">Nothing clinical, nothing scored. Just five moments. Answer for how you actually react, not how you think you should. Only the final result is added to an anonymous tally.</p>
 
     <div class="quiz" id="quiz">
       <span class="t-clip" aria-hidden="true"></span>
@@ -4156,7 +4240,7 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
           <button type="submit" class="share-btn">Make my card</button>
           <button type="button" class="rw-ex" id="rwEx">fill in an example</button>
         </div>
-        <p class="rw-note">made on your device. nothing you type is sent anywhere.</p>
+        <p class="rw-note">made on your device. nothing you type is sent anywhere. only a count of cards made and saved is kept.</p>
         <span class="rw-status share-msg" id="rwStatus" role="status" aria-live="polite"></span>
       </form>
     </div>
@@ -4210,6 +4294,35 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
         <span class="share-msg" id="rwOutMsg" role="status" aria-live="polite"></span>
       </div>
     </div></div>
+    <!-- Update 209: one tap reflection check. Anonymous. Sits after the rewrite card and before the share button. -->
+    <div class="doc yourturn reflect" id="reflect">
+      <span class="lp" aria-hidden="true"></span>
+      <p class="dear">One last thing,</p>
+      <p>Did this change how you see a standard you hold? <b>Pick the one that fits best.</b> There is no right answer.</p>
+      <form class="rw-form" id="rfForm" novalidate>
+        <span class="rw-l" id="rfQ">green pen in. did it change how you see a standard</span>
+        <div class="rf-opts" id="rfOpts" role="group" aria-labelledby="rfQ">
+          <button type="button" class="rw-sec" data-k="yes" aria-pressed="false">Yes</button>
+          <button type="button" class="rw-sec" data-k="little" aria-pressed="false">A little</button>
+          <button type="button" class="rw-sec" data-k="no" aria-pressed="false">No</button>
+        </div>
+        <label class="rw-l g" for="rfLine">optional. what are you taking with you?</label>
+        <input type="text" id="rfLine" maxlength="140" autocomplete="off" placeholder="One line, in your own words">
+        <div class="rw-row">
+          <button type="submit" class="share-btn" id="rfSend">Add mine to the tally</button>
+          <span class="rw-status share-msg" id="rfStatus" role="status" aria-live="polite"></span>
+        </div>
+        <p class="rw-note">anonymous. only your pick and the line above (if you write one) are sent. no name, no account.</p>
+      </form>
+      <p class="rf-done" id="rfDone" role="status" aria-live="polite" hidden>Thank you. Yours is in the tally.</p>
+    </div>
+    <!-- Update 213: public results panel. Filled in by a script from the Apps Script (reflection answers, activity counts, moderated takeaways). -->
+    <div class="rs" id="results" aria-labelledby="rsH">
+      <span class="rs-tape" aria-hidden="true"></span>
+      <h3 class="rs-h" id="rsH">what readers did with it</h3>
+      <p class="rs-sub" id="rsSub" role="status" aria-live="polite">Counting...</p>
+      <div class="rs-body" id="rsBody" hidden></div>
+    </div>
     <div class="sharebar">
       <button class="share-btn" type="button" data-share><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.6l6.8-4M8.6 13.4l6.8 4"/></svg>Send this to a friend</button>
       <span class="share-msg" role="status" aria-live="polite"></span>
@@ -4485,6 +4598,7 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
       const result = exposedCount >= 3 ? 'exposed' : 'try';
       const resEl = quiz.querySelector('.q-result[data-result="' + result + '"]');
       resEl.classList.add('active');
+      if (window.wttCount) wttCount(result === 'exposed' ? 'quiz_notenough' : 'quiz_bounce'); // Update 212: anonymous tally, the result only
       const lean = resEl.querySelector('.lean');
       lean.style.setProperty('--pos', exposedCount / 5);
       const notes = [
@@ -5389,19 +5503,19 @@ function qrMatrix(text){
         if (!u) { say(btn, 'Sharing works once this page is online.'); return; }
         var data = { title: 'Who told you that?', text: "Most of the standards you're failing to meet were never yours to begin with.", url: u };
         if (navigator.share) {
-          navigator.share(data).catch(function (e) {
+          navigator.share(data).then(function () { if (window.wttCount) wttCount('link_shared'); }).catch(function (e) {
             if (e && e.name === 'AbortError') return;
-            copyText(u).then(function (ok) { say(btn, ok ? 'Link copied. Paste it into a chat.' : u); });
+            copyText(u).then(function (ok) { if (ok && window.wttCount) wttCount('link_shared'); say(btn, ok ? 'Link copied. Paste it into a chat.' : u); });
           });
         } else {
-          copyText(u).then(function (ok) { say(btn, ok ? 'Link copied. Paste it into a chat.' : u); });
+          copyText(u).then(function (ok) { if (ok && window.wttCount) wttCount('link_shared'); say(btn, ok ? 'Link copied. Paste it into a chat.' : u); });
         }
       });
     });
     var copyBtn = document.getElementById('sc-copy');
     if (copyBtn) copyBtn.addEventListener('click', function () {
       var u = pageUrl(), msg = document.getElementById('sc-msg').textContent.trim();
-      copyText(u ? msg + ' ' + u : msg).then(function (ok) { say(copyBtn, ok ? (u ? 'Copied.' : 'Message copied. The link is added once the page is online.') : 'Could not copy. Select the text and copy it by hand.'); });
+      copyText(u ? msg + ' ' + u : msg).then(function (ok) { if (ok && window.wttCount) wttCount('msg_copied'); say(copyBtn, ok ? (u ? 'Copied.' : 'Message copied. The link is added once the page is online.') : 'Could not copy. Select the text and copy it by hand.'); });
     });
     // Update 171: the poster is a torn notebook sheet on the desk with the same cards and pens as the rewrite card
     function tornClip(w, h) {
@@ -5424,6 +5538,7 @@ function qrMatrix(text){
     }
     var printBtn = document.getElementById('sc-print');
     if (printBtn) printBtn.addEventListener('click', function () {
+      if (window.wttCount) wttCount('poster_printed');
       var u = pageUrl(), svg2 = u ? qrSvg(u) : '';
       var p = document.createElement('div'); p.id = 'poster-print';
       var ring = 'M24 54 C 14 20, 92 2, 152 9 C 200 15, 204 72, 154 90 C 102 106, 20 94, 9 60 C 6 42, 28 26, 62 20';
@@ -5920,6 +6035,7 @@ function qrMatrix(text){
           shareBtn.hidden = !canShareFile();
           outMsg.textContent = '';
           status.textContent = 'Your card is ready below.';
+          if (window.wttCount) wttCount('card_made'); // Update 212: a count only, never the words
           var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches || lite();
           setTimeout(function () { out.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'nearest' }); }, 60);
         }, 'image/png');
@@ -5932,6 +6048,7 @@ function qrMatrix(text){
         var a = document.createElement('a'); a.href = sendUrl || url; a.download = NAME;
         document.body.appendChild(a); a.click(); a.remove();
         outMsg.textContent = tucked ? 'Saved again.' : 'Saved. If nothing downloaded, press and hold the picture.';
+        if (!tucked && window.wttCount) wttCount('card_saved'); // Update 212: first save of a card only
         if (!tucked && !busy && env && lay) lay.style.visibility = 'hidden';
         tuck();
       }
@@ -6005,7 +6122,7 @@ function qrMatrix(text){
       if (!blob) return;
       function go() {
         var f = new File([sendBlob || blob], NAME, { type: 'image/png' });
-        navigator.share({ files: [f], title: 'Who told you that?', text: 'I rewrote a rule I was handed.' }).catch(function (e) {
+        navigator.share({ files: [f], title: 'Who told you that?', text: 'I rewrote a rule I was handed.' }).then(function () { if (window.wttCount) wttCount('card_shared'); }).catch(function (e) {
           if (e && e.name !== 'AbortError') outMsg.textContent = 'Could not open the share sheet. Try Save image instead.';
         });
       }
@@ -6907,6 +7024,142 @@ function qrMatrix(text){
       sync();
       window.dispatchEvent(new Event('resize'));
     });
+  })();
+</script>
+<!-- SCRIPT. Update 209: one tap reflection check. Sends the pick (and an optional one line) anonymously to the Apps Script, remembers on this device that it was answered. -->
+<script>
+  (function () {
+    var form = document.getElementById('rfForm'); if (!form) return;
+    var API = 'https://script.google.com/macros/s/AKfycbyWm-xx44Y_Rb1NWfGtfq13put0UCZWyazw6WSdv6ms-Wuxdk-DWaDT9wpsS0QyLUVf/exec';
+    var KEY = 'wtyt-reflect', opts = document.getElementById('rfOpts'), line = document.getElementById('rfLine'),
+        send = document.getElementById('rfSend'), st = document.getElementById('rfStatus'), done = document.getElementById('rfDone'),
+        pick = '', busy = false;
+    function said() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
+    function remember(k) { try { localStorage.setItem(KEY, k); } catch (e) {} }
+    function thanks() { form.hidden = true; done.hidden = false; }
+    if (said()) { thanks(); return; }
+    function msg(t, bad) { st.textContent = t; st.classList.toggle('err', !!bad); }
+    opts.addEventListener('click', function (ev) {
+      var b = ev.target.closest('button[data-k]'); if (!b) return;
+      pick = b.dataset.k;
+      opts.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      msg('');
+    });
+    function call(k, text, cb) {
+      if (!API || API.indexOf('PASTE_YOUR') > -1) { cb({ ok: true, status: 'local' }); return; }
+      var name = 'wttRef_' + Date.now() + '_' + Math.floor(Math.random() * 1e6), tag = document.createElement('script'), over = false, timer;
+      function fin(r) { if (over) return; over = true; clearTimeout(timer); window[name] = function () {}; tag.remove(); cb(r); }
+      timer = setTimeout(function () { fin(null); }, 8000);
+      window[name] = function (d) { fin(d && typeof d === 'object' && !Array.isArray(d) ? d : null); };
+      tag.onerror = function () { fin(null); };
+      tag.src = API + (API.indexOf('?') > -1 ? '&' : '?') + 'action=reflect&pick=' + encodeURIComponent(k) + '&line=' + encodeURIComponent(text.slice(0, 140)) + '&callback=' + name;
+      document.body.appendChild(tag);
+    }
+    form.addEventListener('submit', function (ev) {
+      ev.preventDefault(); if (busy) return;
+      if (!pick) { msg('Pick one first, then add it.', true); return; }
+      busy = true; send.disabled = true; msg('sending…');
+      call(pick, line.value.trim(), function (r) {
+        busy = false; send.disabled = false;
+        if (r && r.ok) { remember(pick); thanks(); window.dispatchEvent(new Event('wtt-reflected')); return; }
+        msg('Not saved. Check your connection and try again.', true);
+        console.warn('The reflection was not saved. ' + (r ? 'The Apps Script answered: ' + r.status : 'No usable answer from the Apps Script (not updated yet, blocked, or offline).'));
+      });
+    });
+  })();
+</script>
+<!-- SCRIPT. Update 212: anonymous activity tally. wttCount(name) sends only an event name (never any text) to the Apps Script, which adds one to a Counts tab. -->
+<script>
+  (function () {
+    var API = 'https://script.google.com/macros/s/AKfycbyWm-xx44Y_Rb1NWfGtfq13put0UCZWyazw6WSdv6ms-Wuxdk-DWaDT9wpsS0QyLUVf/exec';
+    var OK = { quiz_bounce: 1, quiz_notenough: 1, card_made: 1, card_saved: 1, card_shared: 1, link_shared: 1, msg_copied: 1, poster_printed: 1 };
+    var last = {};
+    window.wttCount = function (name) {
+      try {
+        if (!OK[name]) return;
+        var h = location.hostname;
+        if (location.protocol !== 'https:' && location.protocol !== 'http:') return;   // a local file is not a reader
+        if (h === 'localhost' || h === '127.0.0.1' || h === '[::1]') return;
+        var now = Date.now();
+        if (last[name] && now - last[name] < 3000) return;   // a double tap counts once
+        last[name] = now;
+        var fn = 'wttCnt_' + now + '_' + Math.floor(Math.random() * 1e6), tag = document.createElement('script');
+        window[fn] = function () { tag.remove(); try { delete window[fn]; } catch (e) { window[fn] = undefined; } };
+        tag.onerror = function () { tag.remove(); };
+        tag.src = API + '?action=count&ev=' + encodeURIComponent(name) + '&callback=' + fn;
+        document.body.appendChild(tag);
+      } catch (e) {}
+    };
+  })();
+</script>
+<!-- SCRIPT. Update 213: public results panel. Asks the Apps Script for the tally and draws it. Only numbers and moderated takeaways come back. -->
+<script>
+  (function () {
+    var root = document.getElementById('results'); if (!root) return;
+    var API = 'https://script.google.com/macros/s/AKfycbyWm-xx44Y_Rb1NWfGtfq13put0UCZWyazw6WSdv6ms-Wuxdk-DWaDT9wpsS0QyLUVf/exec';
+    var sub = document.getElementById('rsSub'), body = document.getElementById('rsBody');
+    function num(x) { x = Number(x); return isFinite(x) && x > 0 ? Math.floor(x) : 0; }
+    function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+    function bar(label, val, total, color) {
+      var row = el('div', 'rs-row'), track = el('span', 'rs-track'), fill = el('span', 'rs-fill');
+      fill.style.setProperty('--c', color);
+      track.appendChild(fill);
+      row.appendChild(el('span', 'rs-l', label)); row.appendChild(track); row.appendChild(el('span', 'rs-v', String(val)));
+      var w = total ? Math.round(val / total * 100) : 0;
+      setTimeout(function () { fill.style.width = w + '%'; }, 80);
+      return row;
+    }
+    function fail(t) { sub.textContent = t; body.hidden = true; body.textContent = ''; }
+    function render(d) {
+      var n = num(d.n), yes = num(d.yes), little = num(d.little), no = num(d.no), c = d.counts || {};
+      var bounce = num(c.quiz_bounce), notE = num(c.quiz_notenough), quizN = bounce + notE;
+      var made = num(c.card_made), saved = num(c.card_saved), posters = num(c.poster_printed);
+      var shared = num(c.link_shared) + num(c.card_shared) + num(c.msg_copied);
+      if (!n && !quizN && !made && !saved && !shared && !posters) { fail('Nothing in the tally yet. Answer the note above and yours will be the first.'); return; }
+      sub.textContent = 'A running tally. It is anonymous and it updates each time the page loads.';
+      body.textContent = '';
+      var cols = el('div', 'rs-cols'), a = el('div'), b = el('div');
+      a.appendChild(el('p', 'rs-k', 'did it change how they see a standard?'));
+      if (n) {
+        var pct = Math.round((yes + little) / n * 100);
+        a.appendChild(el('div', 'rs-pct', pct + '%'));
+        a.appendChild(el('p', 'rs-pt', 'said yes or a little. ' + n + (n === 1 ? ' answer' : ' answers') + ' so far.'));
+        if (n < 10) a.appendChild(el('p', 'rs-warn', 'only ' + n + (n === 1 ? ' answer' : ' answers') + ' so far. a first look, not a result.'));
+        a.appendChild(bar('yes', yes, n, '#27503C')); a.appendChild(bar('a little', little, n, '#8A5600')); a.appendChild(bar('no', no, n, '#5A5F6B'));
+      } else { a.appendChild(el('p', 'rs-pt', 'No answers yet.')); }
+      b.appendChild(el('p', 'rs-k', 'how the self-check landed'));
+      if (quizN) {
+        b.appendChild(el('p', 'rs-pt', quizN + (quizN === 1 ? ' result' : ' results') + ' so far. Each one is a finished self-check, not a person.'));
+        b.appendChild(bar('bounce back', bounce, quizN, '#27503C')); b.appendChild(bar('not enough', notE, quizN, '#8F2D18'));
+      } else { b.appendChild(el('p', 'rs-pt', 'No finished self-checks yet.')); }
+      cols.appendChild(a); cols.appendChild(b); body.appendChild(cols);
+      var st = el('div', 'rs-stats');
+      [['cards made', made], ['cards saved', saved], ['times shared', shared], ['posters printed', posters]].forEach(function (x) {
+        var box = el('div', 'rs-st'); box.appendChild(el('b', null, String(x[1]))); box.appendChild(el('span', null, x[0])); st.appendChild(box);
+      });
+      body.appendChild(st);
+      var tk = Array.isArray(d.takeaways) ? d.takeaways.filter(function (t) { return typeof t === 'string' && t.trim(); }).slice(0, 6) : [];
+      if (tk.length) {
+        var k = el('p', 'rs-k', 'in their words'); k.style.marginTop = '20px'; body.appendChild(k);
+        var ul = el('ul', 'rs-q');
+        tk.forEach(function (t) { ul.appendChild(el('li', null, '\u201C' + t.trim().slice(0, 140) + '\u201D')); });
+        body.appendChild(ul);
+      }
+      body.appendChild(el('p', 'rs-foot', 'self-reported and anonymous. counts are actions, not people. small numbers can move a lot, and there is no before-and-after baseline.'));
+      body.hidden = false;
+    }
+    var seq = 0;
+    function load() {
+      var name = 'wttRes_' + Date.now() + '_' + (++seq), tag = document.createElement('script'), over = false, timer;
+      function fin(d) { if (over) return; over = true; clearTimeout(timer); window[name] = function () {}; tag.remove(); if (d && typeof d === 'object' && !Array.isArray(d) && 'n' in d) render(d); else fail('The tally cannot load right now. It may be blocked on this network.'); }
+      timer = setTimeout(function () { fin(null); }, 8000);
+      window[name] = function (d) { fin(d); };
+      tag.onerror = function () { fin(null); };
+      tag.src = API + '?action=results&callback=' + name;
+      document.body.appendChild(tag);
+    }
+    load();
+    window.addEventListener('wtt-reflected', function () { setTimeout(load, 1500); });
   })();
 </script>
 </body>
