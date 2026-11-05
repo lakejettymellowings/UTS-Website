@@ -3436,23 +3436,23 @@ body.flipping .hero h1 .iw span, body.flipping .wtyt .iw span, body.flipping .do
 }
 </style>
 <style>
-/* ---------- Update 191. Calm mode. A small button at the bottom left hides the extra decoration (margin pieces, stickers, stamps, tape strips, trinkets, yarn, ribbons) and stops the glow and the drifting doodles. Reading, the quiz, the wall, the card maker, the tabs and the light and dark button all stay. Saved in this browser (wtyt-calm). Delete this block, the button and the two small scripts to go back. ---------- */
+/* ---------- Update 191. Calm mode. A button in the colors tab ("easy on the mess!", since Update 195) hides the extra decoration (margin pieces, stickers, stamps, tape strips, trinkets, yarn, ribbons) and stops the glow and the drifting doodles. Reading, the quiz, the wall, the card maker, the tabs and the light and dark button all stay. Saved in this browser (wtyt-calm). Delete this block, the button and the two small scripts to go back. ---------- */
+/* Update 195. The button is now inside the colors tab, under the swatches, and is called "easy on the mess!". */
+.pl-calm { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--paper-line); }
 #calm-toggle {
-  position: fixed; z-index: 140; left: calc(14px + env(safe-area-inset-left, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-  display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px 0 12px;
-  font-family: "Outfit", sans-serif; font-size: 16px; line-height: 1; color: var(--ink);
+  display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 42px; padding: 8px 14px;
+  font-family: "Outfit", sans-serif; font-size: 16px; line-height: 1.1; color: var(--ink);
   background: var(--card); border: 1px solid var(--paper-line); border-radius: 999px;
   box-shadow: 1px 2px 6px rgba(var(--shc), 0.14); cursor: pointer;
   transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease, background .2s ease;
 }
 #calm-toggle:hover { border-color: var(--ink-soft); box-shadow: 1px 4px 10px rgba(var(--shc), 0.22); }
-#calm-toggle:active { transform: scale(0.95); }
+#calm-toggle:active { transform: scale(0.97); }
 #calm-toggle:focus-visible { outline: 2px solid var(--focus, var(--red)); outline-offset: 2px; }
 #calm-toggle[aria-pressed="true"] { background: color-mix(in srgb, var(--good) 22%, var(--card)); border-color: var(--good); }
-body.splash-lock #calm-toggle { display: none; }
+.pl-calm-sub { margin: 8px 2px 2px; font-size: 13px; line-height: 1.35; color: var(--ink-soft); }
 @media print { #calm-toggle { display: none; } }
 @media (prefers-reduced-motion: reduce) { #calm-toggle { transition: none; } }
-@media (max-width: 700px) { #calm-toggle { height: 38px; padding: 0 13px 0 10px; font-size: 15px; } }
 
 /* what calm hides. The light and dark button (the hero polaroid) and the envelope that the card goes into stay. */
 html.calm .scrap:not(.env):not(#theme-toggle),
@@ -3471,6 +3471,8 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
   .cloud-block .cloud-fallback { position: relative; display: block; width: fit-content; max-width: min(340px, 100%); margin: 6px 4px 20px auto; padding: 16px 18px 14px; background-color: #E6D488; color: #2B1A0C; border: 0; border-radius: 1px; rotate: 1.6deg; font-family: 'Caveat', 'Segoe Print', cursive; font-size: 21px; font-weight: 700; line-height: 1.15; letter-spacing: 0.01em; box-shadow: 0 0 0 0.5px rgba(var(--ao), 0.3), 1px 2px 3px rgba(58, 36, 18, 0.34), 3px 8px 12px rgba(58, 36, 18, 0.24); }
   .cloud-block .cloud-fallback[hidden] { display: none; }
   .cloud-block .cloud-fallback::before { content: ""; position: absolute; top: -7px; left: 50%; width: 13px; height: 13px; margin-left: -6px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ffb3a1, #C9462E 55%, #7E2814); box-shadow: 1px 2px 2px rgba(40, 22, 6, 0.45); }
+  /* Update 194. While the note shows, the word cloud and the counts are hidden so the note is the only thing pinned there */
+  .cloud-block.wall-offline .cloud, .cloud-block.wall-offline .stats { display: none; }
   @media (max-width: 700px) {
     .cloud-block .cloud-fallback { max-width: 100%; margin: 4px 2px 14px; padding: 14px 14px 12px; font-size: 19px; }
   }
@@ -3845,7 +3847,7 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
 
     <div class="cloud-block">
       <p class="cloud-label mono">where it's coming from, sized by how often it's mentioned and colored by type</p>
-      <p class="cloud-fallback" id="cloudFallback" role="status" hidden>Can't reach the live wall. These are sample notes. Try opening this link in a private window or another browser.</p>
+      <p class="cloud-fallback" id="cloudFallback" role="status" hidden>Can't reach the live wall. Try opening this link in a private window or another browser.</p>
       <div class="cloud" id="cloud"></div>
       <div class="stats" id="stats"></div>
     </div>
@@ -4225,9 +4227,8 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
     </details>
   </div>
 </aside>
-<!-- FLOATING BUTTONS. Back to top, and the calm mode switch that hides the extra decoration. -->
+<!-- FLOATING BUTTONS. Back to top. (The calm mode switch now lives in the colors tab, "easy on the mess!".) -->
 <button id="to-top" type="button" aria-label="Scroll back to the top" title="Back to top"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
-<button id="calm-toggle" type="button" aria-pressed="false" title="Hide the extra decoration"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9c3-3 6 3 9 0s6 3 9 0M3 15c3-3 6 3 9 0s6 3 9 0"/></svg><span>calm</span></button>
 
 
 
@@ -4372,9 +4373,11 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
     // Update 193: if the live entries never arrive (blocked, error page, no answer in 8 seconds), a note on the
     // corkboard says the wall shows sample notes. A live wall that answers with an empty list is not a failure.
     const fbNote = document.getElementById('cloudFallback');
-    const showFb = (on) => { if (fbNote) fbNote.hidden = !on; };
+    const fbBlock = fbNote && fbNote.closest('.cloud-block');
+    // Update 194: on failure the sample notes are cleared and the cloud and stats are hidden, so the note is the only thing on the cork
+    const showFb = (on) => { if (fbNote) fbNote.hidden = !on; if (fbBlock) fbBlock.classList.toggle('wall-offline', on); if (on) entries = []; };
     let answered = false;
-    const fbTimer = setTimeout(() => { if (!answered) { showFb(true); renderCards(); } }, 8000); // renderCards shows the sample notes, which stay empty when the request never answers
+    const fbTimer = setTimeout(() => { if (!answered) { showFb(true); renderCards(); } }, 8000); // entries are cleared by showFb(true), so nothing but the note shows
     window[callbackName] = function (data) {
       answered = true; clearTimeout(fbTimer);
       if (Array.isArray(data)) { if (data.length) entries = data; showFb(false); } else showFb(true);
@@ -6524,6 +6527,10 @@ function qrMatrix(text){
     <div class="gl-head"><h2 class="gl-title">pick a color theme</h2><button class="gl-x" id="pl-x" type="button" aria-label="Close the color themes">×</button></div>
     <p class="gl-sub">Tap a swatch. It stays for your next visit.</p>
     <div class="rl-ds-row" id="pl-grid" role="group" aria-label="Color themes"></div>
+    <div class="pl-calm">
+      <button id="calm-toggle" type="button" aria-pressed="false" title="Hide the extra decoration"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9c3-3 6 3 9 0s6 3 9 0M3 15c3-3 6 3 9 0s6 3 9 0"/></svg><span>easy on the mess!</span></button>
+      <p class="pl-calm-sub">Tucks away the extra stickers, tape and doodles, and stops the glow. It stays for your next visit.</p>
+    </div>
   </div>
 </aside>
 <!-- PULL OUT TAB 4. "tidy up". The tab that opens the tidy-up game. -->
@@ -6637,7 +6644,7 @@ function qrMatrix(text){
     } catch (e) { /* the slide just runs without the pause */ }
   })();
 </script>
-<!-- SCRIPT. Calm mode button. Hides the extra decoration and remembers the choice. -->
+<!-- SCRIPT. "easy on the mess!" button (calm mode), in the colors tab. Hides the extra decoration and remembers the choice. -->
 <script>
   // Calm mode button. The class on <html> is set in the head so a saved choice shows before first paint.
   (function () {
