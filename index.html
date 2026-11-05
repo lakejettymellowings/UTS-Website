@@ -18,12 +18,12 @@
 -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Most of the standards you're failing to meet were never yours to begin with. A short look at self-imposed pressure and maladaptive perfectionism, and where they come from.">
+<meta name="description" content="Many of the standards you’re failing to meet were never yours to begin with. A short look at self-imposed pressure and maladaptive perfectionism, and where they come from.">
 <meta name="theme-color" content="#DAB785">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Who Told You That?">
+<meta property="og:site_name" content="Who told you that?">
 <meta property="og:title" content="Who told you that?">
-<meta property="og:description" content="Most of the standards you're failing to meet were never yours to begin with. A short look at self-imposed pressure and maladaptive perfectionism, and where they come from.">
+<meta property="og:description" content="Many of the standards you’re failing to meet were never yours to begin with. A short look at self-imposed pressure and maladaptive perfectionism, and where they come from.">
 <!-- Preview image: full https address of og-image.png on GitHub Pages. If the repo is renamed, update this and the twitter:image line below. -->
 <meta property="og:image" content="https://lakejettymellowings.github.io/UTS-Website/og-image.png">
 <meta property="og:image:width" content="1200">
@@ -31,9 +31,9 @@
 <meta property="og:image:alt" content="A navy notebook cover with a taped paper label reading Who told you that? Understanding the Self.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Who told you that?">
-<meta name="twitter:description" content="Most of the standards you're failing to meet were never yours to begin with.">
+<meta name="twitter:description" content="Many of the standards you’re failing to meet were never yours to begin with.">
 <meta name="twitter:image" content="https://lakejettymellowings.github.io/UTS-Website/og-image.png">
-<title>Who Told You That?</title>
+<title>Who told you that?</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Ctext%20y='.9em'%20font-size='90'%3E%F0%9F%94%8D%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -73,7 +73,7 @@
       ['midnight', '#0E0E14', '#1B1B26', '#F4EAD0', '#F4EAD0', '#F2C94C', '#8FD6A8'],
       ['sage', '#A9B89A', '#F4F7EC', '#1E2D1A', '#2D4426', '#8F2D18', '#2F5E47']
     ];
-    var T = R.map(function (r, i) { return { id: i ? 't' + i : 'notebook', desk: r[1], paper: r[2], ink: r[3], soft: r[4], red: r[5], good: r[6] }; });
+    var T = R.map(function (r, i) { return { id: i ? 't' + i : 'notebook', name: r[0], desk: r[1], paper: r[2], ink: r[3], soft: r[4], red: r[5], good: r[6] }; });
     function lum(h) {
       var c = [1, 3, 5].map(function (i) { var v = parseInt(h.substr(i, 2), 16) / 255; return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); });
       return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
@@ -114,18 +114,58 @@
         var bgs = [p0.desk, p0.paper], rin = fix(p0.ink, bgs, 7), rsoft = fix(p0.soft, bgs, 4.5), rred = fix(p0.red, bgs, 4.5), rgood = fix(p0.good, bgs, 4.5);
         root = '--paper:' + p0.desk + ';--card:' + p0.paper + ';--ink:' + rin + ';--ink-soft:' + rsoft + ';--paper-line:' + mix(rin, 'transparent', 30) + ';--red:' + rred + ';--good:' + rgood + ';--c-family:' + rred + ';--c-friends:' + rgood + ';--tape:' + tape + ';';
       }
+      // Update 225: the notebook cover takes its colors from the palette too. The cover is the desk color (darkened when the desk is light), the label is the sheet paper, and the label text, handwriting and elastic band use the contrast fixed ink, red and soft ink
+      var cov = lum(p0.desk) < 0.3 ? mh(p0.desk, '#FFFFFF', 0.06) : mh(p0.desk, '#000000', 0.5);
+      var sp = ':root[data-palette] #splash{--nb-cover:' + cov + ';--nb-label:' + p.paper + ';--nb-ink:' + ink + ';--nb-soft:' + soft + ';--nb-accent:' + red + ';--nb-b1:' + mh(red, '#000000', 0.37) + ';--nb-b2:' + red + ';--nb-b3:' + mh(red, '#FFFFFF', 0.15) + ';--nb-b4:' + mh(red, '#000000', 0.23) + ';}';
       var Q = ':root[data-palette][data-palette]', dark = '--paper:' + mix(p.desk, '#000', 22) + ';';
-      var out = Q + ' body > section > .wrap,' + Q + ' .hero.wrap{' + sh + '}' +
+      var wm = fixSet(WALL_NOTES, s[2]), lmn = fixSet(LIM_NOTES, s[3]);
+      curNotes = { from: WALL_NOTES, to: wm };
+      var out = sp + Q + ' body > section > .wrap,' + Q + ' .hero.wrap{' + sh + '}' +
+        lmn.map(function (c, i) { return Q + ' .sticky:nth-child(' + (i + 1) + '){--nc:' + c + ';}'; }).join('') +
         ':root[data-palette][data-theme="light"]{' + root + '}' +
         '@media (prefers-color-scheme: light){:root[data-palette]:not([data-theme="dark"]){' + root + '}}' +
         ':root[data-palette][data-theme="dark"]{' + dark + '}' +
         '@media (prefers-color-scheme: dark){:root[data-palette]:not([data-theme="light"]){' + dark + '}}';
       return out;
     }
+    // Update 229: the sticky notes keep their colors in every theme, so a note could land on a sheet of nearly the same color (the lemon note on legal's yellow paper, the lilac note on purple). A note that is too close to its sheet (CIE76 distance under 18) steps its hue around the wheel by the golden angle, keeping its lightness and strength, until it is clear of the sheet and of the other notes.
+    function rgb3(h) { return [1, 3, 5].map(function (i) { return parseInt(h.substr(i, 2), 16); }); }
+    function toHsl(h) {
+      var c = rgb3(h).map(function (v) { return v / 255; }), mx = Math.max(c[0], c[1], c[2]), mn = Math.min(c[0], c[1], c[2]), l = (mx + mn) / 2, d = mx - mn, s = d ? d / (1 - Math.abs(2 * l - 1)) : 0, hh = 0;
+      if (d) { if (mx === c[0]) hh = ((c[1] - c[2]) / d) % 6; else if (mx === c[1]) hh = (c[2] - c[0]) / d + 2; else hh = (c[0] - c[1]) / d + 4; hh *= 60; if (hh < 0) hh += 360; }
+      return [hh, s, l];
+    }
+    function fromHsl(h, s, l) {
+      var c = (1 - Math.abs(2 * l - 1)) * s, x = c * (1 - Math.abs((h / 60) % 2 - 1)), m = l - c / 2, r = 0, g = 0, b = 0, k = Math.floor(h / 60) % 6;
+      if (k === 0) { r = c; g = x; } else if (k === 1) { r = x; g = c; } else if (k === 2) { g = c; b = x; } else if (k === 3) { g = x; b = c; } else if (k === 4) { r = x; b = c; } else { r = c; b = x; }
+      return '#' + [r + m, g + m, b + m].map(function (v) { v = Math.max(0, Math.min(255, Math.round(v * 255))); return (v < 16 ? '0' : '') + v.toString(16); }).join('');
+    }
+    function lab(h) {
+      var c = rgb3(h).map(function (v) { v /= 255; return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); });
+      var X = (0.4124 * c[0] + 0.3576 * c[1] + 0.1805 * c[2]) / 0.95047, Y = 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2], Z = (0.0193 * c[0] + 0.1192 * c[1] + 0.9505 * c[2]) / 1.08883;
+      function f(t) { return t > 0.008856 ? Math.cbrt(t) : 7.787 * t + 16 / 116; }
+      return [116 * f(Y) - 16, 500 * (f(X) - f(Y)), 200 * (f(Y) - f(Z))];
+    }
+    function de(a, b) { var x = lab(a), y = lab(b); return Math.sqrt(Math.pow(x[0] - y[0], 2) + Math.pow(x[1] - y[1], 2) + Math.pow(x[2] - y[2], 2)); }
+    function apart(c, list, min) { return list.every(function (o) { return de(c, o) >= min; }); }
+    function fixSet(list, sheet) {
+      var out = list.slice(), taken = [], bad = [];
+      list.forEach(function (c, i) { if (de(c, sheet) >= 18) taken.push(c); else bad.push(i); });
+      bad.forEach(function (i) {
+        var hsl = toHsl(list[i]), pick = null, k, cand, l;
+        [hsl[2], Math.max(0.6, hsl[2] - 0.1)].forEach(function (ll) {
+          for (k = 1; k <= 8 && !pick; k++) { cand = fromHsl((hsl[0] + 137.508 * k) % 360, hsl[1], ll); if (de(cand, sheet) >= 18 && apart(cand, taken, 9)) pick = cand; }
+        });
+        out[i] = pick || list[i]; taken.push(out[i]);
+      });
+      return out;
+    }
+    var WALL_NOTES = ['#F6E27A', '#C6B6EC', '#F0A07F', '#B4DB9E', '#F2A8A0', '#9FCBEA', '#E3AED2', '#8CDACB'], LIM_NOTES = ['#F6E27A', '#F2A8A0', '#C6B6EC', '#B4DB9E'], curNotes = null;
     var cur = 'notebook';
     function apply(id, save) {
       var p = T[0], i;
       for (i = 0; i < T.length; i++) if (T[i].id === id) p = T[i];
+      curNotes = null;
       var old = document.getElementById('pal-style');
       if (old) old.parentNode.removeChild(old);
       if (p.id === 'notebook') document.documentElement.removeAttribute('data-palette');
@@ -136,10 +176,12 @@
       }
       cur = p.id;
       if (save) { try { localStorage.setItem('wtyt-palette', p.id); } catch (e) {} }
+      try { document.dispatchEvent(new Event('wtyt-palette')); } catch (e) {}
     }
     window.wtytPal = {
       list: T, get: function () { return cur; }, set: function (id) { apply(id, true); }, init: function () {},
-      swatch: function (t) { return [t.desk, t.paper]; }
+      swatch: function (t) { return [t.desk, t.paper]; },
+      noteFix: function (hex) { if (!curNotes) return hex; var i = curNotes.from.indexOf(hex); return i < 0 ? hex : curNotes.to[i]; }
     };
     try { var saved = localStorage.getItem('wtyt-palette'); if (saved) apply(saved, false); } catch (e) {}
   })();
@@ -3761,6 +3803,94 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
   /* the paper grain is a little lighter, so it no longer dulls the color */
   .card, .sticky { --shade: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='f' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' seed='5' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .23 0 0 0 0 .14 0 0 0 0 .06 .5 0 0 0 -.2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23f)'/%3E%3C/svg%3E"); }
 </style>
+<style>
+  /* ---------- Update 225. The notebook cover follows the color theme and the light and dark switch. The values below are the original cover, so theme 1 in light mode looks exactly as before. The palette script (early script 3) overrides the --nb-* colors for the other 13 themes, and dark mode only dims them (--nb-keep, --nb-lkeep). Delete this block and the "Update 225" lines in early script 3 to go back. ---------- */
+  #splash {
+    --nb-cover: #11285A; --nb-label: #F6ECD3; --nb-ink: #031D44; --nb-soft: #5A4A30; --nb-accent: #8F2D18;
+    --nb-b1: #5a1a0d; --nb-b2: #8F2D18; --nb-b3: #B5442B; --nb-b4: #6E2111;
+    --nb-keep: 100%; --nb-lkeep: 100%;
+  }
+  :root[data-theme="dark"] #splash { --nb-keep: 60%; --nb-lkeep: 80%; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) #splash { --nb-keep: 60%; --nb-lkeep: 80%; } }
+  #splash .nb-cover { background-color: color-mix(in srgb, var(--nb-cover) var(--nb-keep), #000); }
+  #splash .nb-band { background: linear-gradient(90deg, color-mix(in srgb, var(--nb-b1) var(--nb-keep), #000), color-mix(in srgb, var(--nb-b2) var(--nb-keep), #000) 35%, color-mix(in srgb, var(--nb-b3) var(--nb-keep), #000) 55%, color-mix(in srgb, var(--nb-b4) var(--nb-keep), #000)); }
+  #splash .nb-label {
+    color: var(--nb-ink);
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 45%, rgba(120, 80, 30, 0.1)), color-mix(in srgb, var(--nb-label) var(--nb-lkeep), #000);
+    outline-color: color-mix(in srgb, var(--nb-ink) 55%, transparent);
+  }
+  #splash .nb-label > i { color: var(--nb-soft); }
+  #splash .nb-label > span:not(.nb-stamp) { color: var(--nb-accent); } /* the subtitle only, not the single letter spans inside the glowing title */
+  #splash .nb-label .nb-stamp { outline-color: color-mix(in srgb, var(--nb-label) var(--nb-lkeep), #000); }
+</style>
+<style>
+  /* ---------- Update 226. Four different pins on the corkboard (they were all the same red one). The label slip keeps the red glass head pin from Update 151. The counts card gets a blue flat head thumbtack off to the left, the yellow sticky note a green map marker pin, and the ruled index card a purple button pin with a gold center. Fixed colors from the page's own pin palette, so they look the same in every theme, like the cork. Delete this block to go back to four red pins. ---------- */
+  .cloud-block .stats::before {
+    top: -8px; left: 22%; width: 16px; height: 16px; margin-left: -8px; rotate: 8deg;
+    background: radial-gradient(circle at 35% 30%, #CFE0FB, #3F6FB5 52%, #1F3F70);
+    box-shadow: inset 0 0 0 2.5px rgba(255, 255, 255, 0.3), inset 0 0 0 3.5px rgba(31, 63, 112, 0.5), 1px 2px 2px rgba(40, 22, 6, 0.45);
+  }
+  .cloud-block .cloud-fallback::before {
+    top: -14px; width: 22px; height: 22px; margin-left: -11px; rotate: -45deg; border-radius: 50% 50% 50% 4%;
+    background: radial-gradient(circle at 50% 50%, #F4FBF3 0 3.5px, transparent 4px), radial-gradient(circle at 35% 30%, #9ED7B5, #2F5E47 55%, #173A2A);
+    box-shadow: 1px 2px 2px rgba(40, 22, 6, 0.45);
+  }
+  .cloud-block .cloud-fallback2::before {
+    width: 18px; height: 18px; margin-left: -9px; top: -9px;
+    background: radial-gradient(circle at 50% 50%, #E3B03B 0 2.2px, transparent 2.7px), radial-gradient(circle at 35% 30%, #E6D7F2, #7B4B94 55%, #43235A);
+    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.25), 1px 2px 2px rgba(40, 22, 6, 0.45);
+  }
+</style>
+<style>
+  /* ---------- Update 227. The closed folder matches the rest of the site and is bigger. It is built from the same pieces as the notes and the cover (kraft paper with grain, a typewriter tab, ruled paper peeking out, a taped paper slip in Caveat, the red elastic band) with the page's flat paper shadows, instead of a glossy drawing. The folder is fixed manila like the sticky notes, and the slip follows the theme colors like the label above the cloud. Delete this block and put back the folder drawing from Update 196 to go back. ---------- */
+  .wall-locked { margin: 10px auto 36px; }
+  .wl-folder {
+    --wl-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='f' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' seed='6' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .30  0 0 0 0 .20  0 0 0 0 .08  .75 0 0 0 -.27'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23f)'/%3E%3C/svg%3E");
+    position: relative; width: min(600px, 98%); aspect-ratio: 300 / 236; margin: 0 auto; rotate: -0.8deg;
+  }
+  .wl-folder > span, .wl-folder > div, .wl-front > span { position: absolute; display: block; }
+  .wl-back { left: 0; right: 0; top: 11%; bottom: 0; border-radius: 6px 6px 9px 9px; background: var(--wl-grain) 0 0 / 180px 180px, #C7A25A; box-shadow: inset 0 1px 0 rgba(255, 241, 194, 0.5), 0 0 0 0.5px rgba(var(--ao), 0.3), 1px 2px 3px rgba(58, 36, 18, 0.34), 3px 9px 13px rgba(58, 36, 18, 0.22); }
+  .wl-tab { left: 5%; top: 0; width: 34%; height: 15%; border-radius: 9px 9px 0 0; background: var(--wl-grain) 0 0 / 180px 180px, #C7A25A; box-shadow: inset 0 1px 0 rgba(255, 241, 194, 0.5); display: flex !important; align-items: center; justify-content: center; font: 400 clamp(11px, 2.6vw, 17px)/1 "Special Elite", "Courier New", Courier, monospace; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(58, 36, 18, 0.78); }
+  .wl-sheet { top: 17%; height: 48%; background-color: #FBF7EC; background-image: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0) 0 21px, rgba(66, 108, 170, 0.26) 21px 22px); background-position: 0 14px; border: 1px solid rgba(58, 36, 18, 0.26); border-radius: 1px; box-shadow: 0 1px 2px rgba(58, 36, 18, 0.22); }
+  .wl-sheet.a { left: 7%; right: 8%; rotate: -1.6deg; }
+  .wl-sheet.b { left: 10%; right: 5%; top: 20%; rotate: 1.3deg; background-image: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0) 0 21px, rgba(66, 108, 170, 0.26) 21px 22px), linear-gradient(90deg, rgba(0, 0, 0, 0) 0 11%, rgba(201, 70, 46, 0.5) 11% calc(11% + 2px), rgba(0, 0, 0, 0) calc(11% + 2px)); }
+  .wl-front { left: 0; right: 0; top: 32%; bottom: 0; border-radius: 7px 7px 9px 9px; background: var(--wl-grain) 0 0 / 180px 180px, linear-gradient(172deg, #EBCB84, #E1BE74 55%, #D3AD62); border: 1px solid rgba(58, 36, 18, 0.42); box-shadow: inset 0 1px 0 rgba(255, 247, 214, 0.8), inset 0 -9px 12px -10px rgba(80, 52, 10, 0.45), 0 -3px 7px -2px rgba(58, 36, 18, 0.3); }
+  .wl-front::before { content: ""; position: absolute; left: 0; right: 0; top: 13%; border-top: 1.3px solid rgba(58, 36, 18, 0.26); box-shadow: 0 1.4px 0 rgba(255, 243, 201, 0.6); }
+  /* the slip with the handwriting, taped on. Same paper and ink as the label above the cloud, so it follows the color theme */
+  .wl-label { left: 8%; top: 27%; width: 60%; padding: 3.6% 3% 3.2%; text-align: center; background: var(--card); color: var(--ink); border: 1px solid var(--paper-line); border-radius: 2px; rotate: -2deg; font: 700 clamp(24px, 7vw, 44px)/1.05 'Caveat', 'Segoe Print', cursive; letter-spacing: 0.01em; box-shadow: 1px 2px 3px rgba(58, 36, 18, 0.3), 2px 7px 10px rgba(58, 36, 18, 0.18); }
+  .wl-label::before { content: ""; position: absolute; top: -11px; left: 50%; width: clamp(46px, 14%, 76px); height: 20px; margin-left: calc(clamp(46px, 14%, 76px) / -2); rotate: 3deg; background: color-mix(in srgb, #EBD27A 80%, transparent); border: 1px solid rgba(120, 90, 0, 0.2); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.22); }
+  /* the red elastic band from the cover, with its little button */
+  .wl-band { top: 0; bottom: 0; right: 12%; width: 3.6%; background: linear-gradient(90deg, #5a1a0d, #8F2D18 35%, #B5442B 55%, #6E2111); box-shadow: 1px 0 3px rgba(40, 22, 6, 0.4); }
+  .wl-band::after { content: ""; position: absolute; left: 50%; top: 44%; width: 230%; aspect-ratio: 1; margin-left: -115%; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #FFB3A1, #C9462E 55%, #7E2814); box-shadow: inset 0 0 0 1.2px #6B1D0E, 1px 3px 3px rgba(40, 22, 6, 0.45); }
+  @media (max-width: 560px) { .wl-folder { width: 100%; } .wl-label { width: 64%; } }
+</style>
+<style>
+  /* ---------- Update 228. All the sticky notes take the lighting of the "what the numbers can't tell you" paper (Update 216): one soft light from the top left that fades out by 45%, a warm shade toward the bottom right, and its three layer shadow (a hairline, a tight shadow, a soft one). It covers the wall notes, the four limits notes and the yellow pinned notice. The fine paper grain from Updates 157 and 223 is dropped, since that paper has none. Delete this block to go back. ---------- */
+  .card, .sticky { --shade: linear-gradient(165deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0) 45%, rgba(110, 80, 10, 0.09)); }
+  .card, .sticky, .cards .card { box-shadow: 0 0 1px rgba(var(--shc), 0.6), 1px 2px 3px rgba(var(--shc), 0.3), 3px 9px 14px rgba(var(--shc), 0.2); }
+  .card:hover, .card.lit, .sticky:hover, .cards .card:hover, .cards .card.lit { box-shadow: 0 0 1px rgba(var(--shc), 0.45), 2px 5px 6px rgba(var(--shc), 0.26), 5px 16px 24px rgba(var(--shc), 0.24); }
+  .cloud-block .cloud-fallback {
+    background-image:
+      radial-gradient(120% 90% at 100% 100%, rgba(80, 52, 10, 0.20), rgba(80, 52, 10, 0) 46%),
+      linear-gradient(to bottom, rgba(110, 78, 14, 0.12) 0 26px, rgba(110, 78, 14, 0) 26px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0) 25px, rgba(255, 252, 225, 0.55) 25px 27px, rgba(255, 255, 255, 0) 27px),
+      linear-gradient(165deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0) 45%, rgba(110, 80, 10, 0.09));
+    background-size: auto;
+    box-shadow: 0 0 1px rgba(var(--shc), 0.6), 1px 2px 3px rgba(var(--shc), 0.3), 3px 9px 14px rgba(var(--shc), 0.2);
+  }
+</style>
+<style>
+  /* ---------- Update 230. The color theme swatches have names again, shown only on hover (and keyboard focus). The name is the card paper's name, kept in data-name, and the label is not a title attribute so screen readers do not hear it twice. Delete this block to go back. ---------- */
+  #pl-grid .rl-ds::before {
+    content: attr(data-name); position: absolute; left: 50%; bottom: calc(100% + 7px); translate: -50% 0; z-index: 6; pointer-events: none;
+    padding: 3px 9px; border-radius: 6px; white-space: nowrap; font-family: "Outfit", system-ui, sans-serif; font-size: 13px; line-height: 1.3; letter-spacing: 0.02em;
+    background: #1B1A17; color: #FBF6E3; box-shadow: 1px 3px 6px rgba(var(--shc), 0.3);
+    opacity: 0; transform: translateY(3px); transition: opacity .15s ease, transform .15s ease;
+  }
+  @media (hover: hover) { #pl-grid .rl-ds:hover::before { opacity: 1; transform: none; } }
+  #pl-grid .rl-ds:focus-visible::before { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { #pl-grid .rl-ds::before { transition: none; transform: none; } }
+</style>
 </head>
 <body class="splash-lock">
 <!-- HIDDEN SVG DEFINITIONS. Reusable shapes and filters used by the decoration. Nothing here is visible on its own. -->
@@ -3877,10 +4007,10 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
     <span class="lp" aria-hidden="true"></span>
     <span class="scrap pclip c-doc" aria-hidden="true"><svg viewBox="0 0 24 56" aria-hidden="true"><path class="pc-shade" d="M14 40 V10 a5 5 0 0 0 -10 0 V42 a8 8 0 0 0 16 0 V14"/><path class="pc-wire" d="M14 40 V10 a5 5 0 0 0 -10 0 V42 a8 8 0 0 0 16 0 V14"/></svg></span>
     <p class="dear">Dear self,</p>
-    <p>I need to get this <span class="mark-strike">right</span><span class="note">right, or what?</span> because if I don't, people will <span class="mark-strike">think less of me</span><span class="note">who is "people"?</span>. Rest is something I'll earn <span class="mark-strike">once I'm caught up</span><span class="note">[citation needed]</span>. Good enough has never actually been <span class="mark-strike">good enough</span><span class="note">says who?</span>.</p>
+    <p>I need to get this <span class="mark-strike">right</span><span class="note">right, or what?</span> because if I don’t, people will <span class="mark-strike">think less of me</span><span class="note">who is “people”?</span>. Rest is something I’ll earn <span class="mark-strike">once I’m caught up</span><span class="note">[citation needed]</span>. Good enough has never actually been <span class="mark-strike">good enough</span><span class="note">says who?</span>.</p>
   </div>
   <h1 aria-label="Who told you that?"><span class="iw" aria-hidden="true"><span style="--i:0">W</span><span style="--i:1">h</span><span style="--i:2">o</span></span> <span class="iw" aria-hidden="true"><span style="--i:3">t</span><span style="--i:4">o</span><span style="--i:5">l</span><span style="--i:6">d</span></span> <span class="iw" aria-hidden="true"><span style="--i:7">y</span><span style="--i:8">o</span><span style="--i:9">u</span></span> <span class="iw" aria-hidden="true"><span style="--i:10">t</span><span style="--i:11">h</span><span style="--i:12">a</span><span style="--i:13">t</span><span style="--i:14">?</span></span></h1>
-  <p class="lede">Most of the standards you're failing to meet were never yours to begin with. This traces a few of them back to where they came from, and looks at the pressure and perfectionism that grow out of them.</p>
+  <p class="lede">Many of the standards you’re failing to meet were never yours to begin with. This traces a few of them back to where they came from, and looks at the pressure and perfectionism that grow out of them.</p>
 </div>
 
 <!-- SECTION 01. THE CLAIM -->
@@ -3928,15 +4058,15 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
     <span class="scrap gd r" style="right:-132px;top:360px;--sr:-6deg;width:52px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-squiggle"/></svg></span>
     <span class="scrap rstamp rs-unv" aria-hidden="true"><b>Unverified</b><i>no source on file</i></span>
     <p class="kicker"><span class="cn">01</span>. the claim</p>
-    <h2 class="big-claim">Achievement isn't supposed to be your <span class="circled">whole identity.</span></h2>
+    <h2 class="big-claim">Achievement isn’t supposed to be your <span class="circled">whole identity.</span></h2>
     <p class="margin-note">nobody ever said this out loud <svg viewBox="0 0 36 34" aria-hidden="true"><path d="M18 32 C 18 20, 22 12, 20 3 M20 3 l-6 8 M20 3 l7 7"/></svg></p>
-    <p class="body">A grade, a rank, a comparison. Somewhere along the way it stopped being feedback on one piece of work and started feeling like a fact about you. It got absorbed from a hundred small moments, which is why it's so hard to argue with.</p>
+    <p class="body">A grade, a rank, a comparison. Somewhere along the way it stopped being feedback on one piece of work and started feeling like a fact about you. It got absorbed from a hundred small moments, which is why it’s so hard to argue with.</p>
     <p class="body">Two things tend to get tangled together here. <b>Self-imposed pressure</b> is the push you put on yourself, often long after anyone else stopped asking. <b>Maladaptive perfectionism</b> is when that push hardens into needing everything flawless and treating anything less as failure. They often travel together and feed each other. Neither is a diagnosis, and this page does not screen for either one.</p>
-    <p class="body pull">Once a standard has a <span class="highlight">source</span>, it can be checked. <span class="scribble-under">Most don't hold up.</span></p>
+    <p class="body pull">Once a standard has a <span class="highlight">source</span>, it can be checked. <span class="scribble-under">Plenty don’t hold up.</span></p>
   </div>
 </section>
 
-<!-- SECTION 02. THE SELF-CHECK. The five question quiz and its result. -->
+<!-- SECTION 02. THE SELF-CHECK. Five questions drawn at random from a pool of 15 (the pool is the POOL list in the quiz script, Update 224), and its result. -->
 <section>
   <div class="wrap">
     <span class="paper" aria-hidden="true"></span>
@@ -3983,53 +4113,12 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
     <p class="kicker"><span class="cn">02</span>. the self-check</p>
     <h2>Notice <span class="circled">which one</span> it feels like.</h2>
     <p class="margin-note">no wrong answers, promise <svg viewBox="0 0 36 34" aria-hidden="true"><path d="M4 6 C 14 3, 27 10, 28 28 M28 28 l-6 -7 M28 28 l7 -8"/></svg></p>
-    <p class="body">Nothing clinical, nothing scored. Just five moments. Answer for how you actually react, not how you think you should. Only the final result is added to an anonymous tally.</p>
+    <p class="body">Nothing clinical, nothing graded. Just five moments. Answer for how you actually react, not how you think you should. Only the final result is added to an anonymous tally.</p>
 
     <div class="quiz" id="quiz">
       <span class="t-clip" aria-hidden="true"></span>
       <div class="t-head" aria-hidden="true"><span class="t-title">self-check</span><b class="t-ng">not graded</b><span class="t-f">name: <i></i></span><span class="t-f">date: <i></i></span></div>
-      <div class="q active" data-q="0">
-        <div class="q-num">1 / 5</div>
-        <p class="q-prompt">You get back a grade or a result that's worse than you expected.</p>
-        <div class="options">
-          <button class="opt" data-lean="try">My first thought is what I'd do differently next time.</button>
-          <button class="opt" data-lean="exposed">My first thought is who saw it and what they'll think.</button>
-        </div>
-      </div>
-      <div class="q" data-q="1">
-        <div class="q-num">2 / 5</div>
-        <p class="q-prompt">Someone points out a mistake in something you made.</p>
-        <div class="options">
-          <button class="opt" data-lean="try">It stings for a second, then I fix it.</button>
-          <button class="opt" data-lean="exposed">It stays with me way longer than it probably should.</button>
-        </div>
-      </div>
-      <div class="q" data-q="2">
-        <div class="q-num">3 / 5</div>
-        <p class="q-prompt">You imagine turning in work that's genuinely just "good enough."</p>
-        <div class="options">
-          <button class="opt" data-lean="try">Fine. It did the job.</button>
-          <button class="opt" data-lean="exposed">Uncomfortable, like I got away with something.</button>
-        </div>
-      </div>
-
-      <div class="q" data-q="3">
-        <div class="q-num">4 / 5</div>
-        <p class="q-prompt">A friend does better than you on the same thing.</p>
-        <div class="options">
-          <button class="opt" data-lean="try">I'm glad for them, and a little curious how they did it.</button>
-          <button class="opt" data-lean="exposed">I start comparing, and somehow I always come up short.</button>
-        </div>
-      </div>
-      <div class="q" data-q="4">
-        <div class="q-num">5 / 5</div>
-        <p class="q-prompt">It's the night before something is due and it's already solid.</p>
-        <div class="options">
-          <button class="opt" data-lean="try">I stop here and let myself rest.</button>
-          <button class="opt" data-lean="exposed">I keep tweaking, because resting feels like I haven't earned it yet.</button>
-        </div>
-      </div>
-
+      <!-- Update 224. The five question cards are built by the quiz script from the POOL list, so nothing is written here. -->
       <div class="q-result" data-result="try">
         <p class="verdict">leans: bounce back</p>
         <div class="lean" role="img" aria-label="">
@@ -4040,7 +4129,7 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
           <span class="lean-end r" aria-hidden="true">not enough</span>
         </div>
         <p class="lean-note"></p>
-        <p class="body" style="margin:0;">Setbacks mostly feel like information for you, not a verdict. That's worth keeping. It's the opposite of the pattern this project is about.</p>
+        <p class="body" style="margin:0;">Setbacks mostly feel like information for you, not a verdict. That’s worth keeping. It’s the opposite of the pattern this project is about.</p>
         <button class="restart" onclick="resetQuiz()">Answer again</button>
       </div>
       <div class="q-result" data-result="exposed">
@@ -4053,7 +4142,7 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
           <span class="lean-end r" aria-hidden="true">not enough</span>
         </div>
         <p class="lean-note"></p>
-        <p class="body" style="margin:0;">If falling short feels less like "I can improve" and more like "I've been found out," that's usually the sign worth sitting with. Not because something's wrong with you, but because a standard got fused to your worth at some point, and the pressure to meet it may now be coming from you.</p>
+        <p class="body" style="margin:0;">If falling short feels less like “I can improve” and more like “I’ve been found out,” that’s usually the sign worth sitting with. Not because something’s wrong with you, but because a standard got fused to your worth at some point, and the pressure to meet it may now be coming from you.</p>
         <button class="restart" onclick="resetQuiz()">Answer again</button>
       </div>
     </div>
@@ -4114,92 +4203,42 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
     <span class="scrap gd r" style="right:-120px;top:1400px;--sr:-8deg;width:40px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-bolt"/></svg></span>
     <span class="scrap dymo d1" aria-hidden="true"><b>anonymous. no names.</b></span>
     <p class="kicker"><span class="cn">03</span>. the wall</p>
-    <h2>Other people's <span class="scribble-under">"who told you that?"</span> moments.</h2>
+    <h2>Other people’s <span class="scribble-under">“who told you that?”</span> moments.</h2>
     <p class="wall-note">Anonymous. No login, no name. Just the moment, and where the standard came from if you know it. That second part feeds the word cloud below.</p>
     <p class="scribble">psst. the “source” box is the interesting part ↓</p>
 
     <div class="composer">
       <div class="prompts" id="prompts"></div>
-      <textarea id="momentInput" rows="2" placeholder="What's the moment, and what did it teach you to believe?"></textarea>
+      <textarea id="momentInput" rows="2" placeholder="What’s the moment, and what did it teach you to believe?"></textarea>
       <div class="chips" id="srcChips"></div>
       <input type="text" id="sourceInput" placeholder="Where did that standard come from? (one word)" maxlength="24">
       <input type="text" id="reframeInput" placeholder="What would you say to a friend in the same spot? (optional)" maxlength="160">
-      <p class="care">If something here feels heavy, it's okay to talk to a school counselor or someone you trust. This wall is for noticing. It can't stand in for someone who can actually help.</p>
+      <p class="care">If something here feels heavy, it’s okay to talk to a school counselor or someone you trust. This wall is for noticing. It can’t stand in for someone who can actually help.</p>
       <button onclick="addEntry()">Add to the wall</button>
       <p class="thanks" id="thanks" aria-live="polite"></p>
     </div>
 
     <div class="cloud-block">
-      <p class="cloud-label mono">where it's coming from, sized by how often it's mentioned and colored by type</p>
-      <p class="cloud-fallback" id="cloudFallback" role="status" hidden>Can't reach the live wall. Try opening this link in a private window or another browser.</p>
-      <p class="cloud-fallback2" id="cloudFallback2"><span class="cf2-h" aria-hidden="true"></span>You can still add your own note above. It will still be sent to the backend, it just can't be shown here until the wall can be reached.</p>
+      <p class="cloud-label mono">where it’s coming from, sized by how often it’s mentioned and colored by type</p>
+      <p class="cloud-fallback" id="cloudFallback" role="status" hidden>Can’t reach the live wall. Try opening this link in a private window or another browser.</p>
+      <p class="cloud-fallback2" id="cloudFallback2"><span class="cf2-h" aria-hidden="true"></span>You can still add your own note above. It will still be sent. It just can’t be shown here until the wall can be reached.</p>
       <div class="cloud" id="cloud"></div>
       <div class="stats" id="stats"></div>
     </div>
 
 
-    <div class="wall-locked" id="wallLocked" role="img" aria-label="A closed folder. The wall's notes can't be opened right now.">
-      <svg viewBox="0 0 300 236" aria-hidden="true" focusable="false">
-        <defs>
-          <linearGradient id="wlBack" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C9A55C"/><stop offset="1" stop-color="#A98337"/></linearGradient>
-          <linearGradient id="wlFront" x1="0" y1="0" x2="0.15" y2="1"><stop offset="0" stop-color="#EFD28A"/><stop offset=".55" stop-color="#E4C47A"/><stop offset="1" stop-color="#D3B066"/></linearGradient>
-          <linearGradient id="wlSheet" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFDF3"/><stop offset="1" stop-color="#E9E2C8"/></linearGradient>
-          <linearGradient id="wlEdge" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3A2412" stop-opacity=".30"/><stop offset=".07" stop-color="#3A2412" stop-opacity="0"/><stop offset=".93" stop-color="#3A2412" stop-opacity="0"/><stop offset="1" stop-color="#3A2412" stop-opacity=".34"/></linearGradient>
-          <radialGradient id="wlBtn" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#FFB3A1"/><stop offset=".55" stop-color="#C9462E"/><stop offset="1" stop-color="#7E2814"/></radialGradient>
-          <filter id="wlBlur6" x="-20%" y="-60%" width="140%" height="220%"><feGaussianBlur stdDeviation="6"/></filter>
-          <filter id="wlBlur3" x="-20%" y="-60%" width="140%" height="220%"><feGaussianBlur stdDeviation="3"/></filter>
-          <filter id="wlBlur1" x="-20%" y="-60%" width="140%" height="220%"><feGaussianBlur stdDeviation="1.2"/></filter>
-          <filter id="wlGrain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" seed="4" result="n"/><feColorMatrix in="n" values="0 0 0 0 .24  0 0 0 0 .14  0 0 0 0 .05  .9 0 0 0 -.3"/></filter>
-          <clipPath id="wlFrontClip"><rect x="12" y="84" width="276" height="130" rx="9"/></clipPath>
-        </defs>
-        <!-- ground: a wide soft shadow, then a tight dark contact shadow (the fake ambient occlusion) -->
-        <ellipse cx="152" cy="218" rx="132" ry="11" fill="#3A2412" opacity=".30" filter="url(#wlBlur6)"/>
-        <ellipse cx="150" cy="215" rx="122" ry="4.5" fill="#1F1208" opacity=".5" filter="url(#wlBlur3)"/>
-        <!-- back panel with the tab -->
-        <path d="M12 56 q0-13 13-13 h72 q9 0 13 8 l8 12 h145 q13 0 13 13 v103 q0 13-13 13 H25 q-13 0-13-13z" fill="url(#wlBack)"/>
-        <path d="M14 58 q0-11 11-11 h72 q7 0 11 7" fill="none" stroke="#FFF1C2" stroke-opacity=".55" stroke-width="1.4" stroke-linecap="round"/>
-        <!-- two sheets peeking out of the top -->
-        <g transform="rotate(-1.6 150 80)">
-          <rect x="30" y="58" width="240" height="60" rx="2" fill="url(#wlSheet)" stroke="#3A2412" stroke-opacity=".22"/>
-          <path d="M44 72 H210 M44 82 H244 M44 92 H196" stroke="#6B4A2A" stroke-opacity=".16" stroke-width="2" stroke-linecap="round"/>
-        </g>
-        <g transform="rotate(1.2 150 80)">
-          <rect x="40" y="64" width="232" height="56" rx="2" fill="url(#wlSheet)" stroke="#3A2412" stroke-opacity=".25"/>
-          <path d="M56 80 H220 M56 90 H190" stroke="#6B4A2A" stroke-opacity=".14" stroke-width="2" stroke-linecap="round"/>
-        </g>
-        <!-- the front panel casts a shadow up onto the sheets -->
-        <rect x="14" y="78" width="272" height="12" rx="6" fill="#1F1208" opacity=".55" filter="url(#wlBlur3)"/>
-        <!-- front panel -->
-        <rect x="12" y="84" width="276" height="130" rx="9" fill="url(#wlFront)"/>
-        <g clip-path="url(#wlFrontClip)">
-          <rect x="12" y="84" width="276" height="130" filter="url(#wlGrain)" opacity=".55"/>
-          <rect x="12" y="84" width="276" height="130" fill="url(#wlEdge)"/>
-          <!-- shaded bottom edge, and a soft dark band along the top where the panel meets the sheets -->
-          <rect x="12" y="206" width="276" height="9" fill="#3A2412" opacity=".28" filter="url(#wlBlur3)"/>
-          <rect x="6" y="80" width="288" height="8" fill="#3A2412" opacity=".32" filter="url(#wlBlur3)"/>
-          <!-- the score line near the top, pressed in -->
-          <path d="M12 104 H288" stroke="#3A2412" stroke-opacity=".26" stroke-width="1.3"/>
-          <path d="M12 105.6 H288" stroke="#FFF3C9" stroke-opacity=".6" stroke-width="1.1"/>
-        </g>
-        <rect x="12" y="84" width="276" height="130" rx="9" fill="none" stroke="#3A2412" stroke-opacity=".4" stroke-width="1.3"/>
-        <path d="M20 86.5 H280" stroke="#FFF7D6" stroke-opacity=".75" stroke-width="1.6" stroke-linecap="round"/>
-        <!-- the label, with a soft shadow under it -->
-        <g transform="rotate(-1.5 128 148)">
-          <rect x="62" y="128" width="136" height="46" rx="2" fill="#2A1608" opacity=".35" filter="url(#wlBlur3)" transform="translate(1.5 3)"/>
-          <rect x="62" y="125" width="136" height="46" rx="2" fill="#F8F2DC" stroke="#3A2412" stroke-opacity=".3"/>
-          <rect x="62" y="125" width="136" height="46" rx="2" fill="none" stroke="#FFFFFF" stroke-opacity=".6" transform="translate(.6 .6)"/>
-          <text x="130" y="156" text-anchor="middle" font-family="'Caveat','Segoe Print',cursive" font-size="29" font-weight="700" fill="#2B1A0C">closed for now</text>
-        </g>
-        <!-- the elastic band, with a shadow on the folder and a little button -->
-        <rect x="231" y="84" width="9" height="130" fill="#1F1208" opacity=".42" filter="url(#wlBlur1)" transform="translate(2 1)"/>
-        <rect x="228" y="84" width="8" height="130" fill="#C9462E"/>
-        <rect x="228" y="84" width="2.4" height="130" fill="#FF9A82" opacity=".55"/>
-        <rect x="233.6" y="84" width="2.4" height="130" fill="#5E1A0C" opacity=".4"/>
-        <circle cx="233" cy="152" r="12.5" fill="#1F1208" opacity=".45" filter="url(#wlBlur3)" transform="translate(1.5 3)"/>
-        <circle cx="232" cy="150" r="11" fill="url(#wlBtn)" stroke="#6B1D0E" stroke-width="1.2"/>
-        <circle cx="232" cy="150" r="4" fill="#7E2814"/>
-        <circle cx="232" cy="150" r="4" fill="none" stroke="#FF9A82" stroke-opacity=".5" stroke-width=".8" transform="translate(-.5 -.5)"/>
-      </svg>
+    <!-- Update 227. The closed folder is a manila folder in the site's own paper and tape style (it was a glossy 3D drawing). -->
+    <div class="wall-locked" id="wallLocked" role="img" aria-label="A closed folder. The wall’s notes can’t be opened right now.">
+      <div class="wl-folder" aria-hidden="true">
+        <span class="wl-back"></span>
+        <span class="wl-tab">the wall</span>
+        <span class="wl-sheet a"></span>
+        <span class="wl-sheet b"></span>
+        <div class="wl-front">
+          <span class="wl-band"></span>
+          <span class="wl-label">closed for now</span>
+        </div>
+      </div>
     </div>
 
     <div class="filters" id="filters"></div>
@@ -4249,23 +4288,23 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
     <span class="scrap gd" style="left:-112px;top:260px;--sr:-6deg;width:44px" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#d-crown"/></svg></span>
     <span class="scrap rstamp rs-cure" aria-hidden="true"><b>Not a cure</b><i>just a start</i></span>
     <p class="kicker"><span class="cn">04</span>. the limits</p>
-    <h2 aria-label="What this can't do."><span aria-hidden="true"><span class="rw"><u class="rl l3">W</u><u class="rl l4">h</u><u class="rl l5">a</u><u class="rl l6">t</u></span> <span class="rw"><u class="rl l1">t</u><u class="rl l2">h</u><u class="rl l3">i</u><u class="rl l4">s</u></span> <span class="circled">can't</span> <span class="rw"><u class="rl l5">d</u><u class="rl l6">o</u><u class="rl l1">.</u></span></span></h2>
+    <h2 aria-label="What this can’t do."><span aria-hidden="true"><span class="rw"><u class="rl l3">W</u><u class="rl l4">h</u><u class="rl l5">a</u><u class="rl l6">t</u></span> <span class="rw"><u class="rl l1">t</u><u class="rl l2">h</u><u class="rl l3">i</u><u class="rl l4">s</u></span> <span class="circled">can’t</span> <span class="rw"><u class="rl l5">d</u><u class="rl l6">o</u><u class="rl l1">.</u></span></span></h2>
     <p class="margin-note">so nobody expects a miracle <svg viewBox="0 0 36 34" aria-hidden="true"><path d="M4 6 C 14 3, 27 10, 28 28 M28 28 l-6 -7 M28 28 l7 -8"/></svg></p>
     <ul class="limits-notes">
       <li class="sticky"><h3>Only reaches people who look</h3><p>Nothing here shows up uninvited, the way a feed post would.</p></li>
-      <li class="sticky"><h3>One visit won't undo years</h3><p>It doesn't touch grading culture, school stress or family expectations. Those sit outside anything a website can fix.</p></li>
+      <li class="sticky"><h3>One visit won’t undo years</h3><p>It doesn’t touch grading culture, school stress or family expectations. Those sit outside anything a website can fix.</p></li>
       <li class="sticky"><h3>Those who need it may skip it</h3><p>This kind of pressure often comes with not wanting to admit the message applies to you.</p></li>
       <li class="sticky"><h3>Easy to forget</h3><p>Without a school link, a counselor mention or a friend sharing it, a single visit is gone once the tab closes.</p></li>
     </ul>
-    <p class="body" style="margin-top:20px;">Research on peer acceptance suggests it can directly ease perfectionistic tendencies in teens (Blackburn et al., 2025). That is part of why routing this through schools or counselors, rather than leaving it to be found cold, matters more than the site itself.</p>
+    <p class="body" style="margin-top:20px;">Research on teens points to a link between how accepted they feel by peers and how perfectionistic they are (Blackburn et al., 2025). It doesn’t show that acceptance fixes it, but it is one reason routing this through schools or counselors, rather than leaving it to be found cold, may matter more than the site itself.</p>
     <!-- Update 216: honest limits of the results. Static text. Pairs with the results panel and the success indicators at the end of section 05. -->
     <div class="lm" id="limits-results" aria-labelledby="lmH">
       <span class="lm-tape" aria-hidden="true"></span>
-      <h3 class="lm-h" id="lmH">what the numbers can't tell you</h3>
+      <h3 class="lm-h" id="lmH">what the numbers can’t tell you</h3>
       <p class="lm-intro">The results at the end of section 05 are real, but they are small and they are our visitors' own words. Here is how far they go.</p>
       <ul class="lm-list">
         <li><p><b>Self-reported.</b> Visitors told us what changed for them. Nobody checked it, and some may answer the way they think we hope.</p></li>
-        <li><p><b>Only some visitors.</b> The numbers come from people who found the page, got to the end and chose to answer. Anyone a school network blocked, or who stopped early, is not in them.</p></li>
+        <li><p><b>Only some visitors.</b> The reflection numbers come from people who found the page, got to the end and chose to answer. The other counts only include people who finished a self-check, made a card or shared. Anyone a school network blocked, or who stopped early, is not in them.</p></li>
         <li><p><b>Views, not wellbeing.</b> Looking at a rule differently is not the same as feeling less pressure. The page measures the first, not the second, and it is not a screening tool.</p></li>
       </ul>
     </div>
@@ -4319,13 +4358,13 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
     <h2 aria-label="Rewrite the line."><span aria-hidden="true"><span class="rw"><u class="rl l1">R</u><u class="rl l2">e</u><u class="rl l3">w</u><u class="rl l4">r</u><u class="rl l5">i</u><u class="rl l6">t</u><u class="rl l1">e</u></span> <span class="rw"><u class="rl l2">t</u><u class="rl l3">h</u><u class="rl l4">e</u></span> <span class="rw"><u class="rl l5">l</u><u class="rl l6">i</u><u class="rl l1">n</u><u class="rl l2">e</u><u class="rl l3">.</u></span></span></h2>
     <p class="margin-note">red pen out. green pen in. <svg viewBox="0 0 36 34" aria-hidden="true"><path d="M4 6 C 14 3, 27 10, 28 28 M28 28 l-6 -7 M28 28 l7 -8"/></svg></p>
     <p class="body">Once you can see where a rule came from, you get to edit it. A few from the top of the page.</p>
-    <div class="rewrite-row"><span class="old">I'll earn rest once I'm caught up.</span><span class="new">Rest is part of the work.</span></div>
+    <div class="rewrite-row"><span class="old">I’ll earn rest once I’m caught up.</span><span class="new">Rest is part of the work.</span></div>
     <div class="rewrite-row"><span class="old">One mistake and people will think less of me.</span><span class="new">One mistake is just one mistake.</span></div>
-    <div class="rewrite-row"><span class="old">Good enough isn't good enough.</span><span class="new">Good enough is allowed to be enough.</span></div>
+    <div class="rewrite-row"><span class="old">Good enough isn’t good enough.</span><span class="new">Good enough is allowed to be enough.</span></div>
     <div class="doc yourturn">
       <span class="lp" aria-hidden="true"></span>
       <p class="dear">Your turn,</p>
-      <p>Think of one standard you hold yourself to. <b>Who told you that?</b> Then ask what you'd say to a friend who held the same one.</p>
+      <p>Think of one standard you hold yourself to. <b>Who told you that?</b> Then ask what you’d say to a friend who held the same one.</p>
       <form class="rw-form" id="rwForm" novalidate>
         <label class="rw-l" for="rwOld">red pen out. the rule you were handed</label>
         <input type="text" id="rwOld" maxlength="120" autocomplete="off" placeholder="If it isn’t perfect, it doesn’t count.">
@@ -4456,14 +4495,14 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
     <!-- Update 215: what we learned and what's next. Static text. Challenges, recommendations and the longer view. -->
     <div class="wl" id="learned" aria-labelledby="wlH">
       <span class="wl-tape" aria-hidden="true"></span>
-      <h3 class="wl-h" id="wlH">what we learned, and what's next</h3>
+      <h3 class="wl-h" id="wlH">what we learned, and what’s next</h3>
 
       <p class="wl-k">what got in the way</p>
       <ul class="wl-list">
         <li>
-          <p><b>Phones struggled with the decoration.</b> The scrapbook look is heavy: paper textures, glowing titles and hundreds of small pieces. Phones lagged, and one froze while making a card. We cut effects on phones, lightened the card drawing, and added an "easy on the mess!" switch in the colors tab that drops the extras.</p>
+          <p><b>Phones struggled with the decoration.</b> The scrapbook look is heavy: paper textures, glowing titles and hundreds of small pieces. Phones lagged, and one froze while making a card. We cut effects on phones, lightened the card drawing, and added an “easy on the mess!” switch in the colors tab that drops the extras.</p>
           <p class="wl-l"><i>What it taught us:</i> the look should never cost the reading.</p>
-          <p class="wl-t">eased. we could not reproduce the freeze, so we can't say it is gone.</p>
+          <p class="wl-t">eased. we could not reproduce the freeze, so we can’t say it is gone.</p>
         </li>
       </ul>
 
@@ -4476,7 +4515,7 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
       <ul class="wl-next wl-grow">
         <li><b>One copy per school.</b> Each school would get its own wall and its own tally, so its results stay with that school and its notes are moderated by people who know the place.</li>
         <li><b>A Filipino version.</b> So the question can be asked in the language the rule was first heard in.</li>
-        <li><b>Permission first.</b> Anything beyond a class pilot needs the school's approval, consent for students who are minors, and a plan for notes that name real people.</li>
+        <li><b>Permission first.</b> Anything beyond a class pilot needs the school’s approval, consent for students who are minors, and a plan for notes that name real people.</li>
       </ul>
       <p class="wl-foot">these are plans and recommendations. none of the next steps is built yet.</p>
     </div>
@@ -4530,11 +4569,11 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
     <p class="kicker"><span class="cn">06</span>. for schools and counselors</p>
     <h2>Hand it to the <span class="circled">people</span> who can use it.</h2>
     <p class="margin-note">print it. pin it. pass it on. <svg viewBox="0 0 36 34" aria-hidden="true"><path d="M4 6 C 14 3, 27 10, 28 28 M28 28 l-6 -7 M28 28 l7 -8"/></svg></p>
-    <p class="body">Who Told You That? is a short, anonymous page where students look at self-imposed pressure and maladaptive perfectionism, trace a rule they hold themselves to back to where it came from, then rewrite it in a kinder way. It asks for no name or account and works on a phone. It is a starting point for a conversation, not a screening tool and not a replacement for counseling.</p>
+    <p class="body">“Who told you that?” is a short, anonymous page where students look at self-imposed pressure and maladaptive perfectionism, trace a rule they hold themselves to back to where it came from, then rewrite it in a kinder way. It asks for no name or account and works on a phone. It is a starting point for a conversation, not a screening tool and not a replacement for counseling.</p>
     <ol class="sc-steps">
-      <li><b>Put it where students already look.</b> A QR code on a classroom wall, a counselor's door or a group chat link.</li>
+      <li><b>Put it where students already look.</b> A QR code on a classroom wall, a counselor’s door or a group chat link.</li>
       <li><b>Let them read it alone.</b> Nothing is graded, and posting to the wall is optional and anonymous.</li>
-      <li><b>Ask the question out loud.</b> "Who told you that?" works well as a check-in prompt afterward.</li>
+      <li><b>Ask the question out loud.</b> “Who told you that?” works well as a check-in prompt afterward.</li>
     </ol>
     <div class="sc-grid">
       <div class="sc-card sc-qrcard">
@@ -4544,7 +4583,7 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
       </div>
       <div class="sc-card">
         <p class="dear">A message you can send,</p>
-        <p class="sc-msg" id="sc-msg">Hello! This is a short page called Who Told You That? about the pressure students put on themselves to be perfect. It helps students notice where their own "rules" came from and try a kinder version. It is anonymous, needs no account and works on a phone. Nobody has to put their name on anything.</p>
+        <p class="sc-msg" id="sc-msg">Hello! This is a short page called “Who told you that?” about the pressure students feel to be perfect. It helps students notice where their own “rules” came from and try a kinder version. It is anonymous, needs no account and works on a phone. Nobody has to put their name on anything.</p>
         <div class="sc-actions">
           <button class="sc-btn" type="button" id="sc-copy">Copy message and link</button>
           <button class="sc-btn" type="button" data-share>Share the link</button>
@@ -4558,7 +4597,7 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
 <!-- FOOTER -->
 <footer>
   <div class="wrap">
-    <p class="mono">Terminal Assessment Submission for MO-SS031 | Understanding The Self. Prepared by Melindo, LJD.</p>
+    <p class="mono">Terminal Assessment Submission for MO-SS031 | Understanding the Self. Prepared by Melindo, LJD.</p>
   </div>
 </footer>
 
@@ -4629,7 +4668,7 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
     </details>
     <details class="gl-term" name="gl-terms">
       <summary>Leans</summary>
-      <p>On the self check, which way your answers tilted today. It is a tendency, not a score, a label or a diagnosis.</p>
+      <p>On the self-check, which way your answers tilted today. It is a tendency, not a score, a label or a diagnosis.</p>
       <p class="gl-nt">Retake it any day and it can change.</p>
     </details>
   </div>
@@ -4648,6 +4687,12 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
       <a class="rf-doi" href="https://doi.org/10.1016/j.appdev.2025.101769" target="_blank" rel="noopener noreferrer">https://doi.org/10.1016/j.appdev.2025.101769</a>
     </details>
     <details class="gl-term" name="rf-refs">
+      <summary>Crocker &amp; Wolfe, 2001</summary>
+      <p class="rf-cite">Crocker, J., &amp; Wolfe, C. T. (2001). Contingencies of self-worth. <i>Psychological Review, 108</i>(3), 593–623.</p>
+      <p class="gl-nt">Behind the self-check question about doing well and whether it changes how you see yourself.</p>
+      <a class="rf-doi" href="https://doi.org/10.1037/0033-295X.108.3.593" target="_blank" rel="noopener noreferrer">https://doi.org/10.1037/0033-295X.108.3.593</a>
+    </details>
+    <details class="gl-term" name="rf-refs">
       <summary>Dela Cruz et al., 2025</summary>
       <p class="rf-cite">Dela Cruz, R. J. P., Jose, J. L. C., Paraon, R. J. R., &amp; Arcinas, M. M. (2025). Academic excellence paradox: Self-imposed academic pressure and well-being among Gen-Z students in a HyFlex learning environment. <i>International Journal of Multidisciplinary: Applied Business and Education Research, 6</i>(4), 2003–2014.</p>
       <p class="gl-nt">Behind how section 01 describes self-imposed pressure.</p>
@@ -4656,8 +4701,32 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
     <details class="gl-term" name="rf-refs">
       <summary>Festinger, 1954</summary>
       <p class="rf-cite">Festinger, L. (1954). A theory of social comparison processes. <i>Human Relations, 7</i>(2), 117–140.</p>
-      <p class="gl-nt">Behind the self check question about a friend doing better than you.</p>
+      <p class="gl-nt">Behind the self-check question about a friend doing better than you.</p>
       <a class="rf-doi" href="https://doi.org/10.1177/001872675400700202" target="_blank" rel="noopener noreferrer">https://doi.org/10.1177/001872675400700202</a>
+    </details>
+    <details class="gl-term" name="rf-refs">
+      <summary>Frost et al., 1990</summary>
+      <p class="rf-cite">Frost, R. O., Marten, P., Lahart, C., &amp; Rosenblate, R. (1990). The dimensions of perfectionism. <i>Cognitive Therapy and Research, 14</i>(5), 449–468.</p>
+      <p class="gl-nt">Behind the self-check questions about spotting your own mistake, putting off a big task, and doubting a compliment.</p>
+      <a class="rf-doi" href="https://doi.org/10.1007/BF01172967" target="_blank" rel="noopener noreferrer">https://doi.org/10.1007/BF01172967</a>
+    </details>
+    <details class="gl-term" name="rf-refs">
+      <summary>Hewitt &amp; Flett, 1991</summary>
+      <p class="rf-cite">Hewitt, P. L., &amp; Flett, G. L. (1991). Perfectionism in the self and social contexts: Conceptualization, assessment, and association with psychopathology. <i>Journal of Personality and Social Psychology, 60</i>(3), 456–470.</p>
+      <p class="gl-nt">Behind the self-check question about what the people closest to you expect.</p>
+      <a class="rf-doi" href="https://doi.org/10.1037/0022-3514.60.3.456" target="_blank" rel="noopener noreferrer">https://doi.org/10.1037/0022-3514.60.3.456</a>
+    </details>
+    <details class="gl-term" name="rf-refs">
+      <summary>Hewitt et al., 2003</summary>
+      <p class="rf-cite">Hewitt, P. L., Flett, G. L., Sherry, S. B., Habke, M., Parkin, M., Lam, R. W., McMurtry, B., Ediger, E., Fairlie, P., &amp; Stein, M. B. (2003). The interpersonal expression of perfection: Perfectionistic self-presentation and psychological distress. <i>Journal of Personality and Social Psychology, 84</i>(6), 1303–1325.</p>
+      <p class="gl-nt">Behind the self-check questions about sharing something rough, telling a friend your week went badly, and quitting before anyone sees you struggle.</p>
+      <a class="rf-doi" href="https://doi.org/10.1037/0022-3514.84.6.1303" target="_blank" rel="noopener noreferrer">https://doi.org/10.1037/0022-3514.84.6.1303</a>
+    </details>
+    <details class="gl-term" name="rf-refs">
+      <summary>Neff, 2003</summary>
+      <p class="rf-cite">Neff, K. D. (2003). Self-compassion: An alternative conceptualization of a healthy attitude toward oneself. <i>Self and Identity, 2</i>(2), 85–101.</p>
+      <p class="gl-nt">Behind the self-check question about what you say to yourself after a mess up.</p>
+      <a class="rf-doi" href="https://doi.org/10.1080/15298860309032" target="_blank" rel="noopener noreferrer">https://doi.org/10.1080/15298860309032</a>
     </details>
     <details class="gl-term" name="rf-refs">
       <summary>Priyadarshini &amp; Supriya, 2026</summary>
@@ -4668,13 +4737,19 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
     <details class="gl-term" name="rf-refs">
       <summary>Ryan &amp; Deci, 2000</summary>
       <p class="rf-cite">Ryan, R. M., &amp; Deci, E. L. (2000). Self-determination theory and the facilitation of intrinsic motivation, social development, and well-being. <i>American Psychologist, 55</i>(1), 68–78.</p>
-      <p class="gl-nt">Behind the self check idea that how you react to a miss shows whose standard it is.</p>
+      <p class="gl-nt">Behind the self-check idea that how you react to a miss shows whose standard it is.</p>
       <a class="rf-doi" href="https://doi.org/10.1037/0003-066X.55.1.68" target="_blank" rel="noopener noreferrer">https://doi.org/10.1037/0003-066X.55.1.68</a>
+    </details>
+    <details class="gl-term" name="rf-refs">
+      <summary>Shafran et al., 2002</summary>
+      <p class="rf-cite">Shafran, R., Cooper, Z., &amp; Fairburn, C. G. (2002). Clinical perfectionism: A cognitive-behavioural analysis. <i>Behaviour Research and Therapy, 40</i>(7), 773–791.</p>
+      <p class="gl-nt">Behind the self-check question about raising the bar right after you hit a goal.</p>
+      <a class="rf-doi" href="https://doi.org/10.1016/S0005-7967(01)00059-6" target="_blank" rel="noopener noreferrer">https://doi.org/10.1016/S0005-7967(01)00059-6</a>
     </details>
     <details class="gl-term" name="rf-refs">
       <summary>Woźniak et al., 2025</summary>
       <p class="rf-cite">Woźniak, M., van Buuren, M., &amp; Tacikowski, P. (2025). Editorial: Self-concept plasticity: Behavioral and neural evidence. <i>Frontiers in Human Neuroscience, 19</i>, Article 1584910.</p>
-      <p class="gl-nt">Behind the claim that achievement should not be your whole identity.</p>
+      <p class="gl-nt">Background for the idea that achievement is not your whole identity. It is an editorial on how the sense of self changes, not a test of that idea.</p>
       <a class="rf-doi" href="https://doi.org/10.3389/fnhum.2025.1584910" target="_blank" rel="noopener noreferrer">https://doi.org/10.3389/fnhum.2025.1584910</a>
     </details>
   </div>
@@ -4732,6 +4807,87 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
   const leans = [];
   const quiz = document.getElementById('quiz');
 
+  // Update 224. The self-check draws QN questions at random from POOL, so every refresh and every "Answer again" can show a different set.
+  // Each item is { p: the moment, t: the answer that leans bounce back, e: the answer that leans not enough }. The first five are the original questions.
+  // Which answer shows first is shuffled too. To add a question, add one item here. Keep QN at 5 (the result notes are written for 0 to 5).
+  const QN = 5;
+  const POOL = [
+    { p: "You get back a grade or a result that’s worse than you expected.",
+      t: "My first thought is what I’d do differently next time.",
+      e: "My first thought is who saw it and what they’ll think." },
+    { p: "Someone points out a mistake in something you made.",
+      t: "It stings for a second, then I fix it.",
+      e: "It stays with me way longer than it probably should." },
+    { p: "You imagine turning in work that’s genuinely just “good enough.”",
+      t: "Fine. It did the job.",
+      e: "Uncomfortable, like I got away with something." },
+    { p: "A friend does better than you on the same thing.",
+      t: "I’m glad for them, and a little curious how they did it.",
+      e: "I start comparing, and somehow I always come up short." },
+    { p: "It’s the night before something is due and it’s already solid.",
+      t: "I stop here and let myself rest.",
+      e: "I keep tweaking, because resting feels like I haven’t earned it yet." },
+    { p: "You made something and it’s not quite how you pictured it, but people are waiting to see it.",
+      t: "I share it anyway. Rough is still worth showing.",
+      e: "I hold it back until it matches what’s in my head." },
+    { p: "A friend asks how your week went, and it went badly.",
+      t: "I tell them the real version.",
+      e: "I say it was fine and make it sound like I had it handled." },
+    { p: "You spot your own mistake right after you hand something in.",
+      t: "Annoying, but I make a note and let it go.",
+      e: "It feels like the whole thing is ruined now." },
+    { p: "You do really well on something that mattered.",
+      t: "I’m happy about it, but it doesn’t change how I see myself.",
+      e: "Relief, mostly. I feel okay about myself until the next one." },
+    { p: "You think about what the people closest to you expect from you.",
+      t: "I know they want good things for me, and I can tell their hopes from mine.",
+      e: "It feels like a bar I can’t quite clear, and I don’t remember agreeing to it." },
+    { p: "You start something new and you’re clearly not good at it yet.",
+      t: "Being bad at it is part of it, so I keep going.",
+      e: "I want to quit before anyone sees how bad I am." },
+    { p: "You mess up on something that matters, and you notice what you say to yourself.",
+      t: "Mostly what I’d say to a friend. It happens, try again.",
+      e: "Things I would never say to a friend." },
+    { p: "A big task is in front of you and you already know it won’t turn out perfect.",
+      t: "I start rough and fix it as I go.",
+      e: "I put it off until I feel sure I can do it right." },
+    { p: "You finally hit a goal you set for yourself.",
+      t: "I enjoy it for a bit, then pick the next thing.",
+      e: "I raise the bar right away, because it clearly wasn’t hard enough." },
+    { p: "Someone tells you that you did a good job.",
+      t: "I take it. Thank you.",
+      e: "I wonder what they missed, because I know where the flaws are." }
+  ];
+  let lastIds = [];
+  function buildQuiz(again) {
+    let ids = POOL.map((_, i) => i);
+    // on "Answer again", prefer questions that were not just shown (there are 10 others, so a full fresh set is possible)
+    if (again) { const unseen = ids.filter(i => lastIds.indexOf(i) < 0); if (unseen.length >= QN) ids = unseen; }
+    for (let i = ids.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = ids[i]; ids[i] = ids[j]; ids[j] = t; }
+    lastIds = ids.slice(0, QN);
+    quiz.querySelectorAll('.q').forEach(el => el.remove());
+    const anchor = quiz.querySelector('.q-result');
+    lastIds.forEach((id, n) => {
+      const q = POOL[id];
+      const box = document.createElement('div');
+      box.className = 'q' + (n === 0 ? ' active' : '');
+      box.dataset.q = n;
+      const num = document.createElement('div'); num.className = 'q-num'; num.textContent = (n + 1) + ' / ' + QN;
+      const pr = document.createElement('p'); pr.className = 'q-prompt'; pr.textContent = q.p;
+      const opts = document.createElement('div'); opts.className = 'options';
+      const pair = [['try', q.t], ['exposed', q.e]];
+      if (Math.random() < 0.5) pair.reverse();
+      pair.forEach(function (o) {
+        const b = document.createElement('button');
+        b.type = 'button'; b.className = 'opt'; b.dataset.lean = o[0]; b.textContent = o[1];
+        opts.appendChild(b);
+      });
+      box.appendChild(num); box.appendChild(pr); box.appendChild(opts);
+      quiz.insertBefore(box, anchor);
+    });
+  }
+  buildQuiz(false);
+
   let quizBusy = false;
   quiz.addEventListener('click', (e) => {
     const btn = e.target.closest('.opt');
@@ -4748,7 +4904,7 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
     const qEl = quiz.querySelector('.q[data-q="' + currentQ + '"]');
     qEl.classList.remove('active');
     currentQ++;
-    if (currentQ < 5) {
+    if (currentQ < QN) {
       quiz.querySelector('.q[data-q="' + currentQ + '"]').classList.add('active');
     } else {
       const exposedCount = leans.filter(l => l === 'exposed').length;
@@ -4757,17 +4913,17 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
       resEl.classList.add('active');
       if (window.wttCount) wttCount(result === 'exposed' ? 'quiz_notenough' : 'quiz_bounce'); // Update 212: anonymous tally, the result only
       const lean = resEl.querySelector('.lean');
-      lean.style.setProperty('--pos', exposedCount / 5);
+      lean.style.setProperty('--pos', exposedCount / QN);
       const notes = [
-        "All five sat on the bounce back side. Slips don't seem to stick to you.",
+        "All five sat on the bounce back side. Slips don’t seem to stick to you.",
         "Mostly bounce back, with one moment that stung a little more.",
         "Leaning bounce back, but a couple of these hit a nerve.",
-        "Leaning toward the not enough side, though it's close. Two answers went the other way.",
-        "Four of five made a slip feel like not being enough. That's worth a closer look.",
-        "All five made a slip feel like not being enough. That's heavy to carry, and you're far from the only one."
+        "Leaning toward the not enough side, though it’s close. Two answers went the other way.",
+        "Four of five made a slip feel like not being enough. That’s worth a closer look.",
+        "All five made a slip feel like not being enough. That’s heavy to carry, and you’re far from the only one."
       ];
       resEl.querySelector('.lean-note').textContent = notes[exposedCount];
-      lean.setAttribute('aria-label', exposedCount + ' of 5 answers leaned toward feeling not enough. The circle sits on the line between bounce back and not enough.');
+      lean.setAttribute('aria-label', exposedCount + ' of ' + QN + ' answers leaned toward feeling not enough. The circle sits on the line between bounce back and not enough.');
     }
   }
 
@@ -4777,8 +4933,7 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
     quizBusy = false;
     quiz.querySelectorAll('.opt.picked').forEach(el => el.classList.remove('picked'));
     quiz.querySelectorAll('.q-result').forEach(el => el.classList.remove('active'));
-    quiz.querySelectorAll('.q').forEach(el => el.classList.remove('active'));
-    quiz.querySelector('.q[data-q="0"]').classList.add('active');
+    buildQuiz(true); // Update 224: a fresh draw, leaving out the questions just shown when it can
   }
 
   // ---- Wall (backed by a Google Apps Script web app) ----
@@ -4984,10 +5139,14 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
   // so no two notes share a color, and a new note never changes the color of an older one (counting is from the oldest).
   const NOTE_COLORS = ['#F6E27A', '#C6B6EC', '#F0A07F', '#B4DB9E', '#F2A8A0', '#9FCBEA', '#E3AED2', '#8CDACB'];
   function noteColor(k) {
-    if (k < NOTE_COLORS.length) return NOTE_COLORS[k];
+    if (k < NOTE_COLORS.length) return (window.wtytPal && window.wtytPal.noteFix) ? window.wtytPal.noteFix(NOTE_COLORS[k]) : NOTE_COLORS[k];
     const j = k - NOTE_COLORS.length;
     return 'hsl(' + Math.round((j * 137.508 + 28) % 360) + ' ' + (58 + (j % 3) * 5) + '% ' + (76 + (j % 2) * 3) + '%)';
   }
+  // Update 229: when the color theme changes, the notes already on the wall take their theme-safe colors again (no full redraw)
+  document.addEventListener('wtyt-palette', function () {
+    document.querySelectorAll('#cards .card').forEach(function (c, i) { c.style.setProperty('--nc', noteColor(entries.length - 1 - i)); });
+  });
   function renderCards() {
     const el = document.getElementById('cards');
     if (!entries.length) { el.innerHTML = '<p class="cards-empty">No notes yet. Be the first to pin one.</p>'; renderStats(); applyFilters(); renderCloud(); return; }
@@ -5194,7 +5353,7 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
     document.querySelectorAll('#srcChips button').forEach(b => b.classList.remove('on'));
     if (!offline) renderCards();
     const thanks = document.getElementById('thanks');
-    thanks.textContent = offline ? "Thank you. Your note was sent, but the wall can't show it right now." : "Thank you. You're not the only one.";
+    thanks.textContent = offline ? "Thank you. Your note was sent, but the wall can’t show it right now." : "Thank you. You’re not the only one.";
     thanks.classList.add('show');
     setTimeout(() => thanks.classList.remove('show'), 5000);
 
@@ -5658,7 +5817,7 @@ function qrMatrix(text){
       btn.addEventListener('click', function () {
         var u = pageUrl();
         if (!u) { say(btn, 'Sharing works once this page is online.'); return; }
-        var data = { title: 'Who told you that?', text: "Most of the standards you're failing to meet were never yours to begin with.", url: u };
+        var data = { title: 'Who told you that?', text: "Many of the standards you’re failing to meet were never yours to begin with.", url: u };
         if (navigator.share) {
           navigator.share(data).then(function () { if (window.wttCount) wttCount('link_shared'); }).catch(function (e) {
             if (e && e.name === 'AbortError') return;
@@ -5709,7 +5868,7 @@ function qrMatrix(text){
         '<div class="pp-kicker">a short, anonymous page</div>' +
         '<h1>Who told<br>you <span class="pp-that">that?<svg viewBox="0 0 210 110" preserveAspectRatio="none" aria-hidden="true"><path d="' + ring + '"/></svg></span></h1>' +
         '<div class="pp-mag"><svg viewBox="0 0 10 10" aria-hidden="true"><circle cx="5" cy="5" r="4.6" fill="#FFFBEF" stroke="#031D44" stroke-opacity="0.18" stroke-width="0.1"/>' + magnifier(4.9, 4.9, 8.4) + '</svg></div>' +
-        '<p class="pp-sub">Most of the standards you\u2019re failing to meet were <mark>never yours</mark> to begin with.</p>' +
+        '<p class="pp-sub">Many of the standards you\u2019re failing to meet were <mark>never yours</mark> to begin with.</p>' +
         '<div class="pp-stack"><div class="pp-red"><div class="pp-bar"><span>red pen out.</span><b class="pp-stamp">UNVERIFIED</b></div><p class="pp-old">I\u2019ll earn rest once I\u2019m caught up.</p></div>' +
         '<div class="pp-say"><svg viewBox="0 0 36 34" aria-hidden="true"><path d="M4 6 C 14 3, 27 10, 28 28 M28 28 l-6 -7 M28 28 l7 -8"/></svg><span>say it kinder.</span></div>' +
         '<div class="pp-green"><div class="pp-bar"><span>green pen in.</span>' +
@@ -7093,7 +7252,7 @@ function qrMatrix(text){
     window.wtytPal.list.forEach(function (t, i) {
       var c = window.wtytPal.swatch(t), b = document.createElement('button');
       b.type = 'button'; b.className = 'rl-ds'; b.setAttribute('data-id', t.id);
-      b.setAttribute('aria-label', 'Color theme ' + (i + 1));
+      b.setAttribute('aria-label', 'Color theme ' + (i + 1) + ', ' + t.name); b.setAttribute('data-name', t.name);
       b.innerHTML = '<i style="background:linear-gradient(135deg,' + c[0] + ' 0 50%,' + c[1] + ' 50%)"></i>';
       // Update 203: choosing a swatch animates. The swatch pops with a ring, and the new colors spread across the page
       // from the swatch like a wipe (View Transitions). Browsers without it get a soft color fade. Reduced motion and
@@ -7317,7 +7476,7 @@ function qrMatrix(text){
         var pct = Math.round((yes + little) / n * 100);
         a.appendChild(el('div', 'rs-pct', pct + '%'));
         a.appendChild(el('p', 'rs-pt', 'said yes or a little. ' + n + (n === 1 ? ' answer' : ' answers') + ' so far.'));
-        if (n < 10) a.appendChild(el('p', 'rs-warn', 'only ' + n + (n === 1 ? ' answer' : ' answers') + ' so far. a first look, not a result.'));
+        if (n < 15) a.appendChild(el('p', 'rs-warn', 'only ' + n + (n === 1 ? ' answer' : ' answers') + ' so far. a first look, not a result.'));
         a.appendChild(bar('yes', yes, n, '#27503C')); a.appendChild(bar('a little', little, n, '#8A5600')); a.appendChild(bar('no', no, n, '#5A5F6B'));
       } else { a.appendChild(el('p', 'rs-pt', 'No answers yet.')); }
       b.appendChild(el('p', 'rs-k', 'how the self-check landed'));
