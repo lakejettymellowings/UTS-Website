@@ -3890,6 +3890,9 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
   @media (hover: hover) { #pl-grid .rl-ds:hover::before { opacity: 1; transform: none; } }
   #pl-grid .rl-ds:focus-visible::before { opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce) { #pl-grid .rl-ds::before { transition: none; transform: none; } }
+  /* ---------- Update 237. The "Add another" button under the reflection thank-you. It reuses the .share-btn sticker. Delete this block and the #rfAgain button and script lines to go back. ---------- */
+  .reflect #rfAgain { margin-top: 14px; }
+  .reflect #rfAgain[hidden] { display: none; }
 </style>
 </head>
 <body class="splash-lock">
@@ -4449,6 +4452,7 @@ html.calm .iw > span { animation: none !important; text-shadow: none !important;
         <p class="rw-note">anonymous. only your pick and the line above (if you write one) are sent. no name, no account.</p>
       </form>
       <p class="rf-done" id="rfDone" role="status" aria-live="polite" hidden>Thank you. Yours is in the tally.</p>
+      <button type="button" class="share-btn" id="rfAgain" hidden>Add another</button>
     </div>
     <!-- Update 213: public results panel. Filled in by a script from the Apps Script (reflection answers, activity counts, moderated takeaways). -->
     <div class="rs" id="results" aria-labelledby="rsH">
@@ -7347,13 +7351,17 @@ function qrMatrix(text){
   (function () {
     var form = document.getElementById('rfForm'); if (!form) return;
     var API = 'https://script.google.com/macros/s/AKfycbyWm-xx44Y_Rb1NWfGtfq13put0UCZWyazw6WSdv6ms-Wuxdk-DWaDT9wpsS0QyLUVf/exec';
-    var KEY = 'wtyt-reflect', opts = document.getElementById('rfOpts'), line = document.getElementById('rfLine'),
-        send = document.getElementById('rfSend'), st = document.getElementById('rfStatus'), done = document.getElementById('rfDone'),
+    var opts = document.getElementById('rfOpts'), line = document.getElementById('rfLine'),
+        send = document.getElementById('rfSend'), st = document.getElementById('rfStatus'), done = document.getElementById('rfDone'), again = document.getElementById('rfAgain'),
         pick = '', busy = false;
-    function said() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
-    function remember(k) { try { localStorage.setItem(KEY, k); } catch (e) {} }
-    function thanks() { form.hidden = true; done.hidden = false; }
-    if (said()) { thanks(); return; }
+    function thanks() { form.hidden = true; done.hidden = false; again.hidden = false; }
+    // Update 237: "Add another" brings the form back, empty, without a refresh. Each send is its own entry.
+    again.addEventListener('click', function () {
+      pick = ''; line.value = ''; msg('');
+      opts.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+      done.hidden = true; again.hidden = true; form.hidden = false;
+      var first = opts.querySelector('button'); if (first) first.focus();
+    });
     function msg(t, bad) { st.textContent = t; st.classList.toggle('err', !!bad); }
     opts.addEventListener('click', function (ev) {
       var b = ev.target.closest('button[data-k]'); if (!b) return;
@@ -7377,7 +7385,7 @@ function qrMatrix(text){
       busy = true; send.disabled = true; msg('sending…');
       call(pick, line.value.trim(), function (r) {
         busy = false; send.disabled = false;
-        if (r && r.ok) { remember(pick); thanks(); window.dispatchEvent(new Event('wtt-reflected')); return; }
+        if (r && r.ok) { thanks(); window.dispatchEvent(new Event('wtt-reflected')); return; }
         msg('Not saved. Check your connection and try again.', true);
         console.warn('The reflection was not saved. ' + (r ? 'The Apps Script answered: ' + r.status : 'No usable answer from the Apps Script (not updated yet, blocked, or offline).'));
       });
